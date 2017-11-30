@@ -14,6 +14,9 @@
     <Filter Include="Kairos">
       <UniqueIdentifier>{9cad34ef-c1be-4ddd-ad47-c71d0831e1ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ImGui">
+      <UniqueIdentifier>{834a034f-3c3b-4ed8-84d5-5d9e764cf459}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
@@ -44,9 +47,24 @@
     <ClCompile Include="..\kairos\Kairos\TimestepLite.cpp">
       <Filter>Kairos</Filter>
     </ClCompile>
+    <ClCompile Include="..\imgui\include\imgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\include\imgui_draw.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\include\imgui-SFML.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\include\imguidock.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\Macros.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Themes.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

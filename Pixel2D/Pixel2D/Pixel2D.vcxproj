@@ -19,6 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\imgui\include\imgui-SFML.cpp" />
+    <ClCompile Include="..\imgui\include\imgui.cpp" />
+    <ClCompile Include="..\imgui\include\imguidock.cpp" />
+    <ClCompile Include="..\imgui\include\imgui_draw.cpp" />
     <ClCompile Include="..\kairos\Kairos\Absorel.cpp" />
     <ClCompile Include="..\kairos\Kairos\BasicClock.cpp" />
     <ClCompile Include="..\kairos\Kairos\Continuum.cpp" />
@@ -32,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\Macros.hpp" />
+    <ClInclude Include="src\utils\Themes.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\kairos\Kairos\Absorel.inl" />
@@ -89,11 +94,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\sfml\include;$(SolutionDir)\thor\include;$(SolutionDir)\kairos;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\sfml\include;$(SolutionDir)\thor\include;$(SolutionDir)\kairos;$(SolutionDir)\imgui\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\sfml\lib;$(SolutionDir)\thor\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\sfml\include;$(SolutionDir)\thor\include;$(SolutionDir)\kairos;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\sfml\include;$(SolutionDir)\thor\include;$(SolutionDir)\kairos;$(SolutionDir)\imgui\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\sfml\lib;$(SolutionDir)\thor\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -103,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;thor.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;thor.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -124,7 +129,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;thor.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;thor.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
