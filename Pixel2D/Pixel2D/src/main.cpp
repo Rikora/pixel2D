@@ -15,7 +15,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(800, 600), windowTitle.c_str(), sf::Style::Default);
 	window.setVerticalSyncEnabled(true);
 
-	sf::CircleShape circle(50.f);
+	sf::CircleShape circle(25.f);
 	circle.setOrigin(circle.getRadius(), circle.getRadius());
 	circle.setFillColor(sf::Color(192, 128, 192));
 	circle.setOutlineColor(sf::Color(64, 255, 192));
@@ -24,40 +24,18 @@ int main()
 	sf::Vector2f currentCirclePosition{ window.getSize() / 2u };
 	sf::Vector2f previousCirclePosition = currentCirclePosition;
 
-	bool interpolate{ false }, extrapolate{ false };
-
 	kairos::FpsLite fps;
 
 	kairos::Timestep timestep;
-	timestep.setStep(1.0 / 5.0); // 'physics' timestep is one fifth of a second, or 5 frames per second.
+	timestep.setStep(1.0 / 60.0); // 'physics' timestep is one fifth of a second, or 5 frames per second.
 	timestep.setMaxAccumulation(0.25); // set maximum time processed at once to a quarter of a second. if time passed is greater than this amount, the extra is discarded.
 	while (window.isOpen())
 	{
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed || event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+			if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 				window.close();
-			if (event.type == sf::Event::KeyPressed)
-			{
-				if (event.key.code == sf::Keyboard::Num1) // toggle interpolation
-				{
-					interpolate = !interpolate;
-					extrapolate = false;
-				}
-				else if (event.key.code == sf::Keyboard::Num2) // toggle extrapolation
-				{
-					extrapolate = !extrapolate;
-					interpolate = false;
-				}
-				else if (event.key.code == sf::Keyboard::Space) // toggle step value
-				{
-					if (timestep.getStep() > 1.0 / 6.0)
-						timestep.setStep(1.0 / 60.0);
-					else
-						timestep.setStep(1.0 / 5.0);
-				}
-			}
 		}
 
 		fps.update();
@@ -66,7 +44,7 @@ int main()
 		while (timestep.isUpdateRequired()) // this is true as long as there are unprocessed timesteps.
 		{
 			previousCirclePosition = currentCirclePosition;
-			float dt{ timestep.getStepAsFloat() };
+			float dt = timestep.getStepAsFloat();
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) // move up
 				currentCirclePosition.y -= movementSpeed * dt;
@@ -76,42 +54,14 @@ int main()
 				currentCirclePosition.x -= movementSpeed * dt;
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) // move right
 				currentCirclePosition.x += movementSpeed * dt;
-
-			// keep circle inside the window
-			if (currentCirclePosition.x < circle.getRadius())
-				currentCirclePosition.x = circle.getRadius();
-			else if (currentCirclePosition.x > window.getSize().x - circle.getRadius())
-				currentCirclePosition.x = window.getSize().x - circle.getRadius();
-			if (currentCirclePosition.y < circle.getRadius())
-				currentCirclePosition.y = circle.getRadius();
-			else if (currentCirclePosition.y > window.getSize().y - circle.getRadius())
-				currentCirclePosition.y = window.getSize().y - circle.getRadius();
 		}
 
-		float interpolationAlpha{ timestep.getInterpolationAlphaAsFloat() }; // the interpolation alpha is how much the unprocessed time is of a step.
-		if (extrapolate)
-			// interpolates the current frame and the next frame predictively (extrapolation).
-			// this is closer to the actual position but smooth only when movement is constant.
-			// (interpolation between the previous frame and the current one is smoother but lags behind by a step)
-			interpolationAlpha += 1.f;
-		else if (!interpolate)
-			interpolationAlpha = 1.f;
+		float interpolationAlpha = timestep.getInterpolationAlphaAsFloat(); // the interpolation alpha is how much the unprocessed time is of a step.
 		circle.setPosition(linearInterpolation(previousCirclePosition, currentCirclePosition, interpolationAlpha));
 
 		// shows information in the window title bar
 		std::string infoTitle = windowTitle;
-
 		infoTitle += " || Fps: " + std::to_string(fps.getFps());
-		infoTitle += " | Time passed: " + std::to_string(timestep.getTime());
-
-		if (timestep.getStep() > 1.0 / 6.0)
-			infoTitle += " || Timestep: 5 FPS";
-		else
-			infoTitle += " || Timestep: 60 FPS";
-		if (interpolate)
-			infoTitle += " | Interpolating";
-		else if (extrapolate)
-			infoTitle += " | Extrapolating";
 
 		window.setTitle(infoTitle.c_str());
 
