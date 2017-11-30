@@ -11,13 +11,51 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{e7b9b9c8-1ecc-492e-96bf-c7031200fbe4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Kairos">
+      <UniqueIdentifier>{9cad34ef-c1be-4ddd-ad47-c71d0831e1ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="..\kairos\Kairos\FpsLite.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kairos\Kairos\Timestep.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kairos\Kairos\Absorel.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kairos\Kairos\BasicClock.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kairos\Kairos\Continuum.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kairos\Kairos\Duration.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kairos\Kairos\Stopwatch.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kairos\Kairos\Timer.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\kairos\Kairos\TimestepLite.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\Macros.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\kairos\Kairos\Absorel.inl">
+      <Filter>Kairos</Filter>
+    </None>
+    <None Include="..\kairos\Kairos\Yalpes.inl">
+      <Filter>Kairos</Filter>
+    </None>
   </ItemGroup>
 </Project>
