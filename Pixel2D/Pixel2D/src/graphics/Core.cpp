@@ -3,6 +3,7 @@
 #include "..\utils\Utility.hpp"
 #include <imgui-SFML.h>
 #include <imguidock.h>
+#include <SFML\Window\Event.hpp>
 
 namespace px
 {
@@ -38,6 +39,9 @@ namespace px
 		//GUI
 		DarkWhiteTheme(true, 0.9f);
 		ImGui::SFML::Init(m_window);
+
+		//Scene
+		m_scene = std::make_unique<Scene>(m_sceneTexture);
 	}
 
 	void Core::run()
@@ -62,6 +66,7 @@ namespace px
 	void Core::render()
 	{
 		m_sceneTexture.clear(sf::Color::Black);
+		m_scene->updateSystems(m_timestep.getStep());
 		m_sceneTexture.draw(m_circle);
 		m_sceneTexture.display();
 	}

@@ -1,5 +1,6 @@
 #pragma once
 #include <entityx\entityx.h>
+#include <SFML\Graphics\RenderTarget.hpp>
 
 using namespace entityx;
 
@@ -8,8 +9,12 @@ namespace px
 	class Scene : public EntityX
 	{
 	public:
-		Scene();
+		Scene(sf::RenderTarget & target);
 		~Scene();
+
+	public:
+		void destroyEntities();
+		void updateSystems(double dt);
 
 	public:
 		EntityManager & GetEntities();

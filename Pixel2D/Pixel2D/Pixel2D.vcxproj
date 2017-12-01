@@ -34,12 +34,14 @@
     <ClCompile Include="..\kairos\Kairos\TimestepLite.cpp" />
     <ClCompile Include="src\graphics\Core.cpp" />
     <ClCompile Include="src\graphics\Scene.cpp" />
+    <ClCompile Include="src\graphics\systems\RenderSystem.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\components\Render.hpp" />
     <ClInclude Include="src\graphics\Core.hpp" />
     <ClInclude Include="src\graphics\Scene.hpp" />
+    <ClInclude Include="src\graphics\systems\RenderSystem.hpp" />
     <ClInclude Include="src\utils\Macros.hpp" />
     <ClInclude Include="src\utils\Themes.hpp" />
     <ClInclude Include="src\utils\Utility.hpp" />

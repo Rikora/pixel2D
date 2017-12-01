@@ -20,6 +20,9 @@
     <Filter Include="Graphics\Components">
       <UniqueIdentifier>{57743f9f-614b-4f74-ad25-e0fb4ec0df8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Systems">
+      <UniqueIdentifier>{cafdb403-b71e-4949-8350-b0e3ef12b98b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
@@ -68,6 +71,9 @@
     <ClCompile Include="src\graphics\Scene.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\systems\RenderSystem.cpp">
+      <Filter>Graphics\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\Macros.hpp">
@@ -87,6 +93,9 @@
     </ClInclude>
     <ClInclude Include="src\graphics\components\Render.hpp">
       <Filter>Graphics\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\systems\RenderSystem.hpp">
+      <Filter>Graphics\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

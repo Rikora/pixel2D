@@ -2,9 +2,10 @@
 #include <SFML\Graphics\CircleShape.hpp>
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML\Graphics\RenderTexture.hpp>
-#include <SFML\Window\Event.hpp>
 #include <Kairos\Timestep.hpp>
 #include <Kairos\FpsLite.hpp>
+
+#include "Scene.hpp"
 
 namespace px
 {
@@ -25,6 +26,9 @@ namespace px
 	private:
 		sf::RenderWindow m_window;
 		sf::RenderTexture m_sceneTexture;
+
+	private:
+		std::unique_ptr<Scene> m_scene;
 
 	private:
 		sf::CircleShape m_circle;
