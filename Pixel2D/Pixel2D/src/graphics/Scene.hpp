@@ -1,8 +1,12 @@
 #pragma once
 #include <entityx\entityx.h>
-#include <SFML\Graphics\RenderTarget.hpp>
 
 using namespace entityx;
+
+namespace sf
+{
+	class RenderTarget;
+}
 
 namespace px
 {
