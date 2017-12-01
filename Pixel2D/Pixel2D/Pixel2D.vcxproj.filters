@@ -59,12 +59,21 @@
     <ClCompile Include="..\imgui\include\imguidock.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\Core.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\Macros.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\utils\Themes.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\Core.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Utility.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

@@ -32,11 +32,14 @@
     <ClCompile Include="..\kairos\Kairos\Timer.cpp" />
     <ClCompile Include="..\kairos\Kairos\Timestep.cpp" />
     <ClCompile Include="..\kairos\Kairos\TimestepLite.cpp" />
+    <ClCompile Include="src\graphics\Core.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\graphics\Core.hpp" />
     <ClInclude Include="src\utils\Macros.hpp" />
     <ClInclude Include="src\utils\Themes.hpp" />
+    <ClInclude Include="src\utils\Utility.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\kairos\Kairos\Absorel.inl" />
