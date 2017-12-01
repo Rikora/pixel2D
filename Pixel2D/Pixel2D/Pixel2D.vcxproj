@@ -33,10 +33,13 @@
     <ClCompile Include="..\kairos\Kairos\Timestep.cpp" />
     <ClCompile Include="..\kairos\Kairos\TimestepLite.cpp" />
     <ClCompile Include="src\graphics\Core.cpp" />
+    <ClCompile Include="src\graphics\Scene.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\graphics\components\Render.hpp" />
     <ClInclude Include="src\graphics\Core.hpp" />
+    <ClInclude Include="src\graphics\Scene.hpp" />
     <ClInclude Include="src\utils\Macros.hpp" />
     <ClInclude Include="src\utils\Themes.hpp" />
     <ClInclude Include="src\utils\Utility.hpp" />
@@ -97,12 +100,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\sfml\include;$(SolutionDir)\thor\include;$(SolutionDir)\kairos;$(SolutionDir)\imgui\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\sfml\lib;$(SolutionDir)\thor\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\sfml\include;$(SolutionDir)\thor\include;$(SolutionDir)\kairos;$(SolutionDir)\imgui\include;$(SolutionDir)\entityx\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\sfml\lib;$(SolutionDir)\thor\lib;$(SolutionDir)\entityx\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\sfml\include;$(SolutionDir)\thor\include;$(SolutionDir)\kairos;$(SolutionDir)\imgui\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\sfml\lib;$(SolutionDir)\thor\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\sfml\include;$(SolutionDir)\thor\include;$(SolutionDir)\kairos;$(SolutionDir)\imgui\include;$(SolutionDir)\entityx\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\sfml\lib;$(SolutionDir)\thor\lib;$(SolutionDir)\entityx\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -111,7 +114,7 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;thor.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;thor.lib;entityx-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -132,7 +135,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;thor.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;thor.lib;entityx-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
