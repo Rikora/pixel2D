@@ -27,8 +27,8 @@ namespace px
 		sf::RenderWindow m_window;
 		sf::RenderTexture m_sceneTexture;
 		sf::View m_sceneView;
-		sf::Vector2f m_currentViewPosition;
-		sf::Vector2f m_previousViewPosition;
+		sf::Vector2i m_currentMousePos;
+		sf::Vector2i m_previousMousePos;
 
 	private:
 		std::unique_ptr<Scene> m_scene;

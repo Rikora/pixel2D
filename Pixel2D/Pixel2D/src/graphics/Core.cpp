@@ -1,6 +1,7 @@
 #include "Core.hpp"
 #include "..\utils\Themes.hpp"
 #include "..\utils\Utility.hpp"
+#include "..\utils\Macros.hpp"
 #include <imgui-SFML.h>
 #include <imguidock.h>
 #include <SFML\Window\Event.hpp>
@@ -79,6 +80,9 @@ namespace px
 
 			if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 				m_window.close();
+
+			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Middle)
+				m_currentMousePos = sf::Mouse::getPosition(m_window);
 		}
 	}
 
@@ -88,26 +92,23 @@ namespace px
 		m_timestep.addFrame(); //Add frame each cycle
 		while (m_timestep.isUpdateRequired()) //If there are unprocessed timesteps
 		{
-			m_previousViewPosition = m_currentViewPosition;
+			m_previousMousePos = m_currentMousePos;
 			float dt = m_timestep.getStepAsFloat();
 
-			//Move the view
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-				m_currentViewPosition.x += m_viewSpeed * dt;
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-				m_currentViewPosition.x -= m_viewSpeed * dt;
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-				m_currentViewPosition.y += m_viewSpeed * dt;
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-				m_currentViewPosition.y -= m_viewSpeed * dt;
+			//Add strafing for mouse
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+			{
+				m_currentMousePos = sf::Mouse::getPosition(m_window);
+				sf::Vector2i m_deltaMouse = sf::Vector2i(m_currentMousePos.x - m_previousMousePos.x, m_previousMousePos.y - m_currentMousePos.y);
+				m_sceneView.move(sf::Vector2f((float)m_deltaMouse.x, (float)m_deltaMouse.y));
+				m_sceneTexture.setView(m_sceneView);
+			}
 		}
 
 		float interpolationAlpha = m_timestep.getInterpolationAlphaAsFloat();
 
-		//Update objects
-		m_sceneView.setCenter(utils::linearInterpolation(m_previousViewPosition, m_currentViewPosition, interpolationAlpha));
-		//m_circle.setPosition(utils::linearInterpolation(m_previousCirclePosition, m_currentCirclePosition, interpolationAlpha));
-		m_sceneTexture.setView(m_sceneView);
+		//Update objects		
+		//m_circle.setPosition(utils::linearInterpolation(m_previousCirclePosition, m_currentCirclePosition, interpolationAlpha));	
 	}
 
 	void Core::updateGUI()
@@ -138,8 +139,6 @@ namespace px
 					m_sceneTexture.create((unsigned int)size.x, (unsigned int)size.y);
 					m_sceneView.setCenter({ size.x / 2.f, size.y / 2.f });
 					m_sceneView.setSize({ size.x, size.y });
-					m_currentViewPosition = m_sceneView.getCenter();
-					m_previousViewPosition = m_currentViewPosition;
 				}
 
 				render();
