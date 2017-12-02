@@ -26,15 +26,16 @@ namespace px
 	private:
 		sf::RenderWindow m_window;
 		sf::RenderTexture m_sceneTexture;
+		sf::View m_sceneView;
+		sf::Vector2f m_currentViewPosition;
+		sf::Vector2f m_previousViewPosition;
 
 	private:
 		std::unique_ptr<Scene> m_scene;
 
 	private:
 		sf::CircleShape m_circle;
-		sf::Vector2f m_currentCirclePosition;
-		sf::Vector2f m_previousCirclePosition;
-		const float m_movementSpeed;
+		const float m_viewSpeed;
 
 	private:
 		kairos::FpsLite m_fps;
