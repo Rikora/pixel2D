@@ -26,45 +26,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="..\kairos\Kairos\FpsLite.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\kairos\Kairos\Timestep.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\kairos\Kairos\Absorel.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\kairos\Kairos\BasicClock.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\kairos\Kairos\Continuum.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\kairos\Kairos\Duration.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\kairos\Kairos\Stopwatch.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\kairos\Kairos\Timer.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\kairos\Kairos\TimestepLite.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\imgui\include\imgui.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\imgui\include\imgui_draw.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\imgui\include\imgui-SFML.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\imgui\include\imguidock.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphics\Core.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -73,6 +34,45 @@
     </ClCompile>
     <ClCompile Include="src\graphics\systems\RenderSystem.cpp">
       <Filter>Graphics\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\imgui\include\imgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\imgui\include\imgui_draw.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\imgui\include\imguidock.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\imgui\include\imgui-SFML.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\kairos\Kairos\Absorel.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\kairos\Kairos\BasicClock.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\kairos\Kairos\Continuum.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\kairos\Kairos\Duration.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\kairos\Kairos\FpsLite.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\kairos\Kairos\Stopwatch.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\kairos\Kairos\Timer.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\kairos\Kairos\Timestep.cpp">
+      <Filter>Kairos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\kairos\Kairos\TimestepLite.cpp">
+      <Filter>Kairos</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -99,10 +99,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\kairos\Kairos\Absorel.inl">
+    <None Include="..\third-party\kairos\Kairos\Absorel.inl">
       <Filter>Kairos</Filter>
     </None>
-    <None Include="..\kairos\Kairos\Yalpes.inl">
+    <None Include="..\third-party\kairos\Kairos\Yalpes.inl">
       <Filter>Kairos</Filter>
     </None>
   </ItemGroup>

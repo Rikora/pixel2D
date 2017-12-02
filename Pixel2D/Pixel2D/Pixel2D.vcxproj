@@ -19,19 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\imgui\include\imgui-SFML.cpp" />
-    <ClCompile Include="..\imgui\include\imgui.cpp" />
-    <ClCompile Include="..\imgui\include\imguidock.cpp" />
-    <ClCompile Include="..\imgui\include\imgui_draw.cpp" />
-    <ClCompile Include="..\kairos\Kairos\Absorel.cpp" />
-    <ClCompile Include="..\kairos\Kairos\BasicClock.cpp" />
-    <ClCompile Include="..\kairos\Kairos\Continuum.cpp" />
-    <ClCompile Include="..\kairos\Kairos\Duration.cpp" />
-    <ClCompile Include="..\kairos\Kairos\FpsLite.cpp" />
-    <ClCompile Include="..\kairos\Kairos\Stopwatch.cpp" />
-    <ClCompile Include="..\kairos\Kairos\Timer.cpp" />
-    <ClCompile Include="..\kairos\Kairos\Timestep.cpp" />
-    <ClCompile Include="..\kairos\Kairos\TimestepLite.cpp" />
+    <ClCompile Include="..\third-party\imgui\include\imgui-SFML.cpp" />
+    <ClCompile Include="..\third-party\imgui\include\imgui.cpp" />
+    <ClCompile Include="..\third-party\imgui\include\imguidock.cpp" />
+    <ClCompile Include="..\third-party\imgui\include\imgui_draw.cpp" />
+    <ClCompile Include="..\third-party\kairos\Kairos\Absorel.cpp" />
+    <ClCompile Include="..\third-party\kairos\Kairos\BasicClock.cpp" />
+    <ClCompile Include="..\third-party\kairos\Kairos\Continuum.cpp" />
+    <ClCompile Include="..\third-party\kairos\Kairos\Duration.cpp" />
+    <ClCompile Include="..\third-party\kairos\Kairos\FpsLite.cpp" />
+    <ClCompile Include="..\third-party\kairos\Kairos\Stopwatch.cpp" />
+    <ClCompile Include="..\third-party\kairos\Kairos\Timer.cpp" />
+    <ClCompile Include="..\third-party\kairos\Kairos\Timestep.cpp" />
+    <ClCompile Include="..\third-party\kairos\Kairos\TimestepLite.cpp" />
     <ClCompile Include="src\graphics\Core.cpp" />
     <ClCompile Include="src\graphics\Scene.cpp" />
     <ClCompile Include="src\graphics\systems\RenderSystem.cpp" />
@@ -47,8 +47,8 @@
     <ClInclude Include="src\utils\Utility.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\kairos\Kairos\Absorel.inl" />
-    <None Include="..\kairos\Kairos\Yalpes.inl" />
+    <None Include="..\third-party\kairos\Kairos\Absorel.inl" />
+    <None Include="..\third-party\kairos\Kairos\Yalpes.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -102,12 +102,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\sfml\include;$(SolutionDir)\thor\include;$(SolutionDir)\kairos;$(SolutionDir)\imgui\include;$(SolutionDir)\entityx\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\sfml\lib;$(SolutionDir)\thor\lib;$(SolutionDir)\entityx\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\third-party\sfml\include;$(SolutionDir)\third-party\thor\include;$(SolutionDir)\third-party\kairos;$(SolutionDir)\third-party\imgui\include;$(SolutionDir)\third-party\entityx\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\third-party\sfml\lib;$(SolutionDir)\third-party\thor\lib;$(SolutionDir)\third-party\entityx\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\sfml\include;$(SolutionDir)\thor\include;$(SolutionDir)\kairos;$(SolutionDir)\imgui\include;$(SolutionDir)\entityx\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\sfml\lib;$(SolutionDir)\thor\lib;$(SolutionDir)\entityx\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\third-party\sfml\include;$(SolutionDir)\third-party\thor\include;$(SolutionDir)\third-party\kairos;$(SolutionDir)\third-party\imgui\include;$(SolutionDir)\third-party\entityx\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\third-party\sfml\lib;$(SolutionDir)\third-party\thor\lib;$(SolutionDir)\third-party\entityx\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

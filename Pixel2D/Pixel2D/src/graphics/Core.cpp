@@ -39,6 +39,7 @@ namespace px
 		//GUI
 		DarkWhiteTheme(true, 0.9f);
 		ImGui::SFML::Init(m_window);
+		ImGui::GetIO().MouseDrawCursor = true;
 
 		//Scene
 		m_scene = std::make_unique<Scene>(m_sceneTexture);
@@ -82,7 +83,7 @@ namespace px
 				m_window.close();
 
 			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Middle)
-				m_currentMousePos = sf::Mouse::getPosition(m_window);
+				m_currentMousePos = sf::Mouse::getPosition(m_window);			
 		}
 	}
 
@@ -113,6 +114,10 @@ namespace px
 
 	void Core::updateGUI()
 	{
+		//Display different cursor on drag
+		if(ImGui::IsMouseDown(sf::Mouse::Middle))
+			ImGui::SetMouseCursor(ImGuiMouseCursor_::ImGuiMouseCursor_Move);
+
 		//Docking system
 		ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 		const ImGuiWindowFlags flags = (ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
