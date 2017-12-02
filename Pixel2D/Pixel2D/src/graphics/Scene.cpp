@@ -16,7 +16,7 @@ namespace px
 		
 		//Circle
 		auto shape = std::make_unique<sf::CircleShape>(10.f);
-		shape->setFillColor(sf::Color::Red);
+		shape->setFillColor(sf::Color::Yellow);
 		shape->setOrigin(10.f, 10.f);
 		shape->setPosition(sf::Vector2f(500.f, 233.f));
 
@@ -46,7 +46,7 @@ namespace px
 		m_systems.update<RenderSystem>(dt);
 	}
 
-	EntityManager & Scene::GetEntities()
+	EntityManager & Scene::getEntities()
 	{
 		return m_entities;
 	}

@@ -42,6 +42,8 @@
     <ClInclude Include="src\graphics\Core.hpp" />
     <ClInclude Include="src\graphics\Scene.hpp" />
     <ClInclude Include="src\graphics\systems\RenderSystem.hpp" />
+    <ClInclude Include="src\utils\Console.hpp" />
+    <ClInclude Include="src\utils\Log.hpp" />
     <ClInclude Include="src\utils\Macros.hpp" />
     <ClInclude Include="src\utils\Themes.hpp" />
     <ClInclude Include="src\utils\Utility.hpp" />
@@ -102,12 +104,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\third-party\sfml\include;$(SolutionDir)\third-party\thor\include;$(SolutionDir)\third-party\kairos;$(SolutionDir)\third-party\imgui\include;$(SolutionDir)\third-party\entityx\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\third-party\sfml\lib;$(SolutionDir)\third-party\thor\lib;$(SolutionDir)\third-party\entityx\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\third-party\sfml\include;$(SolutionDir)\third-party\thor\include;$(SolutionDir)\third-party\kairos;$(SolutionDir)\third-party\imgui\include;$(SolutionDir)\third-party\entityx\include;$(SolutionDir)\third-party\sol;$(SolutionDir)\third-party\lua\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\third-party\sfml\lib;$(SolutionDir)\third-party\thor\lib;$(SolutionDir)\third-party\entityx\lib;$(SolutionDir)\third-party\lua\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\third-party\sfml\include;$(SolutionDir)\third-party\thor\include;$(SolutionDir)\third-party\kairos;$(SolutionDir)\third-party\imgui\include;$(SolutionDir)\third-party\entityx\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\third-party\sfml\lib;$(SolutionDir)\third-party\thor\lib;$(SolutionDir)\third-party\entityx\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\third-party\sfml\include;$(SolutionDir)\third-party\thor\include;$(SolutionDir)\third-party\kairos;$(SolutionDir)\third-party\imgui\include;$(SolutionDir)\third-party\entityx\include;$(SolutionDir)\third-party\sol;$(SolutionDir)\third-party\lua\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\third-party\sfml\lib;$(SolutionDir)\third-party\thor\lib;$(SolutionDir)\third-party\entityx\lib;$(SolutionDir)\third-party\lua\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -116,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;thor.lib;entityx-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;thor.lib;entityx-d.lib;lua53.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -137,7 +139,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;thor.lib;entityx-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;thor.lib;entityx-d.lib;lua53.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

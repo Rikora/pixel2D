@@ -1,5 +1,4 @@
 #pragma once
-#include <SFML\Graphics\CircleShape.hpp>
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML\Graphics\RenderTexture.hpp>
 #include <Kairos\Timestep.hpp>
@@ -29,13 +28,10 @@ namespace px
 		sf::View m_sceneView;
 		sf::Vector2i m_currentMousePos;
 		sf::Vector2i m_previousMousePos;
+		bool m_isSceneHovered;
 
 	private:
 		std::unique_ptr<Scene> m_scene;
-
-	private:
-		sf::CircleShape m_circle;
-		const float m_viewSpeed;
 
 	private:
 		kairos::FpsLite m_fps;

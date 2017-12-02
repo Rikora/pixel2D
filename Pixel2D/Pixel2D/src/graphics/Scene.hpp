@@ -21,7 +21,7 @@ namespace px
 		void updateSystems(double dt);
 
 	public:
-		EntityManager & GetEntities();
+		EntityManager & getEntities();
 		
 	private:
 		EntityManager m_entities;

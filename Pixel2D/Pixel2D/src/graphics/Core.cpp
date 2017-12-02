@@ -2,13 +2,15 @@
 #include "..\utils\Themes.hpp"
 #include "..\utils\Utility.hpp"
 #include "..\utils\Macros.hpp"
+#include "..\utils\Log.hpp"
+#include "..\utils\Console.hpp"
 #include <imgui-SFML.h>
 #include <imguidock.h>
 #include <SFML\Window\Event.hpp>
 
 namespace px
 {
-	Core::Core() : m_window(sf::VideoMode(1400, 900), "Pixel2D", sf::Style::Close), m_circle(25.f), m_viewSpeed(500.f)
+	Core::Core() : m_window(sf::VideoMode(1400, 900), "Pixel2D", sf::Style::Close), m_isSceneHovered(false)
 	{
 		initialize();
 	}
@@ -24,11 +26,6 @@ namespace px
 		m_window.setPosition({ 125, 75 });
 		m_window.setVerticalSyncEnabled(true);
 
-		//Circle
-		m_circle.setOrigin(m_circle.getRadius(), m_circle.getRadius()); 
-		m_circle.setFillColor(sf::Color::Green);
-		m_circle.setPosition(sf::Vector2f(670.f, 233.f));
-
 		//Render texture
 		m_sceneTexture.create(m_window.getSize().x, m_window.getSize().y);
 
@@ -43,6 +40,9 @@ namespace px
 
 		//Scene
 		m_scene = std::make_unique<Scene>(m_sceneTexture);
+
+		//Lua functions
+		gameConsole.lua.set_function("print", [] { gameConsole.addLog("Welcome to lua!"); });
 	}
 
 	void Core::run()
@@ -68,7 +68,6 @@ namespace px
 	{
 		m_sceneTexture.clear(sf::Color::Black);
 		m_scene->updateSystems(m_timestep.getStep());
-		m_sceneTexture.draw(m_circle);
 		m_sceneTexture.display();
 	}
 
@@ -97,7 +96,7 @@ namespace px
 			float dt = m_timestep.getStepAsFloat();
 
 			//Add strafing for mouse
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Middle) && m_isSceneHovered)
 			{
 				m_currentMousePos = sf::Mouse::getPosition(m_window);
 				sf::Vector2i m_deltaMouse = sf::Vector2i(m_currentMousePos.x - m_previousMousePos.x, m_previousMousePos.y - m_currentMousePos.y);
@@ -115,7 +114,7 @@ namespace px
 	void Core::updateGUI()
 	{
 		//Display different cursor on drag
-		if(ImGui::IsMouseDown(sf::Mouse::Middle))
+		if(ImGui::IsMouseDown(sf::Mouse::Middle) && m_isSceneHovered)
 			ImGui::SetMouseCursor(ImGuiMouseCursor_::ImGuiMouseCursor_Move);
 
 		//Docking system
@@ -135,6 +134,7 @@ namespace px
 			ImGui::SetNextDock(ImGuiDockSlot_Left);
 			if (ImGui::BeginDock("Scene"))
 			{
+				m_isSceneHovered = ImGui::IsItemHovered();
 				ImVec2 size = ImGui::GetContentRegionAvail();
 				unsigned int width = m_sceneTexture.getSize().x;
 				unsigned int height = m_sceneTexture.getSize().y;
@@ -176,14 +176,14 @@ namespace px
 			ImGui::SetNextDock(ImGuiDockSlot_Bottom);
 			if (ImGui::BeginDock("Log"))
 			{
-				//gameLog.Draw();
+				gameLog.draw();
 			}
 			ImGui::EndDock();
 
 			ImGui::SetNextDock(ImGuiDockSlot_Tab);
 			if (ImGui::BeginDock("Console"))
 			{
-				//gameConsole.Draw();
+				gameConsole.draw();
 			}
 			ImGui::EndDock();
 
