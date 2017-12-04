@@ -9,6 +9,8 @@
 
 #define IM_ARRAYSIZE(_ARR)  ((int)(sizeof(_ARR)/sizeof(*_ARR)))
 
+sol::state lua;
+
 struct AppConsole
 {
 	char                  InputBuf[256];
@@ -17,7 +19,6 @@ struct AppConsole
 	ImVector<char*>       History;
 	int                   HistoryPos;    // -1: new line, 0..History.Size-1 browsing history.
 	ImVector<const char*> Commands;
-	sol::state lua;
 
 	AppConsole()
 	{

@@ -6,8 +6,9 @@ namespace px
 {
 	struct Render
 	{
-		explicit Render(std::unique_ptr<sf::Shape> shape) : shape(std::move(shape)) {}
+		explicit Render(std::unique_ptr<sf::Shape> shape, std::string name) : shape(std::move(shape)), name(name) {}
 
 		std::unique_ptr<sf::Shape> shape;
+		std::string name;
 	};
 }

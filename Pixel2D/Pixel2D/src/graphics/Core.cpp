@@ -8,6 +8,21 @@
 #include <imguidock.h>
 #include <SFML\Window\Event.hpp>
 
+struct Player 
+{
+	int b = 24;
+
+	int f() const 
+	{
+		return 24;
+	}
+
+	void g() 
+	{
+		++b;
+	}
+};
+
 namespace px
 {
 	Core::Core() : m_window(sf::VideoMode(1400, 900), "Pixel2D", sf::Style::Close), m_isSceneHovered(false)
@@ -42,7 +57,30 @@ namespace px
 		m_scene = std::make_unique<Scene>(m_sceneTexture);
 
 		//Lua functions
-		gameConsole.lua.set_function("print", [] { gameConsole.addLog("Welcome to lua!"); });
+		lua.set_function("key", [] 
+		{ 
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+			{
+				gameConsole.addLog("Pressed W");	
+			} 
+		});
+
+		//Lua example
+		//Table and usertype	
+		sol::table bark = lua.create_named_table("bark");
+		bark.new_usertype<Player>("Player", "f", &Player::f, "g", &Player::g);
+
+		//Add new function without the struct
+		bark.set_function("print_player", [](Player & self) { std::cout << "b: " << self.b << std::endl; });
+
+		//'bark' namespace
+		lua.script("obj = bark.Player.new()");
+		lua.script("obj:g()");
+
+		//Access function on namespace
+		lua.script("bark.print_player(obj)");
+		Player & obj = lua["obj"];
+		PRINT(obj.b);
 	}
 
 	void Core::run()
@@ -103,6 +141,8 @@ namespace px
 				m_sceneView.move(sf::Vector2f((float)m_deltaMouse.x, (float)m_deltaMouse.y));
 				m_sceneTexture.setView(m_sceneView);
 			}
+
+			lua.script("key()");
 		}
 
 		float interpolationAlpha = m_timestep.getInterpolationAlphaAsFloat();
@@ -147,8 +187,6 @@ namespace px
 				}
 
 				render();
-
-				//Draw the image/texture, filling the whole dock window
 				ImGui::Image(m_sceneTexture.getTexture());
 			}
 			ImGui::EndDock();

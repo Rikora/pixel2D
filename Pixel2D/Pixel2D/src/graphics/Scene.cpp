@@ -1,9 +1,6 @@
 #include "Scene.hpp"
 #include <SFML\Graphics\CircleShape.hpp>
 
-//Components
-#include "components\Render.hpp"
-
 //Systems
 #include "systems\RenderSystem.hpp"
 
@@ -21,7 +18,7 @@ namespace px
 		shape->setPosition(sf::Vector2f(500.f, 233.f));
 
 		//Apply components
-		entity.assign<Render>(std::move(shape));
+		entity.assign<Render>(std::move(shape), "Circle");
 
 		//Systems
 		m_systems.add<RenderSystem>(target);
@@ -44,6 +41,20 @@ namespace px
 	void Scene::updateSystems(double dt)
 	{
 		m_systems.update<RenderSystem>(dt);
+	}
+
+	Entity Scene::getEntity(const std::string name)
+	{
+		ComponentHandle<Render> render;
+		Entity found;
+
+		for (Entity & entity : m_entities.entities_with_components(render))
+		{
+			if (render->name == name)
+				found = entity;
+		}
+
+		return found;
 	}
 
 	EntityManager & Scene::getEntities()

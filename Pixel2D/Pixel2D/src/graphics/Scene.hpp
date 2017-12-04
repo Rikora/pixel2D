@@ -1,6 +1,9 @@
 #pragma once
 #include <entityx\entityx.h>
 
+//Components
+#include "components\Render.hpp"
+
 using namespace entityx;
 
 namespace sf
@@ -19,6 +22,7 @@ namespace px
 	public:
 		void destroyEntities();
 		void updateSystems(double dt);
+		Entity getEntity(const std::string name);
 
 	public:
 		EntityManager & getEntities();
