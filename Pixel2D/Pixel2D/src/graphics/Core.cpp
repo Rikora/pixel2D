@@ -43,31 +43,23 @@ namespace px
 		//Scene
 		m_scene = std::make_unique<Scene>(m_sceneTexture);
 
-		//Lua functions
-		lua.set_function("key", [] 
-		{ 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-			{
-				gameConsole.addLog("Pressed W");	
-			} 
-		});
-
 		//Lua example
 		//Table and usertype
-		Player player;
+		lua.new_usertype<Player>("Player", "get", &Player::getEntity, "setpos", &Player::setPosition);
 
-		sol::table bark = lua.create_named_table("bark");
-		bark.new_usertype<Player>("Player", "set", &Player::set, "g", &Player::g, "get", &Player::get, "setpos", &Player::setpos);
+		//Add new tables with functions
+		sol::table util = lua.create_named_table("utils");		
+		util.set_function("print_player", [](Player & self) { std::cout << "Name: " << self.entity.component<Render>()->name << std::endl; });
 
-		//Add new function without the struct
-		bark.set_function("print_player", [](Player & self) { std::cout << "Name: " << self.entity.component<Render>()->name << std::endl; });
+		sol::table kb = lua.create_named_table("keyboard");
+		kb.set_function("isKeyPressed", [](const std::string key)->bool { return sf::Keyboard::isKeyPressed(utils::toKey(key)); });
 
-		//'bark' namespace
-		lua.script("obj = bark.Player.new()");
+		//'utils' namespace
+		lua.script("obj = Player.new()");
 		lua.script("obj:get('Circle')");
 
 		//Access function on namespace
-		lua.script("bark.print_player(obj)");
+		lua.script("utils.print_player(obj)");
 		/*Player & obj = lua["obj"];
 		PRINT(obj.b);*/
 	}
@@ -122,6 +114,9 @@ namespace px
 			m_previousMousePos = m_currentMousePos;
 			float dt = m_timestep.getStepAsFloat();
 
+			//Keyboard handles goes here...
+			//We need 3 virtual lua functions for this? OnInit, OnUpdate, OnInput?
+
 			//Add strafing for mouse
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Middle) && m_isSceneHovered)
 			{
@@ -131,10 +126,11 @@ namespace px
 				m_sceneTexture.setView(m_sceneView);
 			}
 
-			lua.script("key()");
+			//Basic script for keyboard
+			lua.script_file("src/res/scripts/test.lua");
 		}
 
-		float interpolationAlpha = m_timestep.getInterpolationAlphaAsFloat();
+		//float interpolationAlpha = m_timestep.getInterpolationAlphaAsFloat();
 
 		//Update objects		
 		//m_circle.setPosition(utils::linearInterpolation(m_previousCirclePosition, m_currentCirclePosition, interpolationAlpha));	
@@ -223,25 +219,5 @@ namespace px
 			ImGui::EndDockspace();
 		}
 		ImGui::End();
-	}
-
-	void Core::Player::get(const std::string name)
-	{
-		Player::entity = m_scene->getEntity(name);
-	}
-
-	void Core::Player::set(int number)
-	{
-		Player::b = number;
-	}
-
-	void Core::Player::setpos(float x, float y)
-	{
-		Player::entity.component<Render>()->shape->setPosition(x, y);
-	}
-
-	void Core::Player::g()
-	{
-		Player::b++;
 	}
 }

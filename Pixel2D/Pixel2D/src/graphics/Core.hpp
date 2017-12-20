@@ -13,13 +13,10 @@ namespace px
 	public:
 		struct Player
 		{
-			Entity entity;
-			int b = 24;
+			void getEntity(const std::string name){ entity = m_scene->getEntity(name); };
+			void setPosition(float x, float y) { entity.component<Render>()->shape->setPosition(x, y); }
 
-			void get(const std::string name);
-			void set(int number);
-			void setpos(float x, float y);
-			void g();
+			Entity entity;
 		};
 
 	public:
