@@ -8,23 +8,10 @@
 #include <imguidock.h>
 #include <SFML\Window\Event.hpp>
 
-struct Player 
-{
-	int b = 24;
-
-	int f() const 
-	{
-		return 24;
-	}
-
-	void g() 
-	{
-		++b;
-	}
-};
-
 namespace px
 {
+	std::unique_ptr<Scene> Core::m_scene;
+
 	Core::Core() : m_window(sf::VideoMode(1400, 900), "Pixel2D", sf::Style::Close), m_isSceneHovered(false)
 	{
 		initialize();
@@ -66,21 +53,23 @@ namespace px
 		});
 
 		//Lua example
-		//Table and usertype	
+		//Table and usertype
+		Player player;
+
 		sol::table bark = lua.create_named_table("bark");
-		bark.new_usertype<Player>("Player", "f", &Player::f, "g", &Player::g);
+		bark.new_usertype<Player>("Player", "set", &Player::set, "g", &Player::g, "get", &Player::get, "setpos", &Player::setpos);
 
 		//Add new function without the struct
-		bark.set_function("print_player", [](Player & self) { std::cout << "b: " << self.b << std::endl; });
+		bark.set_function("print_player", [](Player & self) { std::cout << "Name: " << self.entity.component<Render>()->name << std::endl; });
 
 		//'bark' namespace
 		lua.script("obj = bark.Player.new()");
-		lua.script("obj:g()");
+		lua.script("obj:get('Circle')");
 
 		//Access function on namespace
 		lua.script("bark.print_player(obj)");
-		Player & obj = lua["obj"];
-		PRINT(obj.b);
+		/*Player & obj = lua["obj"];
+		PRINT(obj.b);*/
 	}
 
 	void Core::run()
@@ -234,5 +223,25 @@ namespace px
 			ImGui::EndDockspace();
 		}
 		ImGui::End();
+	}
+
+	void Core::Player::get(const std::string name)
+	{
+		Player::entity = m_scene->getEntity(name);
+	}
+
+	void Core::Player::set(int number)
+	{
+		Player::b = number;
+	}
+
+	void Core::Player::setpos(float x, float y)
+	{
+		Player::entity.component<Render>()->shape->setPosition(x, y);
+	}
+
+	void Core::Player::g()
+	{
+		Player::b++;
 	}
 }

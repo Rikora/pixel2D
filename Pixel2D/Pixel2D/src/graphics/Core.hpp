@@ -11,6 +11,18 @@ namespace px
 	class Core
 	{
 	public:
+		struct Player
+		{
+			Entity entity;
+			int b = 24;
+
+			void get(const std::string name);
+			void set(int number);
+			void setpos(float x, float y);
+			void g();
+		};
+
+	public:
 		Core();
 		~Core();
 
@@ -31,7 +43,7 @@ namespace px
 		bool m_isSceneHovered;
 
 	private:
-		std::unique_ptr<Scene> m_scene;
+		static std::unique_ptr<Scene> m_scene;
 
 	private:
 		kairos::FpsLite m_fps;
