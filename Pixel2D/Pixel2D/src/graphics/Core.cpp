@@ -60,6 +60,7 @@ namespace px
 
 		//Access function on namespace
 		lua.script("utils.print_player(obj)");
+		lua.script_file("src/res/scripts/main.lua");
 		/*Player & obj = lua["obj"];
 		PRINT(obj.b);*/
 	}

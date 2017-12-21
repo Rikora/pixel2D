@@ -22,7 +22,7 @@ struct AppConsole
 
 	AppConsole()
 	{
-		lua.open_libraries(sol::lib::base);
+		lua.open_libraries(sol::lib::base, sol::lib::package);
 
 		clearLog();
 		memset(InputBuf, 0, sizeof(InputBuf));
