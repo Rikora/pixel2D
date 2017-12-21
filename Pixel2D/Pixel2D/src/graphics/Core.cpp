@@ -54,13 +54,12 @@ namespace px
 		sol::table kb = lua.create_named_table("keyboard");
 		kb.set_function("isKeyPressed", [](const std::string key)->bool { return sf::Keyboard::isKeyPressed(utils::toKey(key)); });
 
-		//'utils' namespace
 		lua.script("obj = Player.new()");
 		lua.script("obj:get('Circle')");
 
 		//Access function on namespace
 		lua.script("utils.print_player(obj)");
-		lua.script_file("src/res/scripts/main.lua");
+		//lua.script_file("src/res/scripts/main.lua");
 		/*Player & obj = lua["obj"];
 		PRINT(obj.b);*/
 	}
@@ -116,7 +115,7 @@ namespace px
 			float dt = m_timestep.getStepAsFloat();
 
 			//Keyboard handles goes here...
-			//We need 3 virtual lua functions for this? OnInit, OnUpdate, OnInput?
+			//We need 3 virtual lua functions for this? onInit, onUpdate, onInput?
 
 			//Add strafing for mouse
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Middle) && m_isSceneHovered)
