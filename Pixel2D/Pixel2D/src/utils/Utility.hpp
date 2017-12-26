@@ -6,7 +6,7 @@ namespace px
 {
 	namespace utils
 	{
-		sf::Vector2f linearInterpolation(sf::Vector2f start, sf::Vector2f end, float alpha)
+		sf::Vector2f lerp(sf::Vector2f start, sf::Vector2f end, float alpha)
 		{
 			return (start * (1 - alpha) + end * alpha);
 		}
@@ -22,6 +22,14 @@ namespace px
 				return sf::Keyboard::Key::S;
 			if (key == "D" || key == "d")
 				return sf::Keyboard::Key::D;
+			if (key == "UP" || key == "up")
+				return sf::Keyboard::Key::Up;
+			if (key == "DOWN" || key == "down")
+				return sf::Keyboard::Key::Down;
+			if (key == "RIGHT" || key == "right")
+				return sf::Keyboard::Key::Right;
+			if (key == "LEFT" || key == "left")
+				return sf::Keyboard::Key::Left;
 			if (key == "SPACE" || key == "space")
 				return sf::Keyboard::Key::Space;
 			if (key == "ENTER" || key == "enter")
