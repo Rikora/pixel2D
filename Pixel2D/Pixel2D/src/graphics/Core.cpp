@@ -43,18 +43,28 @@ namespace px
 		//Scene
 		m_scene = std::make_unique<Scene>(m_sceneTexture);
 
-		//Lua example
-		//Table and usertype
-		lua.new_usertype<Object>("Object", "get", &Object::getEntity, "getPosX", &Object::getX, "getPosY", &Object::getY , "setPosition", &Object::setPosition);
+		loadLua();
+		loadLuaScripts();
 
-		sol::table kb = lua.create_named_table("keyboard");
-		kb.set_function("isKeyPressed", [](const std::string key)->bool { return sf::Keyboard::isKeyPressed(utils::toKey(key)); });
-
-		//Scripts
-		lua.script_file("src/res/scripts/main.lua");
-
+		//Doesn't work for multiple scripts if same name,
+		//so need to have a table for each script?
 		//Start for scripts
 		lua["onStart"]();
+	}
+
+	void Core::loadLua()
+	{
+		//Usertypes
+		lua.new_usertype<Object>("Object", "get", &Object::getEntity, "getPosX", &Object::getX, "getPosY", &Object::getY, "setPosition", &Object::setPosition);
+
+		//Keyboard table
+		sol::table kb = lua.create_named_table("keyboard");
+		kb.set_function("isKeyPressed", [](const std::string key)->bool { return sf::Keyboard::isKeyPressed(utils::toKey(key)); });
+	}
+
+	void Core::loadLuaScripts()
+	{
+		lua.script_file("src/res/scripts/circle.lua");
 	}
 
 	void Core::run()

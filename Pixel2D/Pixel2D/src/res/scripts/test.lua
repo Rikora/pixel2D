@@ -1,3 +1,3 @@
-if (keyboard.isKeyPressed('W')) then
-  print('Pressed W')
+function onStart()
+  print("Hello there")
 end

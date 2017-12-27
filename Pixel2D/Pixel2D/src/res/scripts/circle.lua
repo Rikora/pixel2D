@@ -1,10 +1,10 @@
 require "externals.vector2"
 
-prevPos = Vector2:new(0.0, 0.0)
-movementSpeed = 250.0
-
 -- Called once
 function onStart()
+  prevPos = Vector2:new(0.0, 0.0)
+  movementSpeed = 250.0
+  
   obj = Object.new()
   obj:get("Circle")
   currPos = Vector2:new(obj:getPosX(), obj:getPosY())
