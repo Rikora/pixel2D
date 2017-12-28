@@ -38,6 +38,11 @@ namespace px
 		void updateGUI();
 
 	private:
+		void sceneDock();
+		void hierarchyDock();
+		void inspectorDock();
+
+	private:
 		sf::RenderWindow m_window;
 		sf::RenderTexture m_sceneTexture;
 		sf::View m_sceneView;

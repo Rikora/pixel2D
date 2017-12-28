@@ -140,8 +140,6 @@ namespace px
 
 	void Core::updateGUI()
 	{
-		int floatPrecision = 3;
-
 		//Display different cursor on drag
 		if(ImGui::IsMouseDown(sf::Mouse::Middle) && m_isSceneHovered)
 			ImGui::SetMouseCursor(ImGuiMouseCursor_::ImGuiMouseCursor_Move);
@@ -179,20 +177,7 @@ namespace px
 			ImGui::SetNextDock(ImGuiDockSlot_Left);
 			if (ImGui::BeginDock("Scene"))
 			{
-				m_isSceneHovered = ImGui::IsItemHovered();
-				ImVec2 size = ImGui::GetContentRegionAvail();
-				unsigned int width = m_sceneTexture.getSize().x;
-				unsigned int height = m_sceneTexture.getSize().y;
-
-				if (width != size.x || height != size.y)
-				{
-					m_sceneTexture.create((unsigned int)size.x, (unsigned int)size.y);
-					m_sceneView.setCenter({ size.x / 2.f, size.y / 2.f });
-					m_sceneView.setSize({ size.x, size.y });
-				}
-
-				render();
-				ImGui::Image(m_sceneTexture.getTexture());
+				sceneDock();
 			}
 			ImGui::EndDock();
 
@@ -205,30 +190,7 @@ namespace px
 			ImGui::SetNextDock(ImGuiDockSlot_Tab);
 			if (ImGui::BeginDock("Inspector"))
 			{
-				if (m_objectInfo.picked)
-				{
-					//Change name of entity upon completion
-					if (ImGui::InputText("Name", m_objectInfo.nameChanger.data(), m_objectInfo.nameChanger.size(), ImGuiInputTextFlags_EnterReturnsTrue))
-					{
-						m_scene->updateName(m_objectInfo.pickedName, m_objectInfo.nameChanger.data());
-					}
-					ImGui::Spacing();
-
-					ImGui::SetNextTreeNodeOpen(true, 2);
-					if (ImGui::CollapsingHeader("Transform"))
-					{
-						ImGui::Spacing();
-						ImGui::InputFloat2("Position", &m_objectInfo.position.x, floatPrecision);
-						ImGui::Spacing();
-						ImGui::InputFloat2("Scale", &m_objectInfo.scale.x, floatPrecision);
-						ImGui::Spacing();
-						ImGui::InputFloat("Rotation", &m_objectInfo.rotation, 1.f, 0.f, floatPrecision);
-					}
-					ImGui::Spacing();
-					
-					//Update transform of selected entity
-					m_scene->updateTransform(m_objectInfo);
-				}
+				inspectorDock();
 			}
 			ImGui::EndDock();
 
@@ -236,22 +198,7 @@ namespace px
 			if (ImGui::BeginDock("Hierarchy"))
 			{
 				ImGui::BeginChild("Entities");
-				unsigned int i = 0;
-				ComponentHandle<Render> render;
-
-				for (Entity & entity : m_scene->getEntities().entities_with_components(render))
-				{
-					char label[128];
-					sprintf(label, render->name.c_str());
-					if (ImGui::Selectable(label, m_objectInfo.selected == i))
-					{
-						//Update entity information for GUI
-						m_objectInfo = { render->name, render->shape->getPosition(), render->shape->getScale(),
-										 render->shape->getRotation(), i, true };
-						m_objectInfo.changeName(render->name);
-					}
-					++i;
-				}
+				hierarchyDock();
 				ImGui::EndChild();
 			}
 			ImGui::EndDock();
@@ -279,5 +226,73 @@ namespace px
 			ImGui::EndDockspace();
 		}
 		ImGui::End();
+	}
+
+	void Core::sceneDock()
+	{
+		m_isSceneHovered = ImGui::IsItemHovered();
+		ImVec2 size = ImGui::GetContentRegionAvail();
+		unsigned int width = m_sceneTexture.getSize().x;
+		unsigned int height = m_sceneTexture.getSize().y;
+
+		if (width != size.x || height != size.y)
+		{
+			m_sceneTexture.create((unsigned int)size.x, (unsigned int)size.y);
+			m_sceneView.setCenter({ size.x / 2.f, size.y / 2.f });
+			m_sceneView.setSize({ size.x, size.y });
+		}
+
+		render();
+		ImGui::Image(m_sceneTexture.getTexture());
+	}
+
+	void Core::hierarchyDock()
+	{
+		unsigned int i = 0;
+		ComponentHandle<Render> render;
+
+		for (Entity & entity : m_scene->getEntities().entities_with_components(render))
+		{
+			char label[128];
+			sprintf(label, render->name.c_str());
+			if (ImGui::Selectable(label, m_objectInfo.selected == i))
+			{
+				//Update entity information for GUI
+				m_objectInfo = { render->name, render->shape->getPosition(), render->shape->getScale(),
+					render->shape->getRotation(), i, true };
+				m_objectInfo.changeName(render->name);
+			}
+			++i;
+		}
+	}
+
+	void Core::inspectorDock()
+	{
+		int floatPrecision = 3;
+
+		if (m_objectInfo.picked)
+		{
+			//Change name of entity upon completion
+			if (ImGui::InputText("Name", m_objectInfo.nameChanger.data(), m_objectInfo.nameChanger.size(), ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				m_scene->updateName(m_objectInfo.pickedName, m_objectInfo.nameChanger.data());
+			}
+			ImGui::Spacing();
+
+			//Update transform of selected entity
+			ImGui::SetNextTreeNodeOpen(true, 2);
+			if (ImGui::CollapsingHeader("Transform"))
+			{
+				ImGui::Spacing();
+				ImGui::InputFloat2("Position", &m_objectInfo.position.x, floatPrecision);
+				ImGui::Spacing();
+				ImGui::InputFloat2("Scale", &m_objectInfo.scale.x, floatPrecision);
+				ImGui::Spacing();
+				ImGui::InputFloat("Rotation", &m_objectInfo.rotation, 1.f, 0.f, floatPrecision);
+			}
+			ImGui::Spacing();
+
+			m_scene->updateTransform(m_objectInfo);
+		}
 	}
 }
