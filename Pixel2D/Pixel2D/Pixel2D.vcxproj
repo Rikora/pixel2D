@@ -37,6 +37,7 @@
     <ClCompile Include="src\graphics\systems\RenderSystem.cpp" />
     <ClCompile Include="src\graphics\systems\TransformSystem.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\utils\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\components\Render.hpp" />

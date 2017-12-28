@@ -77,6 +77,9 @@
     <ClCompile Include="src\graphics\systems\TransformSystem.cpp">
       <Filter>Graphics\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\Utility.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\Macros.hpp">

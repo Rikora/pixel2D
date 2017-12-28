@@ -17,6 +17,12 @@ namespace px
 	class Scene : public EntityX
 	{
 	public:
+		enum class Shapes
+		{
+			CIRCLE,
+		};
+
+	public:
 		struct ObjectInfo
 		{
 			ObjectInfo(){}
@@ -45,6 +51,8 @@ namespace px
 		~Scene();
 
 	public:
+		void createEntity(const Scene::Shapes & shape, const sf::Vector2f & position, const std::string & name, ObjectInfo & info);
+		void destroyEntity(const std::string & name);
 		void destroyEntities();
 		void updateName(std::string & cName, const std::string & nName);
 		void updateTransform(const ObjectInfo & info);

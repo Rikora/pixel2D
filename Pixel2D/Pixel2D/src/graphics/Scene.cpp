@@ -1,9 +1,11 @@
 #include "Scene.hpp"
 #include <SFML/Graphics/CircleShape.hpp>
+#include "../utils/Utility.hpp"
 
 //Systems
 #include "systems/RenderSystem.hpp"
 #include "systems/TransformSystem.hpp"
+
 
 namespace px
 {
@@ -33,6 +35,47 @@ namespace px
 	Scene::~Scene()
 	{
 		destroyEntities();
+	}
+
+	void Scene::createEntity(const Scene::Shapes & shape, const sf::Vector2f & position, const std::string & name, ObjectInfo & info)
+	{
+		//Create default entity based on shape
+		if (shape == Shapes::CIRCLE)
+		{
+			auto entity = m_entities.create();
+			auto shape = std::make_unique<sf::CircleShape>(5.f);
+
+			Transform transform(position, sf::Vector2f(1.f, 1.f), 0.f);
+			shape->setFillColor(sf::Color::Red);
+			shape->setOrigin(5.f, 5.f);
+			shape->setPosition(transform.position);
+			shape->setScale(transform.scale);
+			shape->setRotation(transform.rotation);
+
+			//Update the GUI display
+			info = { name, transform.position, transform.scale, transform.rotation, utils::selected, true };
+			info.changeName(name);
+			utils::selected++; //Can't really predict where the label should be placed?
+
+			//Apply components
+			entity.assign<Render>(std::move(shape), name);
+			entity.assign<Transform>(transform);
+		}
+	}
+
+	void Scene::destroyEntity(const std::string & name)
+	{
+		ComponentHandle<Render> render;
+
+		//Remove entity which corresponds to the name
+		for (Entity & entity : m_entities.entities_with_components(render))
+		{
+			if (render->name == name)
+			{
+				m_entities.destroy(entity.id());
+				break;
+			}
+		}
 	}
 
 	void Scene::destroyEntities()

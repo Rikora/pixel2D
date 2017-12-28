@@ -105,7 +105,7 @@ namespace px
 				m_window.close();
 
 			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Middle)
-				m_currentMousePos = sf::Mouse::getPosition(m_window);			
+				m_currentMousePos = sf::Mouse::getPosition(m_window);	
 		}
 	}
 
@@ -144,8 +144,83 @@ namespace px
 		if(ImGui::IsMouseDown(sf::Mouse::Middle) && m_isSceneHovered)
 			ImGui::SetMouseCursor(ImGuiMouseCursor_::ImGuiMouseCursor_Move);
 
-		ImGui::SetNextWindowPos(ImVec2(m_window.getSize().x - 215u, m_window.getSize().y - 480u));
-		if (!ImGui::Begin("Camera overlay", nullptr, ImVec2(0, 0), 0.0f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
+		//Menu
+		if (ImGui::BeginMainMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("New")) {}
+				if (ImGui::MenuItem("Open", "Ctrl+O")) {}
+				if (ImGui::BeginMenu("Open Recent"))
+				{
+					ImGui::MenuItem("fish_hat.c");
+					ImGui::MenuItem("fish_hat.inl");
+					ImGui::MenuItem("fish_hat.h");
+					if (ImGui::BeginMenu("More.."))
+					{
+						ImGui::MenuItem("Hello");
+						ImGui::MenuItem("Sailor");
+						ImGui::EndMenu();
+					}
+					ImGui::EndMenu();
+				}
+				if (ImGui::BeginMenu("Disabled", false)) // Disabled
+				{
+					IM_ASSERT(0);
+				}
+				if (ImGui::MenuItem("Quit", "Escape")) { m_window.close(); }
+				ImGui::EndMenu();
+			}
+
+			/*if (ImGui::BeginMenu("Edit"))
+			{
+				if (ImGui::MenuItem("Show Grid", NULL, &m_displayInfo.showGrid)) {}
+				if (ImGui::MenuItem("Show FPS", NULL, &m_displayInfo.showFPS)) {}
+				if (ImGui::MenuItem("Show Position", NULL, &m_displayInfo.showCameraPosition)) {}
+				if (ImGui::MenuItem("Show Diagnostics", NULL, &m_displayInfo.showDiagnostics)) {}
+				if (ImGui::MenuItem("Show Debug Shapes", NULL, &m_displayInfo.showDebugDraw)) {}
+				ImGui::EndMenu();
+			}*/
+
+			if (ImGui::BeginMenu("GameObject"))
+			{
+				if (ImGui::BeginMenu("2D Object"))
+				{
+					if (ImGui::MenuItem("Circle"))
+						m_scene->createEntity(Scene::Shapes::CIRCLE, m_sceneView.getCenter(), 
+											  utils::generateName("Circle", utils::circleCounter), m_objectInfo);
+
+					ImGui::EndMenu();
+				}
+				ImGui::EndMenu();
+			}
+			ImGui::EndMainMenuBar();
+		}
+
+		//Open popup for delete
+		if (m_objectInfo.picked && sf::Keyboard::isKeyPressed(sf::Keyboard::Delete))
+			ImGui::OpenPopup("Delete?");
+
+		//Remove the picked entity if the user agrees
+		if (ImGui::BeginPopupModal("Delete?", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+		{
+			ImGui::Text("Are you sure you want to delete '%s'?\nThis action can't be undone.\n\n", m_objectInfo.pickedName.c_str());
+			ImGui::Separator();
+
+			if (ImGui::Button("Yes", ImVec2(120, 0)) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+			{
+				m_scene->destroyEntity(m_objectInfo.pickedName);
+				m_objectInfo.picked = false;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SameLine();
+
+			if (ImGui::Button("No", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+			ImGui::EndPopup();
+		}
+
+		ImGui::SetNextWindowPos(ImVec2(static_cast<float>(m_window.getSize().x - 215u), static_cast<float>(m_window.getSize().y - 480u)));
+		if (!ImGui::Begin("Mouse overlay", nullptr, ImVec2(0, 0), 0.0f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
 			ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
 		{
 			ImGui::End();
@@ -166,7 +241,7 @@ namespace px
 			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings |
 			ImGuiWindowFlags_NoTitleBar);
 		const float oldWindowRounding = ImGui::GetStyle().WindowRounding; ImGui::GetStyle().WindowRounding = 0;
-		const bool visible = ImGui::Begin("Docking system", NULL, ImVec2(0, 0), 1.0f, flags);
+		const bool visible = ImGui::Begin("Docking system", nullptr, ImVec2(0, 0), 1.0f, flags);
 		ImGui::GetStyle().WindowRounding = oldWindowRounding;
 		ImGui::SetWindowPos(ImVec2(0, 10));
 
@@ -248,21 +323,21 @@ namespace px
 
 	void Core::hierarchyDock()
 	{
-		unsigned int i = 0;
+		utils::selected = 0;
 		ComponentHandle<Render> render;
 
 		for (Entity & entity : m_scene->getEntities().entities_with_components(render))
 		{
 			char label[128];
 			sprintf(label, render->name.c_str());
-			if (ImGui::Selectable(label, m_objectInfo.selected == i))
+			if (ImGui::Selectable(label, m_objectInfo.selected == utils::selected))
 			{
 				//Update entity information for GUI
 				m_objectInfo = { render->name, render->shape->getPosition(), render->shape->getScale(),
-					render->shape->getRotation(), i, true };
+					render->shape->getRotation(), utils::selected, true };
 				m_objectInfo.changeName(render->name);
 			}
-			++i;
+			utils::selected++;
 		}
 	}
 
@@ -274,9 +349,8 @@ namespace px
 		{
 			//Change name of entity upon completion
 			if (ImGui::InputText("Name", m_objectInfo.nameChanger.data(), m_objectInfo.nameChanger.size(), ImGuiInputTextFlags_EnterReturnsTrue))
-			{
 				m_scene->updateName(m_objectInfo.pickedName, m_objectInfo.nameChanger.data());
-			}
+
 			ImGui::Spacing();
 
 			//Update transform of selected entity
