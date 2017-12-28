@@ -1,5 +1,5 @@
 #include "RenderSystem.hpp"
-#include "../components/Render.hpp"
+#include "..\components\Render.hpp"
 #include <SFML\Graphics\RenderTarget.hpp>
 
 namespace px

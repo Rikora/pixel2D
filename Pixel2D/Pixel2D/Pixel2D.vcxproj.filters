@@ -74,6 +74,9 @@
     <ClCompile Include="..\third-party\kairos\Kairos\TimestepLite.cpp">
       <Filter>Kairos</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\systems\TransformSystem.cpp">
+      <Filter>Graphics\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\Macros.hpp">
@@ -102,6 +105,12 @@
     </ClInclude>
     <ClInclude Include="src\utils\Log.hpp">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\systems\TransformSystem.hpp">
+      <Filter>Graphics\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\components\Transform.hpp">
+      <Filter>Graphics\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
