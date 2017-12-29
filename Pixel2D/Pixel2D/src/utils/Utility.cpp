@@ -4,7 +4,7 @@ namespace px
 {
 	namespace utils
 	{
-		const std::string generateName(const std::string & name, unsigned int & counter)
+		std::string generateName(const std::string & name, unsigned int & counter)
 		{
 			const std::string n = name + std::to_string(counter); counter++;
 			return n;

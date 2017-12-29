@@ -33,14 +33,15 @@ namespace px
 			void changeName(const std::string & name)
 			{
 				nameChanger.clear(); nameChanger.resize(50);
+
 				for (std::size_t p = 0; p < name.size(); ++p)
 					nameChanger[p] = name[p];
 			}
 
 			unsigned int selected;
 			bool picked = false;
-			std::string pickedName;
 			float rotation;
+			std::string pickedName;
 			sf::Vector2f position;
 			sf::Vector2f scale;
 			std::vector<char> nameChanger;

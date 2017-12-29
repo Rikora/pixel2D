@@ -15,9 +15,10 @@ namespace px
 		auto entity = m_entities.create();
 
 		Transform transform(sf::Vector2f(500.f, 233.f), sf::Vector2f(1.f, 1.f), 0.f);
-		
+
 		//Circle
 		auto shape = std::make_unique<sf::CircleShape>(10.f);
+
 		shape->setFillColor(sf::Color::Yellow);
 		shape->setOrigin(10.f, 10.f);
 		shape->setPosition(transform.position);

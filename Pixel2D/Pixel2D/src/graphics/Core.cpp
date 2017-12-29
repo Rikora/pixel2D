@@ -7,6 +7,7 @@
 #include <imgui-SFML.h>
 #include <imguidock.h>
 #include <SFML\Window\Event.hpp> 
+#include <SFML\Graphics\RectangleShape.hpp>
 
 namespace px
 {
@@ -106,6 +107,11 @@ namespace px
 
 			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Middle)
 				m_currentMousePos = sf::Mouse::getPosition(m_window);	
+
+			/*if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+			{
+
+			}*/
 		}
 	}
 
@@ -219,7 +225,7 @@ namespace px
 			ImGui::EndPopup();
 		}
 
-		ImGui::SetNextWindowPos(ImVec2(static_cast<float>(m_window.getSize().x - 215u), static_cast<float>(m_window.getSize().y - 480u)));
+		ImGui::SetNextWindowPos(ImVec2(static_cast<float>(m_window.getSize().x - 200u), static_cast<float>(m_window.getSize().y - 480u)));
 		if (!ImGui::Begin("Mouse overlay", nullptr, ImVec2(0, 0), 0.0f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
 			ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
 		{
@@ -227,12 +233,12 @@ namespace px
 			return;
 		}
 
-		sf::Vector2i pos = sf::Mouse::getPosition(m_window);
-		sf::Vector2f worldPos = m_sceneTexture.mapPixelToCoords(pos);
-		ImGui::Text("%.3f, %.3f)     ", worldPos.x, worldPos.y);
+		sf::Vector2f worldPos = m_sceneTexture.mapPixelToCoords(sf::Mouse::getPosition(m_window), m_sceneView);
+		sf::FloatRect bounds(worldPos, sf::Vector2f(1, 1));
+		ImGui::Text("(%.3f, %.3f)     ", worldPos.x, worldPos.y);
 		ImGui::End();
 
-		/*if (m_scene->getEntity("Circle").component<Render>()->shape->getGlobalBounds().contains(worldPos))
+		/*if (m_scene->getEntity("Circle").component<Render>()->shape->getGlobalBounds().intersects(bounds))
 			std::cout << "True" << std::endl;*/
 
 		//Docking system

@@ -10,7 +10,7 @@ namespace px
 		static unsigned int selected = 0;
 		static unsigned int circleCounter = 0;
 
-		const std::string generateName(const std::string & name, unsigned int & counter);
+		std::string generateName(const std::string & name, unsigned int & counter);
 		sf::Vector2f lerp(sf::Vector2f start, sf::Vector2f end, float alpha);
 		sf::Keyboard::Key toKey(const std::string key);
 	}
