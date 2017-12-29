@@ -1,4 +1,7 @@
 #include "Utility.hpp"
+#include <SFML\Window\Mouse.hpp>
+#include <SFML\Graphics\RenderWindow.hpp>
+#include <SFML\Graphics\RenderTexture.hpp>
 
 namespace px
 {
@@ -10,12 +13,21 @@ namespace px
 			return n;
 		}
 
-		sf::Vector2f lerp(sf::Vector2f start, sf::Vector2f end, float alpha)
+		sf::Vector2f lerp(const sf::Vector2f & start, const sf::Vector2f & end, const float & alpha)
 		{
 			return (start * (1 - alpha) + end * alpha);
 		}
 
-		sf::Keyboard::Key toKey(const std::string key)
+		sf::Vector2f getMouseWorldPos(const sf::RenderTexture & texture, const sf::RenderWindow & window)
+		{
+			sf::Vector2i pos = sf::Mouse::getPosition(window) - sf::Vector2i(16, 50); //(16, 50) is docking offset
+			sf::Vector2f worldPos = sf::Vector2f(texture.mapPixelToCoords(pos).x, window.mapPixelToCoords(pos).y);
+			float yOffset = texture.getView().getCenter().y - (texture.getView().getSize().y / 2.f);
+			worldPos = sf::Vector2f(worldPos.x, (-worldPos.y + texture.getView().getSize().y) + yOffset);
+			return worldPos;
+		}
+
+		sf::Keyboard::Key toKey(const std::string & key)
 		{
 			//Is there a cleaner way to do this with defines?
 			if (key == "W" || key == "w")
