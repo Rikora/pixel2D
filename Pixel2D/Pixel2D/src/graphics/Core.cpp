@@ -110,12 +110,10 @@ namespace px
 
 			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
 			{
-				sf::Vector2i pos = sf::Mouse::getPosition(m_window);
-				pos = sf::Vector2i(pos.x - 16, pos.y - 50);
-				sf::Vector2f worldPos = m_sceneTexture.mapPixelToCoords(pos);
-				worldPos = sf::Vector2f(worldPos.x, -worldPos.y + 401.f);
-
-				//Now we need to consider the offset when the view moves!
+				sf::Vector2i pos = sf::Mouse::getPosition(m_window) - sf::Vector2i(16, 50); //(16, 50) is docking offset
+				sf::Vector2f worldPos = sf::Vector2f(m_sceneTexture.mapPixelToCoords(pos).x, m_window.mapPixelToCoords(pos).y);
+				float yOffset = m_sceneView.getCenter().y - (m_sceneView.getSize().y / 2.f);
+				worldPos = sf::Vector2f(worldPos.x, (-worldPos.y + m_sceneView.getSize().y) + yOffset);
 
 				m_scene->createEntity(Scene::Shapes::CIRCLE, worldPos,
 					utils::generateName("Circle", utils::circleCounter), m_objectInfo);
