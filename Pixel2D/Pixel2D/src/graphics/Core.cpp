@@ -7,7 +7,6 @@
 #include <imgui-SFML.h>
 #include <imguidock.h>
 #include <SFML\Window\Event.hpp> 
-#include <SFML\Graphics\RectangleShape.hpp>
 
 namespace px
 {
@@ -108,12 +107,15 @@ namespace px
 			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Middle)
 				m_currentMousePos = sf::Mouse::getPosition(m_window);	
 
-			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && m_isSceneHovered)
 			{
 				sf::Vector2f worldPos = utils::getMouseWorldPos(m_sceneTexture, m_window);
 
-				m_scene->createEntity(Scene::Shapes::CIRCLE, worldPos,
-					utils::generateName("Circle", utils::circleCounter), m_objectInfo);
+				//Check if the mouse picked an object
+				if (m_scene->checkIntersection(worldPos, m_objectInfo))
+					gameLog.print("Intersected\n");
+				else
+					m_objectInfo.picked = false;
 			}
 		}
 	}
@@ -228,6 +230,7 @@ namespace px
 			ImGui::EndPopup();
 		}
 
+		//Show world position of mouse 
 		ImGui::SetNextWindowPos(ImVec2(static_cast<float>(m_window.getSize().x - 200u), static_cast<float>(m_window.getSize().y - 480u)));
 		if (!ImGui::Begin("Mouse overlay", nullptr, ImVec2(0, 0), 0.0f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
 			ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
@@ -236,15 +239,9 @@ namespace px
 			return;
 		}
 
-		sf::Vector2i pos = sf::Mouse::getPosition(m_window);
-		pos = sf::Vector2i(pos.x, pos.y - 50);
-		sf::Vector2f worldPos = m_sceneTexture.mapPixelToCoords(pos);
-		worldPos = sf::Vector2f(worldPos.x - 16.f, -worldPos.y + 401.f);
+		sf::Vector2f worldPos = utils::getMouseWorldPos(m_sceneTexture, m_window);
 		ImGui::Text("(%.3f, %.3f)     ", worldPos.x, worldPos.y);
 		ImGui::End();
-
-		/*if (m_scene->getEntity("Circle").component<Render>()->shape->getGlobalBounds().contains(worldPos))
-			std::cout << "True" << std::endl;*/
 
 		//Docking system
 		ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
@@ -290,9 +287,8 @@ namespace px
 			ImGui::EndDock();
 
 			ImGui::SetNextDock(ImGuiDockSlot_Bottom);
-			if (ImGui::BeginDock("Log"))
+			if (ImGui::BeginDock("Assets"))
 			{
-				gameLog.draw();
 			}
 			ImGui::EndDock();
 
@@ -304,8 +300,9 @@ namespace px
 			ImGui::EndDock();
 
 			ImGui::SetNextDock(ImGuiDockSlot_Tab);
-			if (ImGui::BeginDock("Assets"))
+			if (ImGui::BeginDock("Log"))
 			{
+				gameLog.draw();
 			}
 			ImGui::EndDock();
 

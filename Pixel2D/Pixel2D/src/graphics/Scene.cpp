@@ -54,9 +54,8 @@ namespace px
 			shape->setRotation(transform.rotation);
 
 			//Update the GUI display
-			info = { name, transform.position, transform.scale, transform.rotation, utils::selected, true };
+			info = { name, transform.position, transform.scale, transform.rotation, utils::circleCounter, true };
 			info.changeName(name);
-			utils::selected++; //Can't really predict where the label should be placed?
 
 			//Apply components
 			entity.assign<Render>(std::move(shape), name);
@@ -132,6 +131,40 @@ namespace px
 	void Scene::updateRenderSystem(const double & dt)
 	{
 		m_systems.update<RenderSystem>(dt);
+	}
+
+	bool Scene::checkIntersection(const sf::Vector2f & point)
+	{
+		ComponentHandle<Render> render;
+
+		for (Entity & entity : m_entities.entities_with_components(render))
+		{
+			if (render->shape->getGlobalBounds().contains(point))
+				return true;
+		}
+
+		return false;
+	}
+
+	bool Scene::checkIntersection(const sf::Vector2f & point, ObjectInfo & info)
+	{
+		ComponentHandle<Render> render;
+		ComponentHandle<Transform> transform;
+
+		std::size_t i = 0;
+		for (Entity & entity : m_entities.entities_with_components(render, transform))
+		{
+			if (render->shape->getGlobalBounds().contains(point))
+			{
+				//Update the GUI display
+				info = { render->name, transform->position, transform->scale, transform->rotation, i, true };
+				info.changeName(render->name);
+				return true;
+			}
+			++i;
+		}
+
+		return false;
 	}
 
 	Entity Scene::getEntity(const std::string & name)

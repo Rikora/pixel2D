@@ -59,6 +59,8 @@ namespace px
 		void updateTransform(const ObjectInfo & info);
 		void updateTransformSystem(const double & dt);
 		void updateRenderSystem(const double & dt);
+		bool checkIntersection(const sf::Vector2f & point);
+		bool checkIntersection(const sf::Vector2f & point, ObjectInfo & info);
 		Entity getEntity(const std::string & name);
 
 	public:
