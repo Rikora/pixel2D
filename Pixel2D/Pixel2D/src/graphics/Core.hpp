@@ -48,6 +48,7 @@ namespace px
 		sf::View m_sceneView;
 		sf::Vector2i m_currentMousePos;
 		sf::Vector2i m_previousMousePos;
+		sf::Vector2i m_deltaMouse;
 		Scene::ObjectInfo m_objectInfo;
 		bool m_isSceneHovered;
 

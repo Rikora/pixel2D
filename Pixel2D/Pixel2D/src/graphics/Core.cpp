@@ -108,10 +108,18 @@ namespace px
 			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Middle)
 				m_currentMousePos = sf::Mouse::getPosition(m_window);	
 
-			/*if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
 			{
+				sf::Vector2i pos = sf::Mouse::getPosition(m_window);
+				pos = sf::Vector2i(pos.x - 16, pos.y - 50);
+				sf::Vector2f worldPos = m_sceneTexture.mapPixelToCoords(pos);
+				worldPos = sf::Vector2f(worldPos.x, -worldPos.y + 401.f);
 
-			}*/
+				//Now we need to consider the offset when the view moves!
+
+				m_scene->createEntity(Scene::Shapes::CIRCLE, worldPos,
+					utils::generateName("Circle", utils::circleCounter), m_objectInfo);
+			}
 		}
 	}
 
@@ -128,7 +136,7 @@ namespace px
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Middle) && m_isSceneHovered)
 			{
 				m_currentMousePos = sf::Mouse::getPosition(m_window);
-				sf::Vector2i m_deltaMouse = sf::Vector2i(m_currentMousePos.x - m_previousMousePos.x, m_previousMousePos.y - m_currentMousePos.y);
+				m_deltaMouse = sf::Vector2i(m_currentMousePos.x - m_previousMousePos.x, m_previousMousePos.y - m_currentMousePos.y);
 				m_sceneView.move(sf::Vector2f((float)m_deltaMouse.x, (float)m_deltaMouse.y));
 			}
 
@@ -233,12 +241,14 @@ namespace px
 			return;
 		}
 
-		sf::Vector2f worldPos = m_sceneTexture.mapPixelToCoords(sf::Mouse::getPosition(m_window), m_sceneView);
-		sf::FloatRect bounds(worldPos, sf::Vector2f(1, 1));
+		sf::Vector2i pos = sf::Mouse::getPosition(m_window);
+		pos = sf::Vector2i(pos.x, pos.y - 50);
+		sf::Vector2f worldPos = m_sceneTexture.mapPixelToCoords(pos);
+		worldPos = sf::Vector2f(worldPos.x - 16.f, -worldPos.y + 401.f);
 		ImGui::Text("(%.3f, %.3f)     ", worldPos.x, worldPos.y);
 		ImGui::End();
 
-		/*if (m_scene->getEntity("Circle").component<Render>()->shape->getGlobalBounds().intersects(bounds))
+		/*if (m_scene->getEntity("Circle").component<Render>()->shape->getGlobalBounds().contains(worldPos))
 			std::cout << "True" << std::endl;*/
 
 		//Docking system
