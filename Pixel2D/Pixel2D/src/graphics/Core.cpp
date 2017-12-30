@@ -28,6 +28,9 @@ namespace px
 		m_window.setPosition({ 125, 75 });
 		m_window.setVerticalSyncEnabled(true);
 
+		//Load resources
+		loadTextures();
+
 		//Render texture
 		m_sceneTexture.create(m_window.getSize().x, m_window.getSize().y);
 
@@ -50,6 +53,11 @@ namespace px
 		//so need to have a table for each script?
 		//Start for scripts
 		//lua["onStart"]();
+	}
+
+	void Core::loadTextures()
+	{
+		m_textures.LoadResource(Textures::ID::Sprite, "src/res/textures/tilesets/baseMap.png");
 	}
 
 	void Core::loadLua()
@@ -289,6 +297,9 @@ namespace px
 			ImGui::SetNextDock(ImGuiDockSlot_Bottom);
 			if (ImGui::BeginDock("Assets"))
 			{
+
+
+
 			}
 			ImGui::EndDock();
 

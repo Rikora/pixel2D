@@ -5,6 +5,8 @@
 #include <Kairos\FpsLite.hpp>
 
 #include "Scene.hpp"
+#include "../utils/ResourceHolder.hpp"
+#include "../utils/ResourceIdentifiers.hpp"
 
 namespace px
 {
@@ -30,6 +32,7 @@ namespace px
 
 	private:
 		void initialize();
+		void loadTextures();
 		void loadLua();
 		void loadLuaScripts();
 		void render();
@@ -53,11 +56,13 @@ namespace px
 		bool m_isSceneHovered;
 
 	private:
+		TextureHolder m_textures;
+
+	private:
 		static std::unique_ptr<Scene> m_scene;
 
 	private:
 		kairos::FpsLite m_fps;
 		kairos::Timestep m_timestep;
-		//tmx::Map m_map;
 	};
 }

@@ -115,6 +115,12 @@
     <ClInclude Include="src\graphics\components\Transform.hpp">
       <Filter>Graphics\Components</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\ResourceHolder.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\ResourceIdentifiers.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\third-party\kairos\Kairos\Absorel.inl">

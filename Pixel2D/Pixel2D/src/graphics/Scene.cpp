@@ -138,10 +138,8 @@ namespace px
 		ComponentHandle<Render> render;
 
 		for (Entity & entity : m_entities.entities_with_components(render))
-		{
 			if (render->shape->getGlobalBounds().contains(point))
 				return true;
-		}
 
 		return false;
 	}
@@ -151,7 +149,7 @@ namespace px
 		ComponentHandle<Render> render;
 		ComponentHandle<Transform> transform;
 
-		std::size_t i = 0;
+		unsigned int i = 0;
 		for (Entity & entity : m_entities.entities_with_components(render, transform))
 		{
 			if (render->shape->getGlobalBounds().contains(point))
@@ -173,10 +171,8 @@ namespace px
 		Entity found;
 
 		for (Entity & entity : m_entities.entities_with_components(render))
-		{
 			if (render->name == name)
 				found = entity;
-		}
 
 		return found;
 	}
