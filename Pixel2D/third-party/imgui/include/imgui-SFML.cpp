@@ -269,6 +269,12 @@ bool ImageButton(const sf::Texture& texture, const sf::Vector2f& size,
     return ::imageButtonImpl(texture, sf::FloatRect(0.f, 0.f, textureSize.x, textureSize.y), size, framePadding, bgColor, tintColor);
 }
 
+bool ImageButton(const sf::Texture& texture, const sf::FloatRect& textureRect, const sf::Vector2f& size,
+	const int framePadding, const sf::Color& bgColor, const sf::Color& tintColor)
+{
+	return ::imageButtonImpl(texture, textureRect, size, framePadding, bgColor, tintColor);
+}
+
 bool ImageButton(const sf::Sprite& sprite,
     const int framePadding, const sf::Color& bgColor, const sf::Color& tintColor)
 {

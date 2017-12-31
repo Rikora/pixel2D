@@ -15,7 +15,9 @@ namespace px
 
 		for (Entity entity : es.entities_with_components(render))
 		{
-			target.draw(*render->shape.get());	
+			if(render->layer == Layers::Default)
+				target.draw(*render->shape.get());
+
 			target.draw(getBoundingRect(render->shape->getGlobalBounds()));
 		}
 	}

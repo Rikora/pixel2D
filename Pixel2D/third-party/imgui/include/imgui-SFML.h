@@ -64,7 +64,8 @@ namespace SFML
                      const sf::Color& tintColor = sf::Color::White);
     bool ImageButton(const sf::Texture& texture, const sf::Vector2f& size, const int framePadding = -1,
                      const sf::Color& bgColor = sf::Color::Transparent, const sf::Color& tintColor = sf::Color::White);
-
+	bool ImageButton(const sf::Texture& texture, const sf::FloatRect & textureRect, const sf::Vector2f& size, const int framePadding = -1,
+					 const sf::Color& bgColor = sf::Color::Transparent, const sf::Color& tintColor = sf::Color::White);
     bool ImageButton(const sf::Sprite& sprite, const int framePadding = -1,
                      const sf::Color& bgColor = sf::Color::Transparent,
                      const sf::Color& tintColor = sf::Color::White);

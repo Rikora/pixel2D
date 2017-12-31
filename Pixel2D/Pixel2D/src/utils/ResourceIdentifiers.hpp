@@ -18,8 +18,14 @@ namespace Fonts
 }
 
 //Forward declaration and a few type definitions
-template <typename Resource, typename Identifier>
-class ResourceHolder;
+namespace px
+{
+	namespace utils
+	{
+		template <typename Resource, typename Identifier>
+		class ResourceHolder;
+	}
+}
 
-using TextureHolder = ResourceHolder<sf::Texture, Textures::ID>;
-using FontHolder = ResourceHolder<sf::Font, Fonts::ID>;
+using TextureHolder = px::utils::ResourceHolder<sf::Texture, Textures::ID>;
+using FontHolder = px::utils::ResourceHolder<sf::Font, Fonts::ID>;

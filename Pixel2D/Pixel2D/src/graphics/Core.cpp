@@ -57,7 +57,7 @@ namespace px
 
 	void Core::loadTextures()
 	{
-		m_textures.LoadResource(Textures::ID::Sprite, "src/res/textures/tilesets/baseMap.png");
+		m_textures.LoadResource(Textures::ID::Sprite, "src/res/textures/tilesets/tileset.png");
 	}
 
 	void Core::loadLua()
@@ -295,11 +295,9 @@ namespace px
 			ImGui::EndDock();
 
 			ImGui::SetNextDock(ImGuiDockSlot_Bottom);
-			if (ImGui::BeginDock("Assets"))
+			if (ImGui::BeginDock("Log"))
 			{
-
-
-
+				gameLog.draw();
 			}
 			ImGui::EndDock();
 
@@ -311,9 +309,9 @@ namespace px
 			ImGui::EndDock();
 
 			ImGui::SetNextDock(ImGuiDockSlot_Tab);
-			if (ImGui::BeginDock("Log"))
+			if (ImGui::BeginDock("Assets"))
 			{
-				gameLog.draw();
+			
 			}
 			ImGui::EndDock();
 

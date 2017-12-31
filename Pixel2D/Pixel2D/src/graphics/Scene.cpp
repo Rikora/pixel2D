@@ -24,7 +24,7 @@ namespace px
 		shape->setPosition(transform.position);
 
 		//Apply components
-		entity.assign<Render>(std::move(shape), "Circle");
+		entity.assign<Render>(std::move(shape), "Circle", Layers::Default);
 		entity.assign<Transform>(transform);
 
 		//Systems
@@ -58,7 +58,7 @@ namespace px
 			info.changeName(name);
 
 			//Apply components
-			entity.assign<Render>(std::move(shape), name);
+			entity.assign<Render>(std::move(shape), name, Layers::Default);
 			entity.assign<Transform>(transform);
 		}
 	}
