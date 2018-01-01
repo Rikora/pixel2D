@@ -12,6 +12,7 @@ namespace px
 {
 	std::unique_ptr<Scene> Core::m_scene;
 	int Core::m_layerItem;
+	bool Core::m_showLayerSettings = false;
 
 	Core::Core() : m_window(sf::VideoMode(1400, 900), "Pixel2D", sf::Style::Close), m_isSceneHovered(false)
 	{
@@ -222,7 +223,23 @@ namespace px
 				}
 				ImGui::EndMenu();
 			}
+
+			if (ImGui::BeginMenu("Options"))
+			{
+				ImGui::MenuItem("Layers", nullptr, &m_showLayerSettings);
+				ImGui::EndMenu();
+			}
 			ImGui::EndMainMenuBar();
+		}
+
+		//Layers settings menu
+		if (m_showLayerSettings)
+		{
+			ImGui::SetNextWindowPosCenter();
+			if (ImGui::Begin("Layer Settings", &m_showLayerSettings, ImVec2(500, 600)))
+			{
+			}
+			ImGui::End();
 		}
 
 		//Open popup for delete
@@ -379,6 +396,7 @@ namespace px
 			if (ImGui::Combo("Layer", &m_layerItem, m_layers.data(), m_layers.size()))
 			{
 				m_scene->updateLayer(m_objectInfo.pickedName, m_layerItem);
+				//m_scene->sortEntitiesByLayer();
 			}
 
 			//Change name of entity upon completion

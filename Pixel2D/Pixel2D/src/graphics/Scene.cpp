@@ -40,9 +40,19 @@ namespace px
 
 	void Scene::sortEntitiesByLayer()
 	{
+		ComponentHandle<Render> render;
+		Entity next;
+
+		for (auto it = m_entities.entities_with_components(render).begin(); it != m_entities.entities_with_components(render).end(); ++it)
+		{
+			it.next_entity(next);
+			if (render->layer > next.component<Render>()->layer)
+				std::swap(*it, next);
+		}
+
 		/*ComponentHandle<Render> render;
 		std::sort(m_entities.entities_with_components(render).begin(), m_entities.entities_with_components(render).end(),
-			[](const Render & a, const Render & b) { return a.layer < b.layer; });*/
+			[](Entity & a, Entity & b) { return true; });*/
 	}
 
 	void Scene::createEntity(const Scene::Shapes & shape, const sf::Vector2f & position, const std::string & name, ObjectInfo & info)
