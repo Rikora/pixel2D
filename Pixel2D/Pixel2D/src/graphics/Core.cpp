@@ -11,6 +11,7 @@
 namespace px
 {
 	std::unique_ptr<Scene> Core::m_scene;
+	int Core::m_layerItem;
 
 	Core::Core() : m_window(sf::VideoMode(1400, 900), "Pixel2D", sf::Style::Close), m_isSceneHovered(false)
 	{
@@ -48,6 +49,8 @@ namespace px
 
 		loadLua();
 		loadLuaScripts();
+
+		m_layers = { "0", "1" };
 
 		//Doesn't work for multiple scripts if same name,
 		//so need to have a table for each script?
@@ -121,7 +124,10 @@ namespace px
 
 				//Check if the mouse picked an object
 				if (m_scene->checkIntersection(worldPos, m_objectInfo))
+				{
+					m_layerItem = m_objectInfo.layer;
 					gameLog.print("Intersected\n");
+				}
 				else
 					m_objectInfo.picked = false;
 			}
@@ -206,8 +212,11 @@ namespace px
 				if (ImGui::BeginMenu("2D Object"))
 				{
 					if (ImGui::MenuItem("Circle"))
-						m_scene->createEntity(Scene::Shapes::CIRCLE, m_sceneView.getCenter(), 
-											  utils::generateName("Circle", utils::circleCounter), m_objectInfo);
+					{
+						m_scene->createEntity(Scene::Shapes::CIRCLE, m_sceneView.getCenter(),
+							utils::generateName("Circle", utils::circleCounter), m_objectInfo);
+						m_layerItem = m_objectInfo.layer;
+					}
 
 					ImGui::EndMenu();
 				}
@@ -247,8 +256,9 @@ namespace px
 			return;
 		}
 
-		sf::Vector2f worldPos = utils::getMouseWorldPos(m_sceneTexture, m_window);
-		ImGui::Text("(%.3f, %.3f)     ", worldPos.x, worldPos.y);
+		if(m_isSceneHovered)
+			m_worldPos = utils::getMouseWorldPos(m_sceneTexture, m_window);
+		ImGui::Text("(%.3f, %.3f)     ", m_worldPos.x, m_worldPos.y);
 		ImGui::End();
 
 		//Docking system
@@ -351,8 +361,9 @@ namespace px
 			{
 				//Update entity information for GUI
 				m_objectInfo = { render->name, render->shape->getPosition(), render->shape->getScale(),
-					render->shape->getRotation(), utils::selected, true };
+					render->shape->getRotation(), utils::selected, true, render->layer };
 				m_objectInfo.changeName(render->name);
+				m_layerItem = m_objectInfo.layer;
 			}
 			utils::selected++;
 		}
@@ -364,6 +375,12 @@ namespace px
 
 		if (m_objectInfo.picked)
 		{
+			//Change layer
+			if (ImGui::Combo("Layer", &m_layerItem, m_layers.data(), m_layers.size()))
+			{
+				m_scene->updateLayer(m_objectInfo.pickedName, m_layerItem);
+			}
+
 			//Change name of entity upon completion
 			if (ImGui::InputText("Name", m_objectInfo.nameChanger.data(), m_objectInfo.nameChanger.size(), ImGuiInputTextFlags_EnterReturnsTrue))
 				m_scene->updateName(m_objectInfo.pickedName, m_objectInfo.nameChanger.data());

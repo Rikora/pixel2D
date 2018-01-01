@@ -52,11 +52,14 @@ namespace px
 		sf::Vector2i m_currentMousePos;
 		sf::Vector2i m_previousMousePos;
 		sf::Vector2i m_deltaMouse;
+		sf::Vector2f m_worldPos;
 		Scene::ObjectInfo m_objectInfo;
 		bool m_isSceneHovered;
 
 	private:
 		TextureHolder m_textures;
+		static int m_layerItem;
+		std::vector<const char*> m_layers;
 
 	private:
 		static std::unique_ptr<Scene> m_scene;

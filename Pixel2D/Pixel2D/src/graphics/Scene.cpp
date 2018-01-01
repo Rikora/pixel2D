@@ -24,7 +24,7 @@ namespace px
 		shape->setPosition(transform.position);
 
 		//Apply components
-		entity.assign<Render>(std::move(shape), "Circle", Layers::Default);
+		entity.assign<Render>(std::move(shape), "Circle", 0);
 		entity.assign<Transform>(transform);
 
 		//Systems
@@ -36,6 +36,13 @@ namespace px
 	Scene::~Scene()
 	{
 		destroyEntities();
+	}
+
+	void Scene::sortEntitiesByLayer()
+	{
+		/*ComponentHandle<Render> render;
+		std::sort(m_entities.entities_with_components(render).begin(), m_entities.entities_with_components(render).end(),
+			[](const Render & a, const Render & b) { return a.layer < b.layer; });*/
 	}
 
 	void Scene::createEntity(const Scene::Shapes & shape, const sf::Vector2f & position, const std::string & name, ObjectInfo & info)
@@ -54,11 +61,11 @@ namespace px
 			shape->setRotation(transform.rotation);
 
 			//Update the GUI display
-			info = { name, transform.position, transform.scale, transform.rotation, utils::circleCounter, true };
+			info = { name, transform.position, transform.scale, transform.rotation, utils::circleCounter, true, 0 };
 			info.changeName(name);
 
 			//Apply components
-			entity.assign<Render>(std::move(shape), name, Layers::Default);
+			entity.assign<Render>(std::move(shape), name, 0);
 			entity.assign<Transform>(transform);
 		}
 	}
@@ -84,6 +91,20 @@ namespace px
 
 		for (Entity & entity : m_entities.entities_with_components(render))
 			entity.destroy();
+	}
+
+	void Scene::updateLayer(std::string & cName, const unsigned int & layer)
+	{
+		ComponentHandle<Render> render;
+
+		for (Entity & entity : m_entities.entities_with_components(render))
+		{
+			if (render->name == cName)
+			{
+				render->layer = layer;
+				return;
+			}
+		}
 	}
 
 	void Scene::updateName(std::string & cName, const std::string & nName)
@@ -155,7 +176,7 @@ namespace px
 			if (render->shape->getGlobalBounds().contains(point))
 			{
 				//Update the GUI display
-				info = { render->name, transform->position, transform->scale, transform->rotation, i, true };
+				info = { render->name, transform->position, transform->scale, transform->rotation, i, true, render->layer };
 				info.changeName(render->name);
 				return true;
 			}
