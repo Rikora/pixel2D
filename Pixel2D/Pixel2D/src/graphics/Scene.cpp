@@ -182,7 +182,7 @@ namespace px
 		return false;
 	}
 
-	std::vector<const char*> & Scene::getLayers()
+	std::vector<std::string> & Scene::getLayers()
 	{
 		return m_layers;
 	}

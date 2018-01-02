@@ -8,6 +8,32 @@
 #include <imguidock.h>
 #include <SFML\Window\Event.hpp> 
 
+//ImGui overloads for STL containers
+namespace ImGui
+{
+	static auto vector_getter = [](void* vec, int idx, const char** out_text)
+	{
+		auto& vector = *static_cast<std::vector<std::string>*>(vec);
+		if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
+		*out_text = vector.at(idx).c_str();
+		return true;
+	};
+
+	bool Combo(const char* label, int* currIndex, std::vector<std::string>& values)
+	{
+		if (values.empty()) { return false; }
+		return Combo(label, currIndex, vector_getter,
+			static_cast<void*>(&values), values.size());
+	}
+
+	bool ListBox(const char* label, int* currIndex, std::vector<std::string>& values)
+	{
+		if (values.empty()) { return false; }
+		return ListBox(label, currIndex, vector_getter,
+			static_cast<void*>(&values), values.size());
+	}
+}
+
 namespace px
 {
 	std::unique_ptr<Scene> Core::m_scene;
@@ -238,31 +264,43 @@ namespace px
 		//Layers settings menu
 		if (m_showLayerSettings)
 		{
-			//ImGui::SetNextWindowPosCenter();
-			//if (ImGui::Begin("Layer Settings", &m_showLayerSettings, ImVec2(500, 600), 1.f), ImGuiWindowFlags_NoMove)
-			//{
-			//	unsigned int i = 1;
-			//	for (auto c : m_scene->getLayers())
-			//	{
-			//		ImGui::Text("Layer: %s", c);		
-			//		if (c != "0")
-			//		{
-			//			ImGui::SameLine(400);
-			//			ImGui::PushID(i);
-			//			if (ImGui::SmallButton("Delete"))
-			//			{
-			//				//TODO: pop correct index
-			//			}
-			//			ImGui::PopID();
-			//			++i;
-			//		}
-			//		ImGui::Separator();
-			//	}
-			//	std::string l = std::to_string(m_scene->getLayers().size());
-			//	if (ImGui::SmallButton("+"))
-			//		m_scene->getLayers().push_back(l.c_str());
-			//}
-			//ImGui::End();
+			ImGui::SetNextWindowPosCenter();
+			if (ImGui::Begin("Layer Settings", &m_showLayerSettings, ImVec2(500, 600), 1.f), ImGuiWindowFlags_NoMove)
+			{
+				unsigned int i = 1;
+				for (auto layer : m_scene->getLayers())
+				{
+					ImGui::Text("Layer: %s", layer.c_str());		
+					if (layer != "Default")
+					{
+						ImGui::SameLine(560);
+						ImGui::PushID(i);
+						if (ImGui::SmallButton("Delete"))
+						{
+							//TODO: pop correct index
+						}
+						ImGui::PopID();
+						++i;
+					}
+					ImGui::Separator();
+				}
+
+				//Add new layer
+				static std::vector<char> layerName(50);
+				ImGui::InputText("", layerName.data(), layerName.size());
+				ImGui::SameLine();
+				if (ImGui::SmallButton("+"))
+				{
+					if (layerName.data() != "")
+					{
+						m_scene->getLayers().push_back(layerName.data());
+						layerName.clear();
+						layerName.resize(50);
+					}
+				}
+				ImGui::Separator();
+			}
+			ImGui::End();
 		}
 
 		//Open popup for delete
@@ -419,7 +457,7 @@ namespace px
 		if (m_objectInfo.picked)
 		{
 			//Change layer
-			if (ImGui::Combo("Layer", &m_layerItem, m_scene->getLayers().data(), m_scene->getLayers().size()))
+			if (ImGui::Combo("Layer", &m_layerItem, m_scene->getLayers()))
 				m_scene->updateLayer(m_objectInfo.pickedName, m_scene->getLayers()[m_layerItem]);
 
 			//Change name of entity upon completion

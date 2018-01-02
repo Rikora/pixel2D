@@ -65,12 +65,12 @@ namespace px
 		bool checkIntersection(const sf::Vector2f & point, ObjectInfo & info);
 
 	public:
-		std::vector<const char*> & getLayers();
+		std::vector<std::string> & getLayers();
 		Entity getEntity(const std::string & name);
 		EntityManager & getEntities();
 		
 	private:
-		std::vector<const char*> m_layers;
+		std::vector<std::string> m_layers;
 		EntityManager m_entities;
 		EventManager m_events;
 		SystemManager m_systems;
