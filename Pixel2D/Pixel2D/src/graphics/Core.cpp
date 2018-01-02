@@ -11,7 +11,7 @@
 namespace px
 {
 	std::unique_ptr<Scene> Core::m_scene;
-	int Core::m_layerItem;
+	int Core::m_layerItem = 0;
 	bool Core::m_showLayerSettings = false;
 
 	Core::Core() : m_window(sf::VideoMode(1400, 900), "Pixel2D", sf::Style::Close), m_isSceneHovered(false)
@@ -50,8 +50,6 @@ namespace px
 
 		loadLua();
 		loadLuaScripts();
-
-		m_layers = { "0", "1" };
 
 		//Doesn't work for multiple scripts if same name,
 		//so need to have a table for each script?
@@ -126,7 +124,9 @@ namespace px
 				//Check if the mouse picked an object
 				if (m_scene->checkIntersection(worldPos, m_objectInfo))
 				{
-					m_layerItem = m_objectInfo.layer;
+					for (std::size_t i = 0; i < m_scene->getLayers().size(); ++i)
+						if (m_scene->getLayers()[i] == m_objectInfo.layer)
+							m_layerItem = i;
 					gameLog.print("Intersected\n");
 				}
 				else
@@ -216,7 +216,10 @@ namespace px
 					{
 						m_scene->createEntity(Scene::Shapes::CIRCLE, m_sceneView.getCenter(),
 							utils::generateName("Circle", utils::circleCounter), m_objectInfo);
-						m_layerItem = m_objectInfo.layer;
+						
+						for (std::size_t i = 0; i < m_scene->getLayers().size(); ++i)
+							if (m_scene->getLayers()[i] == m_objectInfo.layer)
+								m_layerItem = i;
 					}
 
 					ImGui::EndMenu();
@@ -235,11 +238,31 @@ namespace px
 		//Layers settings menu
 		if (m_showLayerSettings)
 		{
-			ImGui::SetNextWindowPosCenter();
-			if (ImGui::Begin("Layer Settings", &m_showLayerSettings, ImVec2(500, 600)))
-			{
-			}
-			ImGui::End();
+			//ImGui::SetNextWindowPosCenter();
+			//if (ImGui::Begin("Layer Settings", &m_showLayerSettings, ImVec2(500, 600), 1.f), ImGuiWindowFlags_NoMove)
+			//{
+			//	unsigned int i = 1;
+			//	for (auto c : m_scene->getLayers())
+			//	{
+			//		ImGui::Text("Layer: %s", c);		
+			//		if (c != "0")
+			//		{
+			//			ImGui::SameLine(400);
+			//			ImGui::PushID(i);
+			//			if (ImGui::SmallButton("Delete"))
+			//			{
+			//				//TODO: pop correct index
+			//			}
+			//			ImGui::PopID();
+			//			++i;
+			//		}
+			//		ImGui::Separator();
+			//	}
+			//	std::string l = std::to_string(m_scene->getLayers().size());
+			//	if (ImGui::SmallButton("+"))
+			//		m_scene->getLayers().push_back(l.c_str());
+			//}
+			//ImGui::End();
 		}
 
 		//Open popup for delete
@@ -380,7 +403,10 @@ namespace px
 				m_objectInfo = { render->name, render->shape->getPosition(), render->shape->getScale(),
 					render->shape->getRotation(), utils::selected, true, render->layer };
 				m_objectInfo.changeName(render->name);
-				m_layerItem = m_objectInfo.layer;
+
+				for (std::size_t i = 0; i < m_scene->getLayers().size(); ++i)
+					if (m_scene->getLayers()[i] == m_objectInfo.layer)
+						m_layerItem = i;
 			}
 			utils::selected++;
 		}
@@ -393,11 +419,8 @@ namespace px
 		if (m_objectInfo.picked)
 		{
 			//Change layer
-			if (ImGui::Combo("Layer", &m_layerItem, m_layers.data(), m_layers.size()))
-			{
-				m_scene->updateLayer(m_objectInfo.pickedName, m_layerItem);
-				//m_scene->sortEntitiesByLayer();
-			}
+			if (ImGui::Combo("Layer", &m_layerItem, m_scene->getLayers().data(), m_scene->getLayers().size()))
+				m_scene->updateLayer(m_objectInfo.pickedName, m_scene->getLayers()[m_layerItem]);
 
 			//Change name of entity upon completion
 			if (ImGui::InputText("Name", m_objectInfo.nameChanger.data(), m_objectInfo.nameChanger.size(), ImGuiInputTextFlags_EnterReturnsTrue))

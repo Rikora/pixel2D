@@ -27,7 +27,7 @@ namespace px
 		{
 			ObjectInfo(){}
 			ObjectInfo(const std::string & name, const sf::Vector2f & pos, const sf::Vector2f & scale, 
-					   const float & rot, const unsigned int & i, const bool & picked, const unsigned int & layer) :
+					   const float & rot, const unsigned int & i, const bool & picked, const std::string & layer) :
 					   pickedName(name), position(pos), scale(scale), rotation(rot), selected(i), picked(picked), layer(layer) {}
 
 			void changeName(const std::string & name)
@@ -38,7 +38,7 @@ namespace px
 					nameChanger[p] = name[p];
 			}
 
-			unsigned int layer;
+			std::string layer;
 			unsigned int selected;
 			bool picked = false;
 			float rotation;
@@ -53,23 +53,24 @@ namespace px
 		~Scene();
 
 	public:
-		void sortEntitiesByLayer();
 		void createEntity(const Scene::Shapes & shape, const sf::Vector2f & position, const std::string & name, ObjectInfo & info);
 		void destroyEntity(const std::string & name);
 		void destroyEntities();
-		void updateLayer(std::string & cName, const unsigned int & layer);
+		void updateLayer(std::string & cName, const std::string & layer);
 		void updateName(std::string & cName, const std::string & nName);
 		void updateTransform(const ObjectInfo & info);
 		void updateTransformSystem(const double & dt);
 		void updateRenderSystem(const double & dt);
 		bool checkIntersection(const sf::Vector2f & point);
 		bool checkIntersection(const sf::Vector2f & point, ObjectInfo & info);
-		Entity getEntity(const std::string & name);
 
 	public:
+		std::vector<const char*> & getLayers();
+		Entity getEntity(const std::string & name);
 		EntityManager & getEntities();
 		
 	private:
+		std::vector<const char*> m_layers;
 		EntityManager m_entities;
 		EventManager m_events;
 		SystemManager m_systems;

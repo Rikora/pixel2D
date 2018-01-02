@@ -60,7 +60,6 @@ namespace px
 		TextureHolder m_textures;
 		static int m_layerItem;
 		static bool m_showLayerSettings;
-		std::vector<const char*> m_layers;
 
 	private:
 		static std::unique_ptr<Scene> m_scene;

@@ -24,8 +24,11 @@ namespace px
 		shape->setPosition(transform.position);
 
 		//Apply components
-		entity.assign<Render>(std::move(shape), "Circle", 0);
+		entity.assign<Render>(std::move(shape), "Circle", "Default");
 		entity.assign<Transform>(transform);
+
+		//Layers
+		m_layers = { "Default", "Grass" };
 
 		//Systems
 		m_systems.add<RenderSystem>(target);
@@ -36,23 +39,6 @@ namespace px
 	Scene::~Scene()
 	{
 		destroyEntities();
-	}
-
-	void Scene::sortEntitiesByLayer()
-	{
-		ComponentHandle<Render> render;
-		Entity next;
-
-		for (auto it = m_entities.entities_with_components(render).begin(); it != m_entities.entities_with_components(render).end(); ++it)
-		{
-			it.next_entity(next);
-			if (render->layer > next.component<Render>()->layer)
-				std::swap(*it, next);
-		}
-
-		/*ComponentHandle<Render> render;
-		std::sort(m_entities.entities_with_components(render).begin(), m_entities.entities_with_components(render).end(),
-			[](Entity & a, Entity & b) { return true; });*/
 	}
 
 	void Scene::createEntity(const Scene::Shapes & shape, const sf::Vector2f & position, const std::string & name, ObjectInfo & info)
@@ -71,11 +57,11 @@ namespace px
 			shape->setRotation(transform.rotation);
 
 			//Update the GUI display
-			info = { name, transform.position, transform.scale, transform.rotation, utils::circleCounter, true, 0 };
+			info = { name, transform.position, transform.scale, transform.rotation, utils::circleCounter, true, "Default" };
 			info.changeName(name);
 
 			//Apply components
-			entity.assign<Render>(std::move(shape), name, 0);
+			entity.assign<Render>(std::move(shape), name, "Default");
 			entity.assign<Transform>(transform);
 		}
 	}
@@ -103,7 +89,7 @@ namespace px
 			entity.destroy();
 	}
 
-	void Scene::updateLayer(std::string & cName, const unsigned int & layer)
+	void Scene::updateLayer(std::string & cName, const std::string & layer)
 	{
 		ComponentHandle<Render> render;
 
@@ -194,6 +180,11 @@ namespace px
 		}
 
 		return false;
+	}
+
+	std::vector<const char*> & Scene::getLayers()
+	{
+		return m_layers;
 	}
 
 	Entity Scene::getEntity(const std::string & name)

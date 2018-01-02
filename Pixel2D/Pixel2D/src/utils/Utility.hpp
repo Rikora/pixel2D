@@ -2,6 +2,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <string>
+#include <vector>
 
 namespace sf
 {
