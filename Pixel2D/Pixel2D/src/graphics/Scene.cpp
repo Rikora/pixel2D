@@ -81,6 +81,15 @@ namespace px
 		}
 	}
 
+	void Scene::destroyEntities(const std::string & layer)
+	{
+		ComponentHandle<Render> render;
+
+		for (Entity & entity : m_entities.entities_with_components(render))
+			if(render->layer == layer)
+				entity.destroy();
+	}
+
 	void Scene::destroyEntities()
 	{
 		ComponentHandle<Render> render;
@@ -148,17 +157,6 @@ namespace px
 	void Scene::updateRenderSystem(const double & dt)
 	{
 		m_systems.update<RenderSystem>(dt);
-	}
-
-	bool Scene::checkIntersection(const sf::Vector2f & point)
-	{
-		ComponentHandle<Render> render;
-
-		for (Entity & entity : m_entities.entities_with_components(render))
-			if (render->shape->getGlobalBounds().contains(point))
-				return true;
-
-		return false;
 	}
 
 	bool Scene::checkIntersection(const sf::Vector2f & point, ObjectInfo & info)

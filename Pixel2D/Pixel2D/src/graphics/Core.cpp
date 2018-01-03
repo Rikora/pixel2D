@@ -332,7 +332,13 @@ namespace px
 				ImGui::PushID(i);
 				if (ImGui::SmallButton("Delete"))
 				{
-					//TODO: pop correct index
+					//Remove all entities which corresponds to the layer
+					m_scene->destroyEntities(layer);
+
+					//Remove the layer from the vector
+					if (i != m_scene->getLayers().size() - 1)
+						m_scene->getLayers()[i] = std::move(m_scene->getLayers().back());
+					m_scene->getLayers().pop_back();
 				}
 				ImGui::PopID();
 				++i;
@@ -346,7 +352,16 @@ namespace px
 		ImGui::SameLine();
 		if (ImGui::SmallButton("+"))
 		{
-			if (layerName.data() != "")
+			auto valid = [](const std::string & l)->bool 
+			{
+				for (const auto & layer : m_scene->getLayers())
+					if (layer == layerName.data())
+						return false;
+
+				return true;
+			};
+
+			if (valid(layerName.data()) && layerName.data() != "")
 			{
 				m_scene->getLayers().push_back(layerName.data());
 				layerName.clear(); layerName.resize(50);
