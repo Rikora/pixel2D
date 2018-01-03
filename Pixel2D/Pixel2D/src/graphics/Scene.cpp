@@ -76,7 +76,7 @@ namespace px
 			if (render->name == name)
 			{
 				m_entities.destroy(entity.id());
-				break;
+				return;
 			}
 		}
 	}
@@ -119,7 +119,7 @@ namespace px
 			{
 				render->name = nName;
 				cName = nName;
-				break;
+				return;
 			}
 		}
 	}
@@ -178,7 +178,6 @@ namespace px
 			}
 			++i;
 		}
-
 		return false;
 	}
 

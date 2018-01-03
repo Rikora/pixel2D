@@ -4,35 +4,10 @@
 #include "..\utils\Macros.hpp"
 #include "..\utils\Log.hpp"
 #include "..\utils\Console.hpp"
+#include "..\utils\imguiSTL.hpp"
 #include <imgui-SFML.h>
 #include <imguidock.h>
 #include <SFML\Window\Event.hpp> 
-
-//ImGui overloads for STL containers
-namespace ImGui
-{
-	static auto vector_getter = [](void* vec, int idx, const char** out_text)
-	{
-		auto& vector = *static_cast<std::vector<std::string>*>(vec);
-		if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
-		*out_text = vector.at(idx).c_str();
-		return true;
-	};
-
-	bool Combo(const char* label, int* currIndex, std::vector<std::string>& values)
-	{
-		if (values.empty()) { return false; }
-		return Combo(label, currIndex, vector_getter,
-			static_cast<void*>(&values), values.size());
-	}
-
-	bool ListBox(const char* label, int* currIndex, std::vector<std::string>& values)
-	{
-		if (values.empty()) { return false; }
-		return ListBox(label, currIndex, vector_getter,
-			static_cast<void*>(&values), values.size());
-	}
-}
 
 namespace px
 {
@@ -149,10 +124,8 @@ namespace px
 
 				//Check if the mouse picked an object
 				if (m_scene->checkIntersection(worldPos, m_objectInfo))
-				{
-					for (std::size_t i = 0; i < m_scene->getLayers().size(); ++i)
-						if (m_scene->getLayers()[i] == m_objectInfo.layer)
-							m_layerItem = i;
+				{	
+					updateLayerItem(m_layerItem);
 					gameLog.print("Intersected\n");
 				}
 				else
@@ -184,6 +157,7 @@ namespace px
 
 		float alpha = m_timestep.getInterpolationAlphaAsFloat();
 
+		//Update entities
 		m_scene->updateTransformSystem(m_timestep.getStep());
 
 		//Update for scripts
@@ -201,38 +175,9 @@ namespace px
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("New")) {}
-				if (ImGui::MenuItem("Open", "Ctrl+O")) {}
-				if (ImGui::BeginMenu("Open Recent"))
-				{
-					ImGui::MenuItem("fish_hat.c");
-					ImGui::MenuItem("fish_hat.inl");
-					ImGui::MenuItem("fish_hat.h");
-					if (ImGui::BeginMenu("More.."))
-					{
-						ImGui::MenuItem("Hello");
-						ImGui::MenuItem("Sailor");
-						ImGui::EndMenu();
-					}
-					ImGui::EndMenu();
-				}
-				if (ImGui::BeginMenu("Disabled", false)) // Disabled
-				{
-					IM_ASSERT(0);
-				}
 				if (ImGui::MenuItem("Quit", "Escape")) { m_window.close(); }
 				ImGui::EndMenu();
 			}
-
-			/*if (ImGui::BeginMenu("Edit"))
-			{
-				if (ImGui::MenuItem("Show Grid", NULL, &m_displayInfo.showGrid)) {}
-				if (ImGui::MenuItem("Show FPS", NULL, &m_displayInfo.showFPS)) {}
-				if (ImGui::MenuItem("Show Position", NULL, &m_displayInfo.showCameraPosition)) {}
-				if (ImGui::MenuItem("Show Diagnostics", NULL, &m_displayInfo.showDiagnostics)) {}
-				if (ImGui::MenuItem("Show Debug Shapes", NULL, &m_displayInfo.showDebugDraw)) {}
-				ImGui::EndMenu();
-			}*/
 
 			if (ImGui::BeginMenu("GameObject"))
 			{
@@ -242,10 +187,7 @@ namespace px
 					{
 						m_scene->createEntity(Scene::Shapes::CIRCLE, m_sceneView.getCenter(),
 							utils::generateName("Circle", utils::circleCounter), m_objectInfo);
-						
-						for (std::size_t i = 0; i < m_scene->getLayers().size(); ++i)
-							if (m_scene->getLayers()[i] == m_objectInfo.layer)
-								m_layerItem = i;
+						updateLayerItem(m_layerItem);
 					}
 
 					ImGui::EndMenu();
@@ -267,38 +209,7 @@ namespace px
 			ImGui::SetNextWindowPosCenter();
 			if (ImGui::Begin("Layer Settings", &m_showLayerSettings, ImVec2(500, 600), 1.f), ImGuiWindowFlags_NoMove)
 			{
-				unsigned int i = 1;
-				for (auto layer : m_scene->getLayers())
-				{
-					ImGui::Text("Layer: %s", layer.c_str());		
-					if (layer != "Default")
-					{
-						ImGui::SameLine(560);
-						ImGui::PushID(i);
-						if (ImGui::SmallButton("Delete"))
-						{
-							//TODO: pop correct index
-						}
-						ImGui::PopID();
-						++i;
-					}
-					ImGui::Separator();
-				}
-
-				//Add new layer
-				static std::vector<char> layerName(50);
-				ImGui::InputText("", layerName.data(), layerName.size());
-				ImGui::SameLine();
-				if (ImGui::SmallButton("+"))
-				{
-					if (layerName.data() != "")
-					{
-						m_scene->getLayers().push_back(layerName.data());
-						layerName.clear();
-						layerName.resize(50);
-					}
-				}
-				ImGui::Separator();
+				layerSettingsMenu();
 			}
 			ImGui::End();
 		}
@@ -361,12 +272,6 @@ namespace px
 			ImGui::EndDock();
 
 			ImGui::SetNextDock(ImGuiDockSlot_Bottom);
-			if (ImGui::BeginDock("Debug"))
-			{
-			}
-			ImGui::EndDock();
-
-			ImGui::SetNextDock(ImGuiDockSlot_Tab);
 			if (ImGui::BeginDock("Inspector"))
 			{
 				inspectorDock();
@@ -408,6 +313,48 @@ namespace px
 		ImGui::End();
 	}
 
+	void Core::updateLayerItem(int & item)
+	{
+		for (std::size_t i = 0; i < m_scene->getLayers().size(); ++i)
+			if (m_scene->getLayers()[i] == m_objectInfo.layer)
+				item = i;
+	}
+
+	void Core::layerSettingsMenu()
+	{
+		unsigned int i = 1;
+		for (const auto & layer : m_scene->getLayers())
+		{
+			ImGui::Text("Layer: %s", layer.c_str());
+			if (layer != "Default")
+			{
+				ImGui::SameLine(560);
+				ImGui::PushID(i);
+				if (ImGui::SmallButton("Delete"))
+				{
+					//TODO: pop correct index
+				}
+				ImGui::PopID();
+				++i;
+			}
+			ImGui::Separator();
+		}
+
+		//Add new layer
+		static std::vector<char> layerName(50);
+		ImGui::InputText("", layerName.data(), layerName.size());
+		ImGui::SameLine();
+		if (ImGui::SmallButton("+"))
+		{
+			if (layerName.data() != "")
+			{
+				m_scene->getLayers().push_back(layerName.data());
+				layerName.clear(); layerName.resize(50);
+			}
+		}
+		ImGui::Separator();
+	}
+
 	void Core::sceneDock()
 	{
 		m_isSceneHovered = ImGui::IsItemHovered();
@@ -441,10 +388,7 @@ namespace px
 				m_objectInfo = { render->name, render->shape->getPosition(), render->shape->getScale(),
 					render->shape->getRotation(), utils::selected, true, render->layer };
 				m_objectInfo.changeName(render->name);
-
-				for (std::size_t i = 0; i < m_scene->getLayers().size(); ++i)
-					if (m_scene->getLayers()[i] == m_objectInfo.layer)
-						m_layerItem = i;
+				updateLayerItem(m_layerItem);				
 			}
 			utils::selected++;
 		}
@@ -463,7 +407,6 @@ namespace px
 			//Change name of entity upon completion
 			if (ImGui::InputText("Name", m_objectInfo.nameChanger.data(), m_objectInfo.nameChanger.size(), ImGuiInputTextFlags_EnterReturnsTrue))
 				m_scene->updateName(m_objectInfo.pickedName, m_objectInfo.nameChanger.data());
-
 			ImGui::Spacing();
 
 			//Update transform of selected entity
@@ -478,7 +421,6 @@ namespace px
 				ImGui::InputFloat("Rotation", &m_objectInfo.rotation, 1.f, 0.f, floatPrecision);
 			}
 			ImGui::Spacing();
-
 			m_scene->updateTransform(m_objectInfo);
 		}
 	}

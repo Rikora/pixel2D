@@ -47,6 +47,7 @@
     <ClInclude Include="src\graphics\systems\RenderSystem.hpp" />
     <ClInclude Include="src\graphics\systems\TransformSystem.hpp" />
     <ClInclude Include="src\utils\Console.hpp" />
+    <ClInclude Include="src\utils\imguiSTL.hpp" />
     <ClInclude Include="src\utils\Log.hpp" />
     <ClInclude Include="src\utils\Macros.hpp" />
     <ClInclude Include="src\utils\ResourceHolder.hpp" />

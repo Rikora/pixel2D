@@ -41,6 +41,8 @@ namespace px
 		void updateGUI();
 
 	private:
+		void updateLayerItem(int & item);
+		void layerSettingsMenu();
 		void sceneDock();
 		void hierarchyDock();
 		void inspectorDock();
