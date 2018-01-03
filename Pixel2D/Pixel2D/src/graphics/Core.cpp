@@ -316,8 +316,13 @@ namespace px
 	void Core::updateLayerItem(int & item)
 	{
 		for (std::size_t i = 0; i < m_scene->getLayers().size(); ++i)
+		{
 			if (m_scene->getLayers()[i] == m_objectInfo.layer)
+			{
 				item = i;
+				return;
+			}
+		}
 	}
 
 	void Core::layerSettingsMenu()
@@ -355,7 +360,7 @@ namespace px
 			auto valid = [](const std::string & l)->bool 
 			{
 				for (const auto & layer : m_scene->getLayers())
-					if (layer == layerName.data())
+					if (layer == l)
 						return false;
 
 				return true;
