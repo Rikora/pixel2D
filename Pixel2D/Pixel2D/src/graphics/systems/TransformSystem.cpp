@@ -13,7 +13,7 @@ namespace px
 		ComponentHandle<Render> render;
 		ComponentHandle<Transform> transform;
 
-		for (Entity entity : es.entities_with_components(render, transform))
+		for (Entity & entity : es.entities_with_components(render, transform))
 		{
 			render->shape->setPosition(transform->position);
 			render->shape->setScale(transform->scale);

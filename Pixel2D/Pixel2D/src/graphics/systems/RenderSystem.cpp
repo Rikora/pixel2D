@@ -5,7 +5,7 @@
 
 namespace px
 {
-	RenderSystem::RenderSystem(sf::RenderTarget & target) : target(target)
+	RenderSystem::RenderSystem(sf::RenderTarget & target, std::vector<std::string> & layers) : m_target(target), m_layers(layers)
 	{
 	}
 
@@ -13,10 +13,16 @@ namespace px
 	{
 		ComponentHandle<Render> render;
 
-		for (Entity entity : es.entities_with_components(render))
+		for (auto & layer : m_layers)
 		{
-			target.draw(*render->shape.get());
-			target.draw(getBoundingRect(render->shape->getGlobalBounds()));
+			for (Entity & entity : es.entities_with_components(render))
+			{
+				if (render->layer == layer)
+				{
+					m_target.draw(*render->shape.get());
+					m_target.draw(getBoundingRect(render->shape->getGlobalBounds()));
+				}
+			}
 		}
 	}
 

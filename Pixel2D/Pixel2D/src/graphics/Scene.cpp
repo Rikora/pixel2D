@@ -31,7 +31,7 @@ namespace px
 		m_layers = { "Default", "Grass" };
 
 		//Systems
-		m_systems.add<RenderSystem>(target);
+		m_systems.add<RenderSystem>(target, m_layers);
 		m_systems.add<TransformSystem>();
 		m_systems.configure();
 	}

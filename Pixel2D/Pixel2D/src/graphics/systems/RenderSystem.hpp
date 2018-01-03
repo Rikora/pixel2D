@@ -15,7 +15,7 @@ namespace px
 	class RenderSystem : public System<RenderSystem>
 	{
 	public:
-		explicit RenderSystem(sf::RenderTarget & target);
+		explicit RenderSystem(sf::RenderTarget & target, std::vector<std::string> & layers);
 
 	public:
 		void update(EntityManager &es, EventManager &events, TimeDelta dt) override;
@@ -24,6 +24,7 @@ namespace px
 		sf::RectangleShape getBoundingRect(const sf::FloatRect & rect);
 
 	private:
-		sf::RenderTarget & target;	
+		sf::RenderTarget & m_target;
+		std::vector<std::string> & m_layers;
 	};
 }
