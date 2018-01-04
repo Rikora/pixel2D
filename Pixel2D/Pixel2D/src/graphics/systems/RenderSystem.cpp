@@ -13,7 +13,7 @@ namespace px
 	{
 		ComponentHandle<Render> render;
 
-		for (auto & layer : m_layers)
+		for (const auto & layer : m_layers)
 		{
 			for (Entity & entity : es.entities_with_components(render))
 			{

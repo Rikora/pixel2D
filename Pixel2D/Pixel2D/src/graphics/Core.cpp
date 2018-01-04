@@ -148,7 +148,7 @@ namespace px
 			{
 				m_currentMousePos = sf::Mouse::getPosition(m_window);
 				m_deltaMouse = sf::Vector2i(m_currentMousePos.x - m_previousMousePos.x, m_previousMousePos.y - m_currentMousePos.y);
-				m_sceneView.move(sf::Vector2f((float)m_deltaMouse.x, (float)m_deltaMouse.y));
+				m_sceneView.move(sf::Vector2f(static_cast<float>(m_deltaMouse.x), static_cast<float>(m_deltaMouse.y)));
 			}
 
 			//Input for scripts
@@ -384,7 +384,7 @@ namespace px
 
 		if (width != size.x || height != size.y)
 		{
-			m_sceneTexture.create((unsigned int)size.x, (unsigned int)size.y);
+			m_sceneTexture.create(static_cast<unsigned int>(size.x), static_cast<unsigned int>(size.y));
 			m_sceneView.setCenter({ size.x / 2.f, size.y / 2.f });
 			m_sceneView.setSize({ size.x, size.y });
 		}
@@ -410,7 +410,7 @@ namespace px
 				m_objectInfo.changeName(render->name);
 				updateLayerItem(m_layerItem);				
 			}
-			utils::selected++;
+			++utils::selected;
 		}
 	}
 
