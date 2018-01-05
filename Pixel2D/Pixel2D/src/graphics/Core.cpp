@@ -151,6 +151,8 @@ namespace px
 				m_sceneView.move(sf::Vector2f(static_cast<float>(m_deltaMouse.x), static_cast<float>(m_deltaMouse.y)));
 			}
 
+			
+
 			//Input for scripts
 			//lua["onInput"](dt);
 		}
@@ -304,7 +306,39 @@ namespace px
 			ImGui::SetNextDock(ImGuiDockSlot_Tab);
 			if (ImGui::BeginDock("Assets"))
 			{
-			
+				//Drag n drop parenting 
+				static int start = 0;
+				static int end = 0;
+				static bool select = false;
+				const int COUNT = 3;
+				static const char* items_data[COUNT] = { "Item One", "Item Two", "Item Three" };
+				static int items_list[COUNT] = { 0, 1, 2 };
+
+				for (unsigned int i = 0; i < COUNT; ++i)
+				{
+					ImGui::Selectable(items_data[i]);
+
+					if (ImGui::IsMouseDragging())
+					{
+						if (!select)
+						{
+							if (ImGui::IsItemHoveredRect())
+							{
+								start = i;
+								select = true;
+							}
+						}
+
+						if (ImGui::IsItemHoveredRect())
+							end = i;
+					}
+
+					if (ImGui::IsMouseReleased(0) && select)
+					{
+						printf("Start %d\n End: %d\n", start, end);
+						select = false;
+					}
+				}
 			}
 			ImGui::EndDock();
 
@@ -368,7 +402,7 @@ namespace px
 
 			if (valid(layerName.data()) && layerName.data() != "")
 			{
-				m_scene->getLayers().push_back(layerName.data());
+				m_scene->getLayers().emplace_back(layerName.data());
 				layerName.clear(); layerName.resize(50);
 			}
 		}
