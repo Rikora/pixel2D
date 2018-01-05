@@ -52,6 +52,12 @@ namespace px
 		loadLua();
 		loadLuaScripts();
 
+		//Drag n drop test vector
+		m_children.push_back({ "Item1", false, false });
+		m_children.push_back({ "Item2", false, false });
+		m_children.push_back({ "Item3", false, false });
+		m_children.push_back({ "Item4", false, false });
+
 		//Doesn't work for multiple scripts if same name,
 		//so need to have a table for each script?
 		//Start for scripts
@@ -307,38 +313,56 @@ namespace px
 			if (ImGui::BeginDock("Assets"))
 			{
 				//Drag n drop parenting 
-				static int start = 0;
-				static int end = 0;
+				static int child = 0;
+				static int parent = 0;
 				static bool select = false;
-				const int COUNT = 3;
-				static const char* items_data[COUNT] = { "Item One", "Item Two", "Item Three" };
-				static int items_list[COUNT] = { 0, 1, 2 };
+				static bool parented = false;
 
-				for (unsigned int i = 0; i < COUNT; ++i)
+				ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, ImGui::GetFontSize() * 3);
+				for (unsigned int i = 0; i < m_children.size(); ++i)
 				{
-					ImGui::Selectable(items_data[i]);
-
-					if (ImGui::IsMouseDragging())
+					if (!m_children[i].parented)
 					{
-						if (!select)
+						ImGui::SetNextTreeNodeOpen(true, 2);
+						if (ImGui::TreeNode(m_children[i].name.c_str()))
 						{
-							if (ImGui::IsItemHoveredRect())
+							if (m_children[i].parent)
 							{
-								start = i;
-								select = true;
+								for (const auto & c : m_children[i].children)
+									ImGui::Selectable(c.c_str());
 							}
+
+							if (ImGui::IsMouseDragging())
+							{
+								if (!select)
+								{
+									if (ImGui::IsItemRectHovered())
+									{
+										child = i;
+										select = true;
+									}
+								}
+
+								if (ImGui::IsItemRectHovered())
+									parent = i;
+							}
+
+							if (ImGui::IsMouseReleased(0) && select)
+							{
+								if (child != parent && !m_children[child].parent)
+								{
+									m_children[parent].parent = true;
+									m_children[child].parented = true;
+									m_children[parent].children.push_back(m_children[child].name);
+									printf("Start %d\n End: %d\n", child, parent);
+									select = false;
+								}
+							}
+							ImGui::TreePop();
 						}
-
-						if (ImGui::IsItemHoveredRect())
-							end = i;
-					}
-
-					if (ImGui::IsMouseReleased(0) && select)
-					{
-						printf("Start %d\n End: %d\n", start, end);
-						select = false;
-					}
+					}	
 				}
+				ImGui::PopStyleVar();
 			}
 			ImGui::EndDock();
 

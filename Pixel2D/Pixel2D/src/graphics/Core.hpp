@@ -63,6 +63,18 @@ namespace px
 		static int m_layerItem;
 		static bool m_showLayerSettings;
 
+		struct Parenting
+		{
+			Parenting(const std::string & name, const bool & parented, const bool & parent) : name(name), parented(parented), parent(parent) {}
+
+			std::string name;
+			std::vector<std::string> children;
+			bool parented;
+			bool parent;
+		};
+
+		std::vector<Parenting> m_children;
+
 	private:
 		static std::unique_ptr<Scene> m_scene;
 
