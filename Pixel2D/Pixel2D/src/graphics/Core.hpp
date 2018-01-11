@@ -23,6 +23,16 @@ namespace px
 			Entity entity;
 		};
 
+		struct Parenting
+		{
+			Parenting(const std::string & name, const bool & parented, const bool & parent) : name(name), parented(parented), parent(parent) {}
+
+			std::string name;
+			std::vector<Parenting> children;
+			bool parented;
+			bool parent;
+		};
+
 	public:
 		Core();
 		~Core();
@@ -41,6 +51,7 @@ namespace px
 		void updateGUI();
 
 	private:
+		void listChildren(unsigned int & index, std::vector<Parenting> & children);
 		void updateLayerItem(int & item);
 		void layerSettingsMenu();
 		void sceneDock();
@@ -62,17 +73,6 @@ namespace px
 		TextureHolder m_textures;
 		static int m_layerItem;
 		static bool m_showLayerSettings;
-
-		struct Parenting
-		{
-			Parenting(const std::string & name, const bool & parented, const bool & parent) : name(name), parented(parented), parent(parent) {}
-
-			std::string name;
-			std::vector<std::string> children;
-			bool parented;
-			bool parent;
-		};
-
 		std::vector<Parenting> m_children;
 
 	private:

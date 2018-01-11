@@ -8,6 +8,7 @@
 #include <imgui-SFML.h>
 #include <imguidock.h>
 #include <SFML\Window\Event.hpp> 
+#include <Windows.h>
 
 namespace px
 {
@@ -156,8 +157,6 @@ namespace px
 				m_deltaMouse = sf::Vector2i(m_currentMousePos.x - m_previousMousePos.x, m_previousMousePos.y - m_currentMousePos.y);
 				m_sceneView.move(sf::Vector2f(static_cast<float>(m_deltaMouse.x), static_cast<float>(m_deltaMouse.y)));
 			}
-
-			
 
 			//Input for scripts
 			//lua["onInput"](dt);
@@ -316,22 +315,21 @@ namespace px
 				static int child = 0;
 				static int parent = 0;
 				static bool select = false;
-				static bool parented = false;
 
+				//Maybe this whole shit should be recursive?
 				ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, ImGui::GetFontSize() * 3);
 				for (unsigned int i = 0; i < m_children.size(); ++i)
 				{
+					//Change display of the object to a child
 					if (!m_children[i].parented)
 					{
 						ImGui::SetNextTreeNodeOpen(true, 2);
 						if (ImGui::TreeNode(m_children[i].name.c_str()))
 						{
-							if (m_children[i].parent)
-							{
-								for (const auto & c : m_children[i].children)
-									ImGui::Selectable(c.c_str());
-							}
+							//Show children of parents
+							listChildren(i, m_children);
 
+							//Perhaps this should be on tree node levels too?
 							if (ImGui::IsMouseDragging())
 							{
 								if (!select)
@@ -347,16 +345,20 @@ namespace px
 									parent = i;
 							}
 
+							//Assign child to parent
 							if (ImGui::IsMouseReleased(0) && select)
 							{
+								//Need a loop here which is also recursive to check for the right child and such
 								if (child != parent && !m_children[child].parent)
 								{
 									m_children[parent].parent = true;
 									m_children[child].parented = true;
-									m_children[parent].children.push_back(m_children[child].name);
+									m_children[parent].children.push_back({ m_children[child].name, true, false });
 									printf("Start %d\n End: %d\n", child, parent);
 									select = false;
 								}
+								else
+									select = false;
 							}
 							ImGui::TreePop();
 						}
@@ -369,6 +371,32 @@ namespace px
 			ImGui::EndDockspace();
 		}
 		ImGui::End();
+	}
+
+	void Core::listChildren(unsigned int & index, std::vector<Parenting> & children)
+	{
+		if (children[index].parent)
+		{
+			for (unsigned int i = 0; i < children[index].children.size(); ++i)
+			{
+				ImGui::SetNextTreeNodeOpen(true, 2);
+				if (ImGui::TreeNode(children[index].children[i].name.c_str()))
+				{
+					//Dummy code
+					if (ImGui::IsItemClicked(0))
+					{
+						children[index].children[i].parent = true;
+						children[index].children[i].children.push_back({ "Test", true, false });
+					}
+
+					//Perform recursion if there are any children
+					if (!children[index].children[i].children.empty())
+						listChildren(i, children[index].children);
+
+					ImGui::TreePop();
+				}
+			}
+		}
 	}
 
 	void Core::updateLayerItem(int & item)
@@ -442,6 +470,7 @@ namespace px
 
 		if (width != size.x || height != size.y)
 		{
+			//Scene view
 			m_sceneTexture.create(static_cast<unsigned int>(size.x), static_cast<unsigned int>(size.y));
 			m_sceneView.setCenter({ size.x / 2.f, size.y / 2.f });
 			m_sceneView.setSize({ size.x, size.y });
