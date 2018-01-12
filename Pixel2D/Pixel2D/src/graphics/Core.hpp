@@ -7,6 +7,7 @@
 #include "Scene.hpp"
 #include "../utils/ResourceHolder.hpp"
 #include "../utils/ResourceIdentifiers.hpp"
+#include "../utils/TileMap.hpp"
 
 namespace px
 {
@@ -25,10 +26,12 @@ namespace px
 
 		struct Parenting
 		{
-			Parenting(const std::string & name, const bool & parented, const bool & parent) : name(name), parented(parented), parent(parent) {}
+			Parenting(const std::string & name, const bool & parented, const bool & parent, const unsigned int & index) : name(name), parented(parented), 
+					  parent(parent), index(index) {}
 
 			std::string name;
 			std::vector<Parenting> children;
+			unsigned int index;
 			bool parented;
 			bool parent;
 		};
@@ -51,7 +54,7 @@ namespace px
 		void updateGUI();
 
 	private:
-		void listChildren(unsigned int & index, std::vector<Parenting> & children);
+		void listChildren(const unsigned int & index, std::vector<Parenting> & children);
 		void updateLayerItem(int & item);
 		void layerSettingsMenu();
 		void sceneDock();
@@ -59,6 +62,7 @@ namespace px
 		void inspectorDock();
 
 	private:
+		std::unique_ptr<utils::TileMap> m_tileMap;
 		sf::RenderWindow m_window;
 		sf::RenderTexture m_sceneTexture;
 		sf::View m_sceneView;

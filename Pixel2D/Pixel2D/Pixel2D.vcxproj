@@ -37,6 +37,7 @@
     <ClCompile Include="src\graphics\systems\RenderSystem.cpp" />
     <ClCompile Include="src\graphics\systems\TransformSystem.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\utils\TileMap.cpp" />
     <ClCompile Include="src\utils\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +54,7 @@
     <ClInclude Include="src\utils\ResourceHolder.hpp" />
     <ClInclude Include="src\utils\ResourceIdentifiers.hpp" />
     <ClInclude Include="src\utils\Themes.hpp" />
+    <ClInclude Include="src\utils\TileMap.hpp" />
     <ClInclude Include="src\utils\Utility.hpp" />
   </ItemGroup>
   <ItemGroup>

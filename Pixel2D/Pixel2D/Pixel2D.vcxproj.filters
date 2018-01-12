@@ -80,6 +80,9 @@
     <ClCompile Include="src\utils\Utility.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\TileMap.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\Macros.hpp">
@@ -123,6 +126,9 @@
     </ClInclude>
     <ClInclude Include="src\utils\imguiSTL.hpp">
       <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\TileMap.hpp">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

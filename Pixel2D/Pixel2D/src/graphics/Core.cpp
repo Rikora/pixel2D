@@ -50,14 +50,31 @@ namespace px
 		//Scene
 		m_scene = std::make_unique<Scene>(m_sceneTexture);
 
+		//Test level
+		const int level[] =
+		{
+			0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0,
+			1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3,
+			0, 1, 0, 0, 2, 0, 3, 3, 3, 0, 1, 1, 1, 0, 0, 0,
+			0, 1, 1, 0, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2, 0, 0,
+			0, 0, 1, 0, 3, 0, 2, 2, 0, 0, 1, 1, 1, 1, 2, 0,
+			2, 0, 1, 0, 3, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1,
+			0, 0, 1, 0, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1,
+		};
+
+		//Tilemaps
+		m_tileMap = std::make_unique<utils::TileMap>(m_textures, Textures::ID::Sprite);
+		m_tileMap->loadMap(sf::Vector2u(32, 32), level, 16, 8);
+
 		loadLua();
 		loadLuaScripts();
 
 		//Drag n drop test vector
-		m_children.push_back({ "Item1", false, false });
-		m_children.push_back({ "Item2", false, false });
-		m_children.push_back({ "Item3", false, false });
-		m_children.push_back({ "Item4", false, false });
+		m_children.push_back({ "Item1", false, false, 0 });
+		m_children.push_back({ "Item2", false, false, 1 });
+		m_children.push_back({ "Item3", false, false, 2 });
+		m_children.push_back({ "Item4", false, false, 3 });
 
 		//Doesn't work for multiple scripts if same name,
 		//so need to have a table for each script?
@@ -67,7 +84,7 @@ namespace px
 
 	void Core::loadTextures()
 	{
-		m_textures.LoadResource(Textures::ID::Sprite, "src/res/textures/tilesets/tileset.png");
+		m_textures.LoadResource(Textures::ID::Sprite, "src/res/textures/tilesets/baseMap.png");
 	}
 
 	void Core::loadLua()
@@ -108,6 +125,7 @@ namespace px
 	{
 		m_sceneTexture.clear(sf::Color::Black);
 		m_sceneTexture.setView(m_sceneView);
+		m_sceneTexture.draw(*m_tileMap);
 		m_scene->updateRenderSystem(m_timestep.getStep());
 		m_sceneTexture.display();
 	}
@@ -312,59 +330,74 @@ namespace px
 			if (ImGui::BeginDock("Assets"))
 			{
 				//Drag n drop parenting 
-				static int child = 0;
-				static int parent = 0;
-				static bool select = false;
+				//static int child = 0;
+				//static int parent = 0;
+				//static bool select = false;
+				//static bool enabled = false;
 
-				//Maybe this whole shit should be recursive?
-				ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, ImGui::GetFontSize() * 3);
-				for (unsigned int i = 0; i < m_children.size(); ++i)
-				{
-					//Change display of the object to a child
-					if (!m_children[i].parented)
-					{
-						ImGui::SetNextTreeNodeOpen(true, 2);
-						if (ImGui::TreeNode(m_children[i].name.c_str()))
-						{
-							//Show children of parents
-							listChildren(i, m_children);
+				//ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, ImGui::GetFontSize() * 3);
+				//for (unsigned int i = 0; i < m_children.size(); ++i)
+				//{
+				//	if (ImGui::IsItemClicked(1))
+				//		ImGui::OpenPopup("FilePopup");
 
-							//Perhaps this should be on tree node levels too?
-							if (ImGui::IsMouseDragging())
-							{
-								if (!select)
-								{
-									if (ImGui::IsItemRectHovered())
-									{
-										child = i;
-										select = true;
-									}
-								}
+				//	//Change display of the object to a child
+				//	if (!m_children[i].parented) //Probably need this in the recursive function too!
+				//	{
+				//		ImGui::SetNextTreeNodeOpen(true, 2);
+				//		if (ImGui::TreeNode(m_children[i].name.c_str()))
+				//		{
+				//			//Show children of parents
+				//			listChildren(i, m_children);
 
-								if (ImGui::IsItemRectHovered())
-									parent = i;
-							}
+				//			//Perhaps this should be on tree node levels too?
+				//			//if (ImGui::IsMouseDragging())
+				//			//{
+				//			//	if (!select)
+				//			//	{
+				//			//		if (ImGui::IsItemRectHovered())
+				//			//		{
+				//			//			child = i;
+				//			//			select = true;
+				//			//		}
+				//			//	}
 
-							//Assign child to parent
-							if (ImGui::IsMouseReleased(0) && select)
-							{
-								//Need a loop here which is also recursive to check for the right child and such
-								if (child != parent && !m_children[child].parent)
-								{
-									m_children[parent].parent = true;
-									m_children[child].parented = true;
-									m_children[parent].children.push_back({ m_children[child].name, true, false });
-									printf("Start %d\n End: %d\n", child, parent);
-									select = false;
-								}
-								else
-									select = false;
-							}
-							ImGui::TreePop();
-						}
-					}	
-				}
-				ImGui::PopStyleVar();
+				//			//	if (ImGui::IsItemRectHovered())
+				//			//		parent = i;
+				//			//}
+
+				//			////Assign child to parent
+				//			//if (ImGui::IsMouseReleased(0) && select)
+				//			//{
+				//			//	//Need a loop here which is also recursive to check for the right child and such
+				//			//	if (child != parent && !m_children[child].parent)
+				//			//	{
+				//			//		m_children[parent].parent = true;
+				//			//		m_children[child].parented = true;
+				//			//		m_children[parent].children.push_back(m_children[child]);
+				//			//		printf("Start %d\n End: %d\n", child, parent);
+				//			//		select = false;
+				//			//	}
+				//			//	else
+				//			//		select = false;
+				//			//}
+				//			ImGui::TreePop();
+				//		}
+				//	}	
+				//}
+
+				//ImGui::PopStyleVar();
+
+				//if (ImGui::BeginPopup("FilePopup"))
+				//{
+				//	if(ImGui::BeginMenu("Add child"))
+				//	{
+				//		static std::vector<char> hello(50);
+				//		ImGui::InputText("", hello.data(), hello.size());
+				//		ImGui::EndMenu();
+				//	}
+				//	ImGui::EndPopup();
+				//}
 			}
 			ImGui::EndDock();
 
@@ -373,7 +406,7 @@ namespace px
 		ImGui::End();
 	}
 
-	void Core::listChildren(unsigned int & index, std::vector<Parenting> & children)
+	void Core::listChildren(const unsigned int & index, std::vector<Parenting> & children)
 	{
 		if (children[index].parent)
 		{
@@ -386,7 +419,7 @@ namespace px
 					if (ImGui::IsItemClicked(0))
 					{
 						children[index].children[i].parent = true;
-						children[index].children[i].children.push_back({ "Test", true, false });
+						children[index].children[i].children.push_back({ "Test", true, false, 0 });
 					}
 
 					//Perform recursion if there are any children
