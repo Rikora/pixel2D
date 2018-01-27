@@ -55,12 +55,12 @@ namespace px
 		{
 			0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 			0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0,
-			1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3,
-			0, 1, 0, 0, 2, 0, 3, 3, 3, 0, 1, 1, 1, 0, 0, 0,
-			0, 1, 1, 0, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2, 0, 0,
-			0, 0, 1, 0, 3, 0, 2, 2, 0, 0, 1, 1, 1, 1, 2, 0,
-			2, 0, 1, 0, 3, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1,
-			0, 0, 1, 0, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1,
+			1, 1, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2,
+			0, 1, 0, 0, 2, 0, 2, 2, 2, 0, 1, 1, 1, 0, 0, 0,
+			0, 1, 1, 0, 2, 2, 2, 0, 0, 0, 1, 1, 1, 2, 0, 0,
+			0, 0, 1, 0, 2, 0, 2, 2, 0, 0, 1, 1, 1, 1, 2, 0,
+			2, 0, 1, 0, 2, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1,
+			0, 0, 1, 0, 2, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1,
 		};
 
 		//Tilemaps
@@ -84,7 +84,7 @@ namespace px
 
 	void Core::loadTextures()
 	{
-		m_textures.LoadResource(Textures::ID::Sprite, "src/res/textures/tilesets/baseMap.png");
+		m_textures.LoadResource(Textures::ID::Sprite, "src/res/textures/tilesets/set.png");
 	}
 
 	void Core::loadLua()
@@ -432,9 +432,28 @@ namespace px
 		}
 	}
 
+	void Core::addLayer(std::vector<char> & layerHolder)
+	{
+		//Make sure that the new layer doesn't already exist
+		auto valid = [](const std::string & l)->bool
+		{
+			for (const auto & layer : m_scene->getLayers())
+				if (layer == l)
+					return false;
+
+			return true;
+		};
+
+		if (valid(layerHolder.data()) && layerHolder.data() != "")
+		{
+			m_scene->getLayers().emplace_back(layerHolder.data());
+			layerHolder.clear(); layerHolder.resize(50);
+		}
+	}
+
 	void Core::updateLayerItem(int & item)
 	{
-		for (std::size_t i = 0; i < m_scene->getLayers().size(); ++i)
+		for (unsigned i = 0; i < m_scene->getLayers().size(); ++i)
 		{
 			if (m_scene->getLayers()[i] == m_objectInfo.layer)
 			{
@@ -472,24 +491,14 @@ namespace px
 
 		//Add new layer
 		static std::vector<char> layerName(50);
-		ImGui::InputText("", layerName.data(), layerName.size());
-		ImGui::SameLine();
-		if (ImGui::SmallButton("+"))
+		if(ImGui::InputText("", layerName.data(), layerName.size(), ImGuiInputTextFlags_EnterReturnsTrue))
 		{
-			auto valid = [](const std::string & l)->bool 
-			{
-				for (const auto & layer : m_scene->getLayers())
-					if (layer == l)
-						return false;
-
-				return true;
-			};
-
-			if (valid(layerName.data()) && layerName.data() != "")
-			{
-				m_scene->getLayers().emplace_back(layerName.data());
-				layerName.clear(); layerName.resize(50);
-			}
+			addLayer(layerName);
+		}
+		ImGui::SameLine();
+		if (ImGui::SmallButton("+")) //Give the user ability to click a button aswell
+		{
+			addLayer(layerName);
 		}
 		ImGui::Separator();
 	}

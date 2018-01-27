@@ -55,6 +55,7 @@ namespace px
 
 	private:
 		void listChildren(const unsigned int & index, std::vector<Parenting> & children);
+		void addLayer(std::vector<char> & layerHolder);
 		void updateLayerItem(int & item);
 		void layerSettingsMenu();
 		void sceneDock();
