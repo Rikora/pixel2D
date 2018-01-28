@@ -16,6 +16,7 @@ namespace px
 	{
 		static unsigned int selected = 0;
 		static unsigned int circleCounter = 1;
+		static unsigned int rectangleCounter = 1;
 
 		std::string generateName(const std::string & name, unsigned int & counter);
 		sf::Vector2f lerp(const sf::Vector2f & start, const sf::Vector2f & end, const float & alpha);

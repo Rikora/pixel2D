@@ -1,5 +1,6 @@
 #include "Scene.hpp"
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include "../utils/Utility.hpp"
 
 //Systems
@@ -43,7 +44,7 @@ namespace px
 
 	void Scene::createEntity(const Scene::Shapes & shape, const sf::Vector2f & position, const std::string & name, ObjectInfo & info)
 	{
-		//Create default entity based on shape
+		//Create default shaped entities
 		if (shape == Shapes::CIRCLE)
 		{
 			auto entity = m_entities.create();
@@ -58,6 +59,26 @@ namespace px
 
 			//Update the GUI display
 			info = { name, transform.position, transform.scale, transform.rotation, utils::circleCounter, true, "Default" };
+			info.changeName(name);
+
+			//Apply components
+			entity.assign<Render>(std::move(shape), name, "Default");
+			entity.assign<Transform>(transform);
+		}
+		else if (shape == Shapes::RECTANGLE)
+		{
+			auto entity = m_entities.create();
+			auto shape = std::make_unique<sf::RectangleShape>(sf::Vector2f(15.f, 15.f));
+
+			Transform transform(position, sf::Vector2f(1.f, 1.f), 0.f);
+			shape->setFillColor(sf::Color::Red);
+			//shape->setOrigin(5.f, 5.f);
+			shape->setPosition(transform.position);
+			shape->setScale(transform.scale);
+			shape->setRotation(transform.rotation);
+
+			//Update the GUI display
+			info = { name, transform.position, transform.scale, transform.rotation, utils::rectangleCounter, true, "Default" };
 			info.changeName(name);
 
 			//Apply components

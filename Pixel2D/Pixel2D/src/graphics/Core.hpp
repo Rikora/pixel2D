@@ -26,14 +26,14 @@ namespace px
 
 		struct Parenting
 		{
-			Parenting(const std::string & name, const bool & parented, const bool & parent, const unsigned int & index) : name(name), parented(parented), 
-					  parent(parent), index(index) {}
+			Parenting(const std::string & name, const bool & isChild, const bool & isParent, const unsigned int & index) : name(name), isChild(isChild), 
+					  isParent(isParent), index(index) {}
 
 			std::string name;
 			std::vector<Parenting> children;
 			unsigned int index;
-			bool parented;
-			bool parent;
+			bool isChild;
+			bool isParent;
 		};
 
 	public:

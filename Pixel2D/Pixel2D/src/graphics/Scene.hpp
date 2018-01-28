@@ -20,6 +20,7 @@ namespace px
 		enum class Shapes
 		{
 			CIRCLE,
+			RECTANGLE
 		};
 
 	public:

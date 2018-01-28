@@ -51,21 +51,21 @@ namespace px
 		m_scene = std::make_unique<Scene>(m_sceneTexture);
 
 		//Test level
-		const int level[] =
-		{
-			0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0,
-			1, 1, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2,
-			0, 1, 0, 0, 2, 0, 2, 2, 2, 0, 1, 1, 1, 0, 0, 0,
-			0, 1, 1, 0, 2, 2, 2, 0, 0, 0, 1, 1, 1, 2, 0, 0,
-			0, 0, 1, 0, 2, 0, 2, 2, 0, 0, 1, 1, 1, 1, 2, 0,
-			2, 0, 1, 0, 2, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1,
-			0, 0, 1, 0, 2, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1,
-		};
+		//const int level[] =
+		//{
+		//	0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		//	0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0,
+		//	1, 1, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2,
+		//	0, 1, 0, 0, 2, 0, 2, 2, 2, 0, 1, 1, 1, 0, 0, 0,
+		//	0, 1, 1, 0, 2, 2, 2, 0, 0, 0, 1, 1, 1, 2, 0, 0,
+		//	0, 0, 1, 0, 2, 0, 2, 2, 0, 0, 1, 1, 1, 1, 2, 0,
+		//	2, 0, 1, 0, 2, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1,
+		//	0, 0, 1, 0, 2, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1,
+		//};
 
-		//Tilemaps
-		m_tileMap = std::make_unique<utils::TileMap>(m_textures, Textures::ID::Sprite);
-		m_tileMap->loadMap(sf::Vector2u(32, 32), level, 16, 8);
+		////Tilemaps
+		//m_tileMap = std::make_unique<utils::TileMap>(m_textures, Textures::ID::Sprite);
+		//m_tileMap->loadMap(sf::Vector2u(32, 32), level, 16, 8);
 
 		loadLua();
 		loadLuaScripts();
@@ -125,7 +125,7 @@ namespace px
 	{
 		m_sceneTexture.clear(sf::Color::Black);
 		m_sceneTexture.setView(m_sceneView);
-		m_sceneTexture.draw(*m_tileMap);
+		//m_sceneTexture.draw(*m_tileMap);
 		m_scene->updateRenderSystem(m_timestep.getStep());
 		m_sceneTexture.display();
 	}
@@ -137,12 +137,15 @@ namespace px
 		{
 			ImGui::SFML::ProcessEvent(event);
 
+			//Close window
 			if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 				m_window.close();
 
+			//Mouse strafing
 			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Middle)
 				m_currentMousePos = sf::Mouse::getPosition(m_window);	
 
+			//Mouse picking
 			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && m_isSceneHovered)
 			{
 				sf::Vector2f worldPos = utils::getMouseWorldPos(m_sceneTexture, m_window);
@@ -215,6 +218,13 @@ namespace px
 						updateLayerItem(m_layerItem);
 					}
 
+					if (ImGui::MenuItem("Rectangle"))
+					{
+						m_scene->createEntity(Scene::Shapes::RECTANGLE, m_sceneView.getCenter(),
+							utils::generateName("Rect", utils::rectangleCounter), m_objectInfo);
+						updateLayerItem(m_layerItem);
+					}
+
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenu();
@@ -239,6 +249,10 @@ namespace px
 			ImGui::End();
 		}
 
+		//Open popup for creation of objects
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) && sf::Keyboard::isKeyPressed(sf::Keyboard::A) && m_isSceneHovered)
+			ImGui::OpenPopup("Add_Objects");
+
 		//Open popup for delete
 		if (m_objectInfo.picked && sf::Keyboard::isKeyPressed(sf::Keyboard::Delete))
 			ImGui::OpenPopup("Delete?");
@@ -258,6 +272,32 @@ namespace px
 			ImGui::SameLine();
 
 			if (ImGui::Button("No", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+			ImGui::EndPopup();
+		}
+
+		//Popup for creation of various objects
+		ImGui::SetNextWindowSize(ImVec2(100, 100));
+		if (ImGui::BeginPopup("Add_Objects"))
+		{
+			ImGui::MenuItem("Add");
+			ImGui::Separator();
+			if (ImGui::BeginMenu("Mesh"))
+			{
+				if (ImGui::MenuItem("Circle##1"))
+				{
+					m_scene->createEntity(Scene::Shapes::CIRCLE, utils::getMouseWorldPos(m_sceneTexture, m_window),
+										  utils::generateName("Circle", utils::circleCounter), m_objectInfo);
+					updateLayerItem(m_layerItem);
+				}
+				if (ImGui::MenuItem("Rectangle##1"))
+				{
+					m_scene->createEntity(Scene::Shapes::RECTANGLE, utils::getMouseWorldPos(m_sceneTexture, m_window),
+						utils::generateName("Rect", utils::rectangleCounter), m_objectInfo);
+					updateLayerItem(m_layerItem);
+				}
+
+				ImGui::EndMenu();
+			}
 			ImGui::EndPopup();
 		}
 
@@ -328,76 +368,72 @@ namespace px
 
 			ImGui::SetNextDock(ImGuiDockSlot_Tab);
 			if (ImGui::BeginDock("Assets"))
-			{
+			{				
 				//Drag n drop parenting 
 				//static int child = 0;
 				//static int parent = 0;
 				//static bool select = false;
-				//static bool enabled = false;
 
 				//ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, ImGui::GetFontSize() * 3);
 				//for (unsigned int i = 0; i < m_children.size(); ++i)
 				//{
-				//	if (ImGui::IsItemClicked(1))
-				//		ImGui::OpenPopup("FilePopup");
+				//	/*if (ImGui::IsItemClicked(1))
+				//		ImGui::OpenPopup("FilePopup");*/
 
 				//	//Change display of the object to a child
-				//	if (!m_children[i].parented) //Probably need this in the recursive function too!
+				//	if (!m_children[i].isChild) 
 				//	{
 				//		ImGui::SetNextTreeNodeOpen(true, 2);
 				//		if (ImGui::TreeNode(m_children[i].name.c_str()))
 				//		{
-				//			//Show children of parents
+				//			//Show children of parents (one level down)
 				//			listChildren(i, m_children);
 
-				//			//Perhaps this should be on tree node levels too?
-				//			//if (ImGui::IsMouseDragging())
-				//			//{
-				//			//	if (!select)
-				//			//	{
-				//			//		if (ImGui::IsItemRectHovered())
-				//			//		{
-				//			//			child = i;
-				//			//			select = true;
-				//			//		}
-				//			//	}
+				//			//Check for mouse drag
+				//			if (ImGui::IsMouseDragging())
+				//			{
+				//				if (!select)
+				//				{
+				//					if (ImGui::IsItemRectHovered())
+				//					{
+				//						child = i;
+				//						select = true;
+				//					}
+				//				}
 
-				//			//	if (ImGui::IsItemRectHovered())
-				//			//		parent = i;
-				//			//}
+				//				if (ImGui::IsItemRectHovered())
+				//					parent = i;
+				//			}
 
-				//			////Assign child to parent
-				//			//if (ImGui::IsMouseReleased(0) && select)
-				//			//{
-				//			//	//Need a loop here which is also recursive to check for the right child and such
-				//			//	if (child != parent && !m_children[child].parent)
-				//			//	{
-				//			//		m_children[parent].parent = true;
-				//			//		m_children[child].parented = true;
-				//			//		m_children[parent].children.push_back(m_children[child]);
-				//			//		printf("Start %d\n End: %d\n", child, parent);
-				//			//		select = false;
-				//			//	}
-				//			//	else
-				//			//		select = false;
-				//			//}
+				//			//Assign child to parent
+				//			if (ImGui::IsMouseReleased(0) && select)
+				//			{
+				//				if (child != parent && !m_children[child].isParent)
+				//				{
+				//					m_children[parent].isParent = true;
+				//					m_children[child].isChild = true;
+				//					m_children[parent].children.push_back(m_children[child]);
+				//					printf("Start %d\n End: %d\n", child, parent);
+				//					select = false;
+				//				}
+				//				else
+				//					select = false;
+				//			}
 				//			ImGui::TreePop();
 				//		}
 				//	}	
 				//}
 
-				//ImGui::PopStyleVar();
+				/*ImGui::PopStyleVar();
+				if (ImGui::BeginPopup("FilePopup"))
+				{
+					if (ImGui::MenuItem("Break"))
+					{
 
-				//if (ImGui::BeginPopup("FilePopup"))
-				//{
-				//	if(ImGui::BeginMenu("Add child"))
-				//	{
-				//		static std::vector<char> hello(50);
-				//		ImGui::InputText("", hello.data(), hello.size());
-				//		ImGui::EndMenu();
-				//	}
-				//	ImGui::EndPopup();
-				//}
+					}
+					ImGui::EndPopup();
+				}*/
+
 			}
 			ImGui::EndDock();
 
@@ -408,23 +444,27 @@ namespace px
 
 	void Core::listChildren(const unsigned int & index, std::vector<Parenting> & children)
 	{
-		if (children[index].parent)
+		//No recursion for now since can't figure a decent way to parent children
+		//with the GUI
+		if (children[index].isParent)
 		{
 			for (unsigned int i = 0; i < children[index].children.size(); ++i)
 			{
 				ImGui::SetNextTreeNodeOpen(true, 2);
 				if (ImGui::TreeNode(children[index].children[i].name.c_str()))
 				{
-					//Dummy code
-					if (ImGui::IsItemClicked(0))
-					{
-						children[index].children[i].parent = true;
-						children[index].children[i].children.push_back({ "Test", true, false, 0 });
-					}
+					//TODO: add functionality to break children property
 
-					//Perform recursion if there are any children
-					if (!children[index].children[i].children.empty())
-						listChildren(i, children[index].children);
+					//Dummy code
+					//if (ImGui::IsItemClicked(0))
+					//{
+					//	children[index].children[i].isParent = true;
+					//	children[index].children[i].children.push_back({ "Test", true, false, 0 });
+					//}
+
+					////Perform recursion if there are any children
+					//if (!children[index].children[i].children.empty())
+					//	listChildren(i, children[index].children);
 
 					ImGui::TreePop();
 				}
@@ -496,7 +536,7 @@ namespace px
 			addLayer(layerName);
 		}
 		ImGui::SameLine();
-		if (ImGui::SmallButton("+")) //Give the user ability to click a button aswell
+		if (ImGui::SmallButton("+")) //Give the user ability to click a button for adding layers aswell
 		{
 			addLayer(layerName);
 		}
