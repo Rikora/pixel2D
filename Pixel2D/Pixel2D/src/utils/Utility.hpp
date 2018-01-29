@@ -18,6 +18,7 @@ namespace px
 		static unsigned int circleCounter = 1;
 		static unsigned int rectangleCounter = 1;
 
+		//General helpers
 		std::string generateName(const std::string & name, unsigned int & counter);
 		sf::Vector2f lerp(const sf::Vector2f & start, const sf::Vector2f & end, const float & alpha);
 		sf::Vector2f getMouseWorldPos(const sf::RenderTexture & texture, const sf::RenderWindow & window);

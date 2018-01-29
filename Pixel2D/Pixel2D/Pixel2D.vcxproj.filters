@@ -14,14 +14,23 @@
     <Filter Include="Kairos">
       <UniqueIdentifier>{9cad34ef-c1be-4ddd-ad47-c71d0831e1ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ImGui">
-      <UniqueIdentifier>{834a034f-3c3b-4ed8-84d5-5d9e764cf459}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Graphics\Components">
       <UniqueIdentifier>{57743f9f-614b-4f74-ad25-e0fb4ec0df8e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Graphics\Systems">
       <UniqueIdentifier>{cafdb403-b71e-4949-8350-b0e3ef12b98b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{73c7d772-7f17-4849-80d5-74a836cf7aea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\GUI">
+      <UniqueIdentifier>{8d925fa8-e1a4-4f4a-aa6a-9092386a7393}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\GUI\ImGui">
+      <UniqueIdentifier>{834a034f-3c3b-4ed8-84d5-5d9e764cf459}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Helpers">
+      <UniqueIdentifier>{ad17ac28-d365-4bbe-ad5f-ff0a0f5dc942}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,16 +45,16 @@
       <Filter>Graphics\Systems</Filter>
     </ClCompile>
     <ClCompile Include="..\third-party\imgui\include\imgui.cpp">
-      <Filter>ImGui</Filter>
+      <Filter>Graphics\GUI\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="..\third-party\imgui\include\imgui_draw.cpp">
-      <Filter>ImGui</Filter>
+      <Filter>Graphics\GUI\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="..\third-party\imgui\include\imguidock.cpp">
-      <Filter>ImGui</Filter>
+      <Filter>Graphics\GUI\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="..\third-party\imgui\include\imgui-SFML.cpp">
-      <Filter>ImGui</Filter>
+      <Filter>Graphics\GUI\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="..\third-party\kairos\Kairos\Absorel.cpp">
       <Filter>Kairos</Filter>
@@ -82,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="src\utils\TileMap.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\SFMLDebugDraw.cpp">
+      <Filter>Physics\Helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,10 +137,19 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\utils\imguiSTL.hpp">
-      <Filter>ImGui</Filter>
+      <Filter>Graphics\GUI\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\utils\TileMap.hpp">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\Box2DConverters.hpp">
+      <Filter>Physics\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\SFMLDebugDraw.hpp">
+      <Filter>Physics\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\PhysicsWorld.hpp">
+      <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

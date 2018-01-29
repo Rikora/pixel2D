@@ -37,6 +37,7 @@
     <ClCompile Include="src\graphics\systems\RenderSystem.cpp" />
     <ClCompile Include="src\graphics\systems\TransformSystem.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\physics\SFMLDebugDraw.cpp" />
     <ClCompile Include="src\utils\TileMap.cpp" />
     <ClCompile Include="src\utils\Utility.cpp" />
   </ItemGroup>
@@ -47,6 +48,9 @@
     <ClInclude Include="src\graphics\Scene.hpp" />
     <ClInclude Include="src\graphics\systems\RenderSystem.hpp" />
     <ClInclude Include="src\graphics\systems\TransformSystem.hpp" />
+    <ClInclude Include="src\physics\Box2DConverters.hpp" />
+    <ClInclude Include="src\physics\PhysicsWorld.hpp" />
+    <ClInclude Include="src\physics\SFMLDebugDraw.hpp" />
     <ClInclude Include="src\utils\Console.hpp" />
     <ClInclude Include="src\utils\imguiSTL.hpp" />
     <ClInclude Include="src\utils\Log.hpp" />
@@ -113,12 +117,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\third-party\sfml\include;$(SolutionDir)\third-party\thor\include;$(SolutionDir)\third-party\kairos;$(SolutionDir)\third-party\imgui\include;$(SolutionDir)\third-party\entityx\include;$(SolutionDir)\third-party\sol;$(SolutionDir)\third-party\lua\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\third-party\sfml\lib;$(SolutionDir)\third-party\thor\lib;$(SolutionDir)\third-party\entityx\lib;$(SolutionDir)\third-party\lua\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\third-party\sfml\include;$(SolutionDir)\third-party\thor\include;$(SolutionDir)\third-party\kairos;$(SolutionDir)\third-party\imgui\include;$(SolutionDir)\third-party\entityx\include;$(SolutionDir)\third-party\sol;$(SolutionDir)\third-party\lua\include;$(SolutionDir)\third-party\box2D\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\third-party\sfml\lib;$(SolutionDir)\third-party\thor\lib;$(SolutionDir)\third-party\entityx\lib;$(SolutionDir)\third-party\lua\lib;$(SolutionDir)\third-party\box2D\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\third-party\sfml\include;$(SolutionDir)\third-party\thor\include;$(SolutionDir)\third-party\kairos;$(SolutionDir)\third-party\imgui\include;$(SolutionDir)\third-party\entityx\include;$(SolutionDir)\third-party\sol;$(SolutionDir)\third-party\lua\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\third-party\sfml\lib;$(SolutionDir)\third-party\thor\lib;$(SolutionDir)\third-party\entityx\lib;$(SolutionDir)\third-party\lua\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\third-party\sfml\include;$(SolutionDir)\third-party\thor\include;$(SolutionDir)\third-party\kairos;$(SolutionDir)\third-party\imgui\include;$(SolutionDir)\third-party\entityx\include;$(SolutionDir)\third-party\sol;$(SolutionDir)\third-party\lua\include;$(SolutionDir)\third-party\box2D\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\third-party\sfml\lib;$(SolutionDir)\third-party\thor\lib;$(SolutionDir)\third-party\entityx\lib;$(SolutionDir)\third-party\lua\lib;$(SolutionDir)\third-party\box2D\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -127,7 +131,7 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;thor.lib;entityx-d.lib;lua53.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;thor.lib;entityx-d.lib;lua53.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -148,7 +152,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;thor.lib;entityx-d.lib;lua53.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;thor.lib;entityx-d.lib;lua53.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
