@@ -1,6 +1,7 @@
 #pragma once
 #include <Box2D/Common/b2Math.h>
 #include <SFML/System/Vector2.hpp>
+#include <memory>
 
 //Converters between Box2D and SFML
 namespace px

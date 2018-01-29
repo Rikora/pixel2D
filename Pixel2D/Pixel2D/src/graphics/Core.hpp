@@ -5,6 +5,7 @@
 #include <Kairos\FpsLite.hpp>
 
 #include "Scene.hpp"
+#include "../physics/Physics.hpp"
 #include "../utils/ResourceHolder.hpp"
 #include "../utils/ResourceIdentifiers.hpp"
 #include "../utils/TileMap.hpp"
@@ -22,18 +23,6 @@ namespace px
 			const float getY() { return entity.component<Render>()->shape->getPosition().y; }
 
 			Entity entity;
-		};
-
-		struct Parenting
-		{
-			Parenting(const std::string & name, const bool & isChild, const bool & isParent, const unsigned int & index) : name(name), isChild(isChild), 
-					  isParent(isParent), index(index) {}
-
-			std::string name;
-			std::vector<Parenting> children;
-			unsigned int index;
-			bool isChild;
-			bool isParent;
 		};
 
 	public:
@@ -54,7 +43,6 @@ namespace px
 		void updateGUI();
 
 	private:
-		void listChildren(const unsigned int & index, std::vector<Parenting> & children);
 		void addLayer(std::vector<char> & layerHolder);
 		void updateLayerItem(int & item);
 		void layerSettingsMenu();
@@ -78,10 +66,13 @@ namespace px
 		TextureHolder m_textures;
 		static int m_layerItem;
 		static bool m_showLayerSettings;
-		std::vector<Parenting> m_children;
 
 	private:
 		static std::unique_ptr<Scene> m_scene;
+		std::unique_ptr<Physics> m_physicsWorld;
+
+		//Test for a simple box2d rigidbody
+		b2Body* m_body;
 
 	private:
 		kairos::FpsLite m_fps;

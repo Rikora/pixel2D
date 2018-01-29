@@ -37,6 +37,7 @@
     <ClCompile Include="src\graphics\systems\RenderSystem.cpp" />
     <ClCompile Include="src\graphics\systems\TransformSystem.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\physics\Physics.cpp" />
     <ClCompile Include="src\physics\SFMLDebugDraw.cpp" />
     <ClCompile Include="src\utils\TileMap.cpp" />
     <ClCompile Include="src\utils\Utility.cpp" />
@@ -49,7 +50,7 @@
     <ClInclude Include="src\graphics\systems\RenderSystem.hpp" />
     <ClInclude Include="src\graphics\systems\TransformSystem.hpp" />
     <ClInclude Include="src\physics\Box2DConverters.hpp" />
-    <ClInclude Include="src\physics\PhysicsWorld.hpp" />
+    <ClInclude Include="src\physics\Physics.hpp" />
     <ClInclude Include="src\physics\SFMLDebugDraw.hpp" />
     <ClInclude Include="src\utils\Console.hpp" />
     <ClInclude Include="src\utils\imguiSTL.hpp" />

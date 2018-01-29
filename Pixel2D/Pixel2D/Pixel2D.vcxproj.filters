@@ -95,6 +95,9 @@
     <ClCompile Include="src\physics\SFMLDebugDraw.cpp">
       <Filter>Physics\Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="src\physics\Physics.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\Macros.hpp">
@@ -148,7 +151,7 @@
     <ClInclude Include="src\physics\SFMLDebugDraw.hpp">
       <Filter>Physics\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="src\physics\PhysicsWorld.hpp">
+    <ClInclude Include="src\physics\Physics.hpp">
       <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>

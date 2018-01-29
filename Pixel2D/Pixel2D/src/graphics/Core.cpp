@@ -9,6 +9,7 @@
 #include <imguidock.h>
 #include <SFML\Window\Event.hpp> 
 #include <Windows.h>
+#include "../physics/Box2DConverters.hpp"
 
 namespace px
 {
@@ -24,6 +25,7 @@ namespace px
 	Core::~Core()
 	{
 		ImGui::SFML::Shutdown();
+		m_physicsWorld->GetWorld()->DestroyBody(m_body);
 	}
 
 	void Core::initialize()
@@ -49,6 +51,7 @@ namespace px
 
 		//Scene
 		m_scene = std::make_unique<Scene>(m_sceneTexture);
+		m_physicsWorld = std::make_unique<Physics>(m_sceneTexture, sf::Vector2f(0.f, -20.f));
 
 		//Test level
 		//const int level[] =
@@ -70,16 +73,30 @@ namespace px
 		loadLua();
 		loadLuaScripts();
 
-		//Drag n drop test vector
-		m_children.push_back({ "Item1", false, false, 0 });
-		m_children.push_back({ "Item2", false, false, 1 });
-		m_children.push_back({ "Item3", false, false, 2 });
-		m_children.push_back({ "Item4", false, false, 3 });
-
 		//Doesn't work for multiple scripts if same name,
 		//so need to have a table for each script?
 		//Start for scripts
 		//lua["onStart"]();
+
+		//Create simple rigidbody
+		b2BodyDef bodyDef;
+		bodyDef.position = utils::sfToBoxVec(sf::Vector2f(500.f, 300));
+		bodyDef.type = b2_dynamicBody;
+		bodyDef.fixedRotation = true;
+		//bodyDef.linearDamping = 6.f;
+		//bodyDef.gravityScale = -2.f;
+
+		//Add body to the world
+		m_body = m_physicsWorld->GetWorld()->CreateBody(&bodyDef);
+
+		//Define shape and fixture
+		b2CircleShape shape;
+		b2FixtureDef fixtureDef;
+		shape.m_radius = utils::sfToBoxFloat(10.f);
+		fixtureDef.density = 1.f;
+		//fixtureDef.friction = 4.f;
+		fixtureDef.shape = &shape;
+		m_body->CreateFixture(&fixtureDef);
 	}
 
 	void Core::loadTextures()
@@ -127,6 +144,7 @@ namespace px
 		m_sceneTexture.setView(m_sceneView);
 		//m_sceneTexture.draw(*m_tileMap);
 		m_scene->updateRenderSystem(m_timestep.getStep());
+		m_physicsWorld->DrawDebugData();
 		m_sceneTexture.display();
 	}
 
@@ -185,7 +203,8 @@ namespace px
 
 		float alpha = m_timestep.getInterpolationAlphaAsFloat();
 
-		//Update entities
+		//Update engine systems
+		//m_physicsWorld->Update(1 / 60.f);
 		m_scene->updateTransformSystem(m_timestep.getStep());
 
 		//Update for scripts
@@ -365,111 +384,9 @@ namespace px
 				gameConsole.draw();
 			}
 			ImGui::EndDock();
-
-			ImGui::SetNextDock(ImGuiDockSlot_Tab);
-			if (ImGui::BeginDock("Assets"))
-			{				
-				//Drag n drop parenting 
-				//static int child = 0;
-				//static int parent = 0;
-				//static bool select = false;
-
-				//ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, ImGui::GetFontSize() * 3);
-				//for (unsigned int i = 0; i < m_children.size(); ++i)
-				//{
-				//	/*if (ImGui::IsItemClicked(1))
-				//		ImGui::OpenPopup("FilePopup");*/
-
-				//	//Change display of the object to a child
-				//	if (!m_children[i].isChild) 
-				//	{
-				//		ImGui::SetNextTreeNodeOpen(true, 2);
-				//		if (ImGui::TreeNode(m_children[i].name.c_str()))
-				//		{
-				//			//Show children of parents (one level down)
-				//			listChildren(i, m_children);
-
-				//			//Check for mouse drag
-				//			if (ImGui::IsMouseDragging())
-				//			{
-				//				if (!select)
-				//				{
-				//					if (ImGui::IsItemRectHovered())
-				//					{
-				//						child = i;
-				//						select = true;
-				//					}
-				//				}
-
-				//				if (ImGui::IsItemRectHovered())
-				//					parent = i;
-				//			}
-
-				//			//Assign child to parent
-				//			if (ImGui::IsMouseReleased(0) && select)
-				//			{
-				//				if (child != parent && !m_children[child].isParent)
-				//				{
-				//					m_children[parent].isParent = true;
-				//					m_children[child].isChild = true;
-				//					m_children[parent].children.push_back(m_children[child]);
-				//					printf("Start %d\n End: %d\n", child, parent);
-				//					select = false;
-				//				}
-				//				else
-				//					select = false;
-				//			}
-				//			ImGui::TreePop();
-				//		}
-				//	}	
-				//}
-
-				/*ImGui::PopStyleVar();
-				if (ImGui::BeginPopup("FilePopup"))
-				{
-					if (ImGui::MenuItem("Break"))
-					{
-
-					}
-					ImGui::EndPopup();
-				}*/
-
-			}
-			ImGui::EndDock();
-
 			ImGui::EndDockspace();
 		}
 		ImGui::End();
-	}
-
-	void Core::listChildren(const unsigned int & index, std::vector<Parenting> & children)
-	{
-		//No recursion for now since can't figure a decent way to parent children
-		//with the GUI
-		if (children[index].isParent)
-		{
-			for (unsigned int i = 0; i < children[index].children.size(); ++i)
-			{
-				ImGui::SetNextTreeNodeOpen(true, 2);
-				if (ImGui::TreeNode(children[index].children[i].name.c_str()))
-				{
-					//TODO: add functionality to break children property
-
-					//Dummy code
-					//if (ImGui::IsItemClicked(0))
-					//{
-					//	children[index].children[i].isParent = true;
-					//	children[index].children[i].children.push_back({ "Test", true, false, 0 });
-					//}
-
-					////Perform recursion if there are any children
-					//if (!children[index].children[i].children.empty())
-					//	listChildren(i, children[index].children);
-
-					ImGui::TreePop();
-				}
-			}
-		}
 	}
 
 	void Core::addLayer(std::vector<char> & layerHolder)

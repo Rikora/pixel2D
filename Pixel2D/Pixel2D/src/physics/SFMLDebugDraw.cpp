@@ -26,7 +26,7 @@ namespace px
 
 		polygon.setOutlineThickness(-1.f);
 		polygon.setFillColor(sf::Color::Transparent);
-		polygon.setOutlineColor(SFMLDebugDraw::GLColorToSFML(color));
+		polygon.setOutlineColor(sf::Color::Green);
 
 		m_target.draw(polygon);
 	}
@@ -42,8 +42,8 @@ namespace px
 		}																								   // they still show up though.. but less frequently
 
 		polygon.setOutlineThickness(-1.f);
-		polygon.setFillColor(SFMLDebugDraw::GLColorToSFML(color, 60));
-		polygon.setOutlineColor(SFMLDebugDraw::GLColorToSFML(color));
+		polygon.setFillColor(sf::Color(sf::Color::Green.r, sf::Color::Green.g, sf::Color::Green.b, 60));
+		polygon.setOutlineColor(sf::Color::Green);
 
 		m_target.draw(polygon);
 	}
@@ -56,7 +56,7 @@ namespace px
 		circle.setPosition(utils::boxToSfVec(center));
 		circle.setFillColor(sf::Color::Transparent);
 		circle.setOutlineThickness(-1.f);
-		circle.setOutlineColor(SFMLDebugDraw::GLColorToSFML(color));
+		circle.setOutlineColor(sf::Color::Green);
 
 		m_target.draw(circle);
 	}
@@ -66,15 +66,15 @@ namespace px
 		sf::CircleShape circle(utils::boxToSfFloat(radius));
 		circle.setOrigin(utils::boxToSfFloat(radius), utils::boxToSfFloat(radius));
 		circle.setPosition(utils::boxToSfVec(center));
-		circle.setFillColor(SFMLDebugDraw::GLColorToSFML(color, 60));
+		circle.setFillColor(sf::Color(sf::Color::Green.r, sf::Color::Green.g, sf::Color::Green.b, 60));
 		circle.setOutlineThickness(1.f);
-		circle.setOutlineColor(SFMLDebugDraw::GLColorToSFML(color));
+		circle.setOutlineColor(sf::Color::Green);
 
 		b2Vec2 endPoint = center + radius * axis;
 		sf::Vertex line[2] =
 		{
-			sf::Vertex(utils::boxToSfVec(center), SFMLDebugDraw::GLColorToSFML(color)),
-			sf::Vertex(utils::boxToSfVec(endPoint), SFMLDebugDraw::GLColorToSFML(color)),
+			sf::Vertex(utils::boxToSfVec(center), sf::Color::Green),
+			sf::Vertex(utils::boxToSfVec(endPoint), sf::Color::Green),
 		};
 
 		m_target.draw(circle);
@@ -85,8 +85,8 @@ namespace px
 	{
 		sf::Vertex line[] =
 		{
-			sf::Vertex(utils::boxToSfVec(p1), SFMLDebugDraw::GLColorToSFML(color)),
-			sf::Vertex(utils::boxToSfVec(p2), SFMLDebugDraw::GLColorToSFML(color))
+			sf::Vertex(utils::boxToSfVec(p1), sf::Color::Green),
+			sf::Vertex(utils::boxToSfVec(p2), sf::Color::Green)
 		};
 
 		m_target.draw(line, 2, sf::Lines);
