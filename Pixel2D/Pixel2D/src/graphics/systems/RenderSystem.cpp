@@ -20,7 +20,7 @@ namespace px
 				if (render->layer == layer)
 				{
 					m_target.draw(*render->shape.get());
-					m_target.draw(getBoundingRect(render->shape->getGlobalBounds())); //Draw bounding rect of the shape
+					//m_target.draw(getBoundingRect(render->shape->getGlobalBounds())); //Draw bounding rect of the shape
 				}
 			}
 		}

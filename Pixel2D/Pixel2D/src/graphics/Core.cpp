@@ -90,9 +90,12 @@ namespace px
 		m_body = m_physicsWorld->GetWorld()->CreateBody(&bodyDef);
 
 		//Define shape and fixture
-		b2CircleShape shape;
+		
+		//b2CircleShape shape;
+		b2PolygonShape shape;
 		b2FixtureDef fixtureDef;
-		shape.m_radius = utils::sfToBoxFloat(10.f);
+		shape.SetAsBox(utils::sfToBoxFloat(16.f / 2.f), utils::sfToBoxFloat(16.f / 2.f), utils::sfToBoxVec(sf::Vector2f(0.f, 0.0f)), 0.f);
+		//shape.m_radius = utils::sfToBoxFloat(10.f);
 		fixtureDef.density = 1.f;
 		//fixtureDef.friction = 4.f;
 		fixtureDef.shape = &shape;

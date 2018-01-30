@@ -16,7 +16,6 @@ namespace px
 	void SFMLDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 	{
 		sf::ConvexShape polygon(vertexCount);
-		sf::Vector2f center;
 
 		for (int i = 0; i < vertexCount; i++)
 		{

@@ -21,7 +21,7 @@ namespace px
 		auto shape = std::make_unique<sf::CircleShape>(10.f);
 
 		shape->setFillColor(sf::Color::Yellow);
-		shape->setOrigin(10.f, 10.f);
+		utils::centerOrigin(*shape);
 		shape->setPosition(transform.position);
 
 		//Apply components
@@ -52,7 +52,7 @@ namespace px
 
 			Transform transform(position, sf::Vector2f(1.f, 1.f), 0.f);
 			shape->setFillColor(sf::Color::Red);
-			shape->setOrigin(5.f, 5.f);
+			utils::centerOrigin(*shape);
 			shape->setPosition(transform.position);
 			shape->setScale(transform.scale);
 			shape->setRotation(transform.rotation);
@@ -68,11 +68,11 @@ namespace px
 		else if (shape == Shapes::RECTANGLE)
 		{
 			auto entity = m_entities.create();
-			auto shape = std::make_unique<sf::RectangleShape>(sf::Vector2f(15.f, 15.f));
+			auto shape = std::make_unique<sf::RectangleShape>(sf::Vector2f(16.f, 16.f));
 
 			Transform transform(position, sf::Vector2f(1.f, 1.f), 0.f);
 			shape->setFillColor(sf::Color::Red);
-			//shape->setOrigin(5.f, 5.f);
+			utils::centerOrigin(*shape);
 			shape->setPosition(transform.position);
 			shape->setScale(transform.scale);
 			shape->setRotation(transform.rotation);

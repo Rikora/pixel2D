@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Graphics/Shape.hpp>
 #include <string>
 #include <vector>
 
@@ -23,5 +24,7 @@ namespace px
 		sf::Vector2f lerp(const sf::Vector2f & start, const sf::Vector2f & end, const float & alpha);
 		sf::Vector2f getMouseWorldPos(const sf::RenderTexture & texture, const sf::RenderWindow & window);
 		sf::Keyboard::Key toKey(const std::string & key);
+
+		void centerOrigin(sf::Shape & shape);
 	}
 }

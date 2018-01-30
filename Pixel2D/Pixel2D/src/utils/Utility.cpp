@@ -53,5 +53,11 @@ namespace px
 
 			return sf::Keyboard::Key::Unknown;
 		}
+
+		void centerOrigin(sf::Shape & shape)
+		{
+			sf::FloatRect bounds = shape.getLocalBounds();
+			shape.setOrigin(std::floor(bounds.left + bounds.width / 2.f), std::floor(bounds.top + bounds.height / 2.f));
+		}
 	}
 }
