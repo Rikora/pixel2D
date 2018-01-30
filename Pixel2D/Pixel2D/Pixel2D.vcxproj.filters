@@ -98,6 +98,9 @@
     <ClCompile Include="src\physics\Physics.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\RigidbodyShape.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\Macros.hpp">
@@ -156,6 +159,9 @@
     </ClInclude>
     <ClInclude Include="src\graphics\components\Rigidbody.hpp">
       <Filter>Graphics\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\RigidbodyShape.hpp">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

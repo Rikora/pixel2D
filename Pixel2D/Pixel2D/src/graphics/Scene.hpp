@@ -1,9 +1,10 @@
 #pragma once
-#include <entityx\entityx.h>
+#include <entityx/entityx.h>
+#include <Box2D/Dynamics/b2World.h>
 
 //Components
-#include "components\Render.hpp"
-#include "components\Transform.hpp"
+#include "components/Render.hpp"
+#include "components/Transform.hpp"
 
 using namespace entityx;
 
@@ -19,8 +20,8 @@ namespace px
 	public:
 		enum class Shapes
 		{
-			CIRCLE,
-			RECTANGLE
+			Circle,
+			Rectangle
 		};
 
 	public:
@@ -35,7 +36,7 @@ namespace px
 			{
 				nameChanger.clear(); nameChanger.resize(50);
 
-				for (std::size_t p = 0; p < name.size(); ++p)
+				for (unsigned p = 0; p < name.size(); ++p)
 					nameChanger[p] = name[p];
 			}
 
@@ -50,8 +51,7 @@ namespace px
 		};
 
 	public:
-		Scene(sf::RenderTarget & target);
-		~Scene();
+		Scene(sf::RenderTarget & target, b2World* world);
 
 	public:
 		void createEntity(const Scene::Shapes & shape, const sf::Vector2f & position, const std::string & name, ObjectInfo & info);
@@ -71,6 +71,7 @@ namespace px
 		EntityManager & getEntities();
 		
 	private:
+		b2World* m_world;
 		std::vector<std::string> m_layers;
 		EntityManager m_entities;
 		EventManager m_events;

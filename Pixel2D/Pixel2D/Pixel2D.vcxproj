@@ -33,6 +33,7 @@
     <ClCompile Include="..\third-party\kairos\Kairos\Timestep.cpp" />
     <ClCompile Include="..\third-party\kairos\Kairos\TimestepLite.cpp" />
     <ClCompile Include="src\graphics\Core.cpp" />
+    <ClCompile Include="src\graphics\RigidbodyShape.cpp" />
     <ClCompile Include="src\graphics\Scene.cpp" />
     <ClCompile Include="src\graphics\systems\RenderSystem.cpp" />
     <ClCompile Include="src\graphics\systems\TransformSystem.cpp" />
@@ -47,6 +48,7 @@
     <ClInclude Include="src\graphics\components\Rigidbody.hpp" />
     <ClInclude Include="src\graphics\components\Transform.hpp" />
     <ClInclude Include="src\graphics\Core.hpp" />
+    <ClInclude Include="src\graphics\RigidbodyShape.hpp" />
     <ClInclude Include="src\graphics\Scene.hpp" />
     <ClInclude Include="src\graphics\systems\RenderSystem.hpp" />
     <ClInclude Include="src\graphics\systems\TransformSystem.hpp" />

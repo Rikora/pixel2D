@@ -1,9 +1,9 @@
 #include "Core.hpp"
-#include "..\utils\Themes.hpp"
-#include "..\utils\Utility.hpp"
-#include "..\utils\Macros.hpp"
-#include "..\utils\Log.hpp"
-#include "..\utils\Console.hpp"
+#include "../utils/Themes.hpp"
+#include "../utils/Utility.hpp"
+#include "../utils/Macros.hpp"
+#include "../utils/Log.hpp"
+#include "../utils/Console.hpp"
 #include "../utils/imguiSTL.hpp"
 #include <imgui-SFML.h>
 #include <imguidock.h>
@@ -25,7 +25,7 @@ namespace px
 	Core::~Core()
 	{
 		ImGui::SFML::Shutdown();
-		m_physicsWorld->GetWorld()->DestroyBody(m_body);
+		m_scene->destroyEntities();
 	}
 
 	void Core::initialize()
@@ -50,8 +50,8 @@ namespace px
 		ImGui::GetIO().MouseDrawCursor = true;
 
 		//Scene
-		m_scene = std::make_unique<Scene>(m_sceneTexture);
 		m_physicsWorld = std::make_unique<Physics>(m_sceneTexture, sf::Vector2f(0.f, -20.f));
+		m_scene = std::make_unique<Scene>(m_sceneTexture, m_physicsWorld->GetWorld());
 
 		//Test level
 		//const int level[] =
@@ -77,29 +77,6 @@ namespace px
 		//so need to have a table for each script?
 		//Start for scripts
 		//lua["onStart"]();
-
-		//Create simple rigidbody
-		b2BodyDef bodyDef;
-		bodyDef.position = utils::sfToBoxVec(sf::Vector2f(500.f, 300.f));
-		bodyDef.type = b2_dynamicBody;
-		bodyDef.fixedRotation = true;
-		//bodyDef.linearDamping = 6.f;
-		//bodyDef.gravityScale = -2.f;
-
-		//Add body to the world
-		m_body = m_physicsWorld->GetWorld()->CreateBody(&bodyDef);
-
-		//Define shape and fixture
-		
-		//b2CircleShape shape;
-		b2PolygonShape shape;
-		b2FixtureDef fixtureDef;
-		shape.SetAsBox(utils::sfToBoxFloat(16.f / 2.f), utils::sfToBoxFloat(16.f / 2.f), utils::sfToBoxVec(sf::Vector2f(0.f, 0.f)), 0.f);
-		//shape.m_radius = utils::sfToBoxFloat(10.f);
-		fixtureDef.density = 1.f;
-		//fixtureDef.friction = 4.f;
-		fixtureDef.shape = &shape;
-		m_body->CreateFixture(&fixtureDef);
 	}
 
 	void Core::loadTextures()
@@ -235,14 +212,14 @@ namespace px
 				{
 					if (ImGui::MenuItem("Circle"))
 					{
-						m_scene->createEntity(Scene::Shapes::CIRCLE, m_sceneView.getCenter(),
+						m_scene->createEntity(Scene::Shapes::Circle, m_sceneView.getCenter(),
 							utils::generateName("Circle", utils::circleCounter), m_objectInfo);
 						updateLayerItem(m_layerItem);
 					}
 
 					if (ImGui::MenuItem("Rectangle"))
 					{
-						m_scene->createEntity(Scene::Shapes::RECTANGLE, m_sceneView.getCenter(),
+						m_scene->createEntity(Scene::Shapes::Rectangle, m_sceneView.getCenter(),
 							utils::generateName("Rect", utils::rectangleCounter), m_objectInfo);
 						updateLayerItem(m_layerItem);
 					}
@@ -307,13 +284,13 @@ namespace px
 			{
 				if (ImGui::MenuItem("Circle##1"))
 				{
-					m_scene->createEntity(Scene::Shapes::CIRCLE, utils::getMouseWorldPos(m_sceneTexture, m_window),
+					m_scene->createEntity(Scene::Shapes::Circle, utils::getMouseWorldPos(m_sceneTexture, m_window),
 										  utils::generateName("Circle", utils::circleCounter), m_objectInfo);
 					updateLayerItem(m_layerItem);
 				}
 				if (ImGui::MenuItem("Rectangle##1"))
 				{
-					m_scene->createEntity(Scene::Shapes::RECTANGLE, utils::getMouseWorldPos(m_sceneTexture, m_window),
+					m_scene->createEntity(Scene::Shapes::Rectangle, utils::getMouseWorldPos(m_sceneTexture, m_window),
 						utils::generateName("Rect", utils::rectangleCounter), m_objectInfo);
 					updateLayerItem(m_layerItem);
 				}

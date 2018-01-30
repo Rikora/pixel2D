@@ -3,6 +3,9 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include "../utils/Utility.hpp"
 
+//Components
+#include "components/Rigidbody.hpp"
+
 //Systems
 #include "systems/RenderSystem.hpp"
 #include "systems/TransformSystem.hpp"
@@ -10,23 +13,26 @@
 
 namespace px
 {
-	Scene::Scene(sf::RenderTarget & target) : m_entities(m_events), m_systems(m_entities, m_events)
+	Scene::Scene(sf::RenderTarget & target, b2World* world) : m_entities(m_events), m_systems(m_entities, m_events), m_world(world)
 	{
 		//Basic entity
 		auto entity = m_entities.create();
-
 		Transform transform(sf::Vector2f(500.f, 233.f), sf::Vector2f(1.f, 1.f), 0.f);
 
 		//Circle
 		auto shape = std::make_unique<sf::CircleShape>(10.f);
-
-		shape->setFillColor(sf::Color::Yellow);
+		shape->setFillColor(sf::Color::Red);
 		utils::centerOrigin(*shape);
 		shape->setPosition(transform.position);
+
+		//Circle collider
+		auto rigidbody = std::make_unique<RigidbodyShape>(RigidbodyShape::Collider::Circle, m_world);
+		rigidbody->setTransform(transform.position, 10.f, 0.f);
 
 		//Apply components
 		entity.assign<Render>(std::move(shape), "Circle", "Default");
 		entity.assign<Transform>(transform);
+		entity.assign<Rigidbody>(std::move(rigidbody));
 
 		//Layers
 		m_layers = { "Default", "Grass" };
@@ -37,15 +43,10 @@ namespace px
 		m_systems.configure();
 	}
 
-	Scene::~Scene()
-	{
-		destroyEntities();
-	}
-
 	void Scene::createEntity(const Scene::Shapes & shape, const sf::Vector2f & position, const std::string & name, ObjectInfo & info)
 	{
 		//Create default shaped entities
-		if (shape == Shapes::CIRCLE)
+		if (shape == Shapes::Circle)
 		{
 			auto entity = m_entities.create();
 			auto shape = std::make_unique<sf::CircleShape>(5.f);
@@ -65,7 +66,7 @@ namespace px
 			entity.assign<Render>(std::move(shape), name, "Default");
 			entity.assign<Transform>(transform);
 		}
-		else if (shape == Shapes::RECTANGLE)
+		else if (shape == Shapes::Rectangle)
 		{
 			auto entity = m_entities.create();
 			auto shape = std::make_unique<sf::RectangleShape>(sf::Vector2f(16.f, 16.f));
@@ -96,7 +97,9 @@ namespace px
 		{
 			if (render->name == name)
 			{
-				m_entities.destroy(entity.id());
+				if (entity.has_component<Rigidbody>())
+					entity.component<Rigidbody>()->body->destroyBody();
+				entity.destroy();
 				return;
 			}
 		}
@@ -107,8 +110,14 @@ namespace px
 		ComponentHandle<Render> render;
 
 		for (Entity & entity : m_entities.entities_with_components(render))
-			if(render->layer == layer)
+		{
+			if (render->layer == layer)
+			{
+				if (entity.has_component<Rigidbody>())
+					entity.component<Rigidbody>()->body->destroyBody();
 				entity.destroy();
+			}
+		}
 	}
 
 	void Scene::destroyEntities()
@@ -116,7 +125,11 @@ namespace px
 		ComponentHandle<Render> render;
 
 		for (Entity & entity : m_entities.entities_with_components(render))
+		{
+			if (entity.has_component<Rigidbody>())
+				entity.component<Rigidbody>()->body->destroyBody();
 			entity.destroy();
+		}
 	}
 
 	void Scene::updateLayer(std::string & cName, const std::string & layer)

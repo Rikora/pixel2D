@@ -71,9 +71,6 @@ namespace px
 		static std::unique_ptr<Scene> m_scene;
 		std::unique_ptr<Physics> m_physicsWorld;
 
-		//Test for a simple box2d rigidbody
-		b2Body* m_body;
-
 	private:
 		kairos::FpsLite m_fps;
 		kairos::Timestep m_timestep;
