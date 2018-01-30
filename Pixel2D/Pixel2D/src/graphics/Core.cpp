@@ -508,6 +508,8 @@ namespace px
 			}
 			ImGui::Spacing();
 			m_scene->updateTransform(m_objectInfo);
+
+
 		}
 	}
 }

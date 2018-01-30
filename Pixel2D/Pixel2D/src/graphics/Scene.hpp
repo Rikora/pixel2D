@@ -25,6 +25,7 @@ namespace px
 		};
 
 	public:
+		//Can't most of this stuff just be replaced by an entity?
 		struct ObjectInfo
 		{
 			ObjectInfo(){}
