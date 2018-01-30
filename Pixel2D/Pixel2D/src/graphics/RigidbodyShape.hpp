@@ -26,6 +26,8 @@ namespace px
 	public:
 		Collider getColliderType() const;
 		b2Body* getBody() const;
+		sf::Vector2f getPosition() const;
+		float getRotation() const;
 
 	private:
 		void createBody();

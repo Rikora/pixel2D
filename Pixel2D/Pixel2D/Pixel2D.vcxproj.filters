@@ -163,6 +163,9 @@
     <ClInclude Include="src\graphics\RigidbodyShape.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\ObjectInfo.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\third-party\kairos\Kairos\Absorel.inl">

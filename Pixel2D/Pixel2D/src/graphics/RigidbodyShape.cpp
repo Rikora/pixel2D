@@ -86,4 +86,14 @@ namespace px
 	{
 		return m_body;
 	}
+
+	sf::Vector2f RigidbodyShape::getPosition() const
+	{
+		return utils::boxToSfVec(m_body->GetPosition());
+	}
+
+	float RigidbodyShape::getRotation() const
+	{
+		return utils::boxToSfAngle(m_body->GetAngle());
+	}
 }

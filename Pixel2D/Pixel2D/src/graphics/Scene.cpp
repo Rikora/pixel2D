@@ -3,9 +3,6 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include "../utils/Utility.hpp"
 
-//Components
-#include "components/Rigidbody.hpp"
-
 //Systems
 #include "systems/RenderSystem.hpp"
 #include "systems/TransformSystem.hpp"
@@ -59,7 +56,7 @@ namespace px
 			shape->setRotation(transform.rotation);
 
 			//Update the GUI display
-			info = { name, transform.position, transform.scale, transform.rotation, utils::circleCounter, true, "Default" };
+			info = { name, transform.position, transform.scale, transform.rotation, utils::circleCounter, true, "Default", entity };
 			info.changeName(name);
 
 			//Apply components
@@ -79,7 +76,7 @@ namespace px
 			shape->setRotation(transform.rotation);
 
 			//Update the GUI display
-			info = { name, transform.position, transform.scale, transform.rotation, utils::rectangleCounter, true, "Default" };
+			info = { name, transform.position, transform.scale, transform.rotation, utils::rectangleCounter, true, "Default", entity };
 			info.changeName(name);
 
 			//Apply components
@@ -204,7 +201,7 @@ namespace px
 			if (render->shape->getGlobalBounds().contains(point))
 			{
 				//Update the GUI display
-				info = { render->name, transform->position, transform->scale, transform->rotation, i, true, render->layer };
+				info = { render->name, transform->position, transform->scale, transform->rotation, i, true, render->layer, entity };
 				info.changeName(render->name);
 				return true;
 			}

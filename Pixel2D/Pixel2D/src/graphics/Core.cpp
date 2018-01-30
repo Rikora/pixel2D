@@ -472,7 +472,7 @@ namespace px
 			{
 				//Update entity information for GUI
 				m_objectInfo = { render->name, render->shape->getPosition(), render->shape->getScale(),
-					render->shape->getRotation(), utils::selected, true, render->layer };
+					render->shape->getRotation(), utils::selected, true, render->layer, entity };
 				m_objectInfo.changeName(render->name);
 				updateLayerItem(m_layerItem);				
 			}
@@ -509,7 +509,24 @@ namespace px
 			ImGui::Spacing();
 			m_scene->updateTransform(m_objectInfo);
 
-
+			if (m_objectInfo.entity.has_component<Rigidbody>())
+			{
+				//Show circle collider
+				if (m_objectInfo.entity.component<Rigidbody>()->body->getColliderType() == RigidbodyShape::Collider::Circle)
+				{
+					ImGui::SetNextTreeNodeOpen(true, 2);
+					if (ImGui::CollapsingHeader("Circle Collider"))
+					{
+						/*ImGui::Spacing();
+						ImGui::InputFloat2("Position", &m_objectInfo.position.x, floatPrecision);*/
+						/*ImGui::Spacing();
+						ImGui::InputFloat2("Scale", &m_objectInfo.scale.x, floatPrecision);
+						ImGui::Spacing();
+						ImGui::InputFloat("Rotation", &m_objectInfo.rotation, 1.f, 0.f, floatPrecision);*/
+					}
+					ImGui::Spacing();
+				}
+			}
 		}
 	}
 }

@@ -59,6 +59,7 @@
     <ClInclude Include="src\utils\imguiSTL.hpp" />
     <ClInclude Include="src\utils\Log.hpp" />
     <ClInclude Include="src\utils\Macros.hpp" />
+    <ClInclude Include="src\utils\ObjectInfo.hpp" />
     <ClInclude Include="src\utils\ResourceHolder.hpp" />
     <ClInclude Include="src\utils\ResourceIdentifiers.hpp" />
     <ClInclude Include="src\utils\Themes.hpp" />

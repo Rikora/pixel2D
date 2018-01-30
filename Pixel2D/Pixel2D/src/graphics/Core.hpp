@@ -59,7 +59,7 @@ namespace px
 		sf::Vector2i m_previousMousePos;
 		sf::Vector2i m_deltaMouse;
 		sf::Vector2f m_worldPos;
-		Scene::ObjectInfo m_objectInfo;
+		ObjectInfo m_objectInfo;
 		bool m_isSceneHovered;
 
 	private:

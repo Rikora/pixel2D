@@ -1,10 +1,11 @@
 #pragma once
 #include <entityx/entityx.h>
-#include <Box2D/Dynamics/b2World.h>
+#include "../utils/ObjectInfo.hpp"
 
 //Components
 #include "components/Render.hpp"
 #include "components/Transform.hpp"
+#include "components/Rigidbody.hpp"
 
 using namespace entityx;
 
@@ -22,33 +23,6 @@ namespace px
 		{
 			Circle,
 			Rectangle
-		};
-
-	public:
-		//Can't most of this stuff just be replaced by an entity?
-		struct ObjectInfo
-		{
-			ObjectInfo(){}
-			ObjectInfo(const std::string & name, const sf::Vector2f & pos, const sf::Vector2f & scale, 
-					   const float & rot, const unsigned int & i, const bool & picked, const std::string & layer) :
-					   pickedName(name), position(pos), scale(scale), rotation(rot), selected(i), picked(picked), layer(layer) {}
-
-			void changeName(const std::string & name)
-			{
-				nameChanger.clear(); nameChanger.resize(50);
-
-				for (unsigned p = 0; p < name.size(); ++p)
-					nameChanger[p] = name[p];
-			}
-
-			std::string layer;
-			unsigned int selected;
-			bool picked = false;
-			float rotation;
-			std::string pickedName;
-			sf::Vector2f position;
-			sf::Vector2f scale;
-			std::vector<char> nameChanger;
 		};
 
 	public:
