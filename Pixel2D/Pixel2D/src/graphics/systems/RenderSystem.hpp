@@ -18,7 +18,7 @@ namespace px
 		explicit RenderSystem(sf::RenderTarget & target, std::vector<std::string> & layers);
 
 	public:
-		void update(EntityManager &es, EventManager &events, TimeDelta dt) override;
+		virtual void update(EntityManager &es, EventManager &events, TimeDelta dt) override;
 
 	private:
 		sf::RectangleShape getBoundingRect(const sf::FloatRect & rect);

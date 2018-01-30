@@ -11,6 +11,6 @@ namespace px
 		explicit TransformSystem();
 
 	public:
-		void update(EntityManager &es, EventManager &events, TimeDelta dt) override;
+		virtual void update(EntityManager &es, EventManager &events, TimeDelta dt) override;
 	};
 }

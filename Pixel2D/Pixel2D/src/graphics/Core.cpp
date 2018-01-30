@@ -4,10 +4,10 @@
 #include "..\utils\Macros.hpp"
 #include "..\utils\Log.hpp"
 #include "..\utils\Console.hpp"
-#include "..\utils\imguiSTL.hpp"
+#include "../utils/imguiSTL.hpp"
 #include <imgui-SFML.h>
 #include <imguidock.h>
-#include <SFML\Window\Event.hpp> 
+#include <SFML/Window/Event.hpp> 
 #include <Windows.h>
 #include "../physics/Box2DConverters.hpp"
 
@@ -80,7 +80,7 @@ namespace px
 
 		//Create simple rigidbody
 		b2BodyDef bodyDef;
-		bodyDef.position = utils::sfToBoxVec(sf::Vector2f(500.f, 300));
+		bodyDef.position = utils::sfToBoxVec(sf::Vector2f(500.f, 300.f));
 		bodyDef.type = b2_dynamicBody;
 		bodyDef.fixedRotation = true;
 		//bodyDef.linearDamping = 6.f;
@@ -94,7 +94,7 @@ namespace px
 		//b2CircleShape shape;
 		b2PolygonShape shape;
 		b2FixtureDef fixtureDef;
-		shape.SetAsBox(utils::sfToBoxFloat(16.f / 2.f), utils::sfToBoxFloat(16.f / 2.f), utils::sfToBoxVec(sf::Vector2f(0.f, 0.0f)), 0.f);
+		shape.SetAsBox(utils::sfToBoxFloat(16.f / 2.f), utils::sfToBoxFloat(16.f / 2.f), utils::sfToBoxVec(sf::Vector2f(0.f, 0.f)), 0.f);
 		//shape.m_radius = utils::sfToBoxFloat(10.f);
 		fixtureDef.density = 1.f;
 		//fixtureDef.friction = 4.f;

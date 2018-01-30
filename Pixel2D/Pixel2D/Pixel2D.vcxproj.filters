@@ -154,6 +154,9 @@
     <ClInclude Include="src\physics\Physics.hpp">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="src\graphics\components\Rigidbody.hpp">
+      <Filter>Graphics\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\third-party\kairos\Kairos\Absorel.inl">
