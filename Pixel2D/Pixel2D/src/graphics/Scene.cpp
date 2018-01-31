@@ -24,7 +24,7 @@ namespace px
 
 		//Circle collider
 		auto rigidbody = std::make_unique<RigidbodyShape>(RigidbodyShape::Collider::Circle, m_world);
-		rigidbody->setTransform(transform.position, 10.f, 0.f);
+		rigidbody->setTransform(sf::Vector2f(0.f, 0.f), 10.f, 0.f);
 
 		//Apply components
 		entity.assign<Render>(std::move(shape), "Circle", "Default");

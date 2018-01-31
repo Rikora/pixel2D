@@ -1,10 +1,11 @@
 #include "RigidbodyShape.hpp"
 #include <Box2D/Box2D.h>
 #include "../physics/Box2DConverters.hpp"
+#include <SFML/Graphics/Transform.hpp>
 
 namespace px
 {
-	RigidbodyShape::RigidbodyShape(Collider colliderType, b2World* world) : m_world(world), m_colliderType(colliderType)
+	RigidbodyShape::RigidbodyShape(Collider colliderType, b2World* world) : m_world(world), m_colliderType(colliderType), m_localPosition()
 	{
 		createBody();
 	}
@@ -87,7 +88,26 @@ namespace px
 		return m_body;
 	}
 
-	sf::Vector2f RigidbodyShape::getPosition() const
+	sf::Transform RigidbodyShape::getTransform() const
+	{
+		sf::Transform trans = sf::Transform::Identity;
+		trans.translate(getWorldPosition());
+		trans.rotate(getRotation());
+		trans.scale(sf::Vector2f(1.f, 1.f));
+		return trans;
+	}
+
+	sf::Vector2f & RigidbodyShape::getLocalPositionRef()
+	{
+		return m_localPosition;
+	}
+
+	sf::Vector2f RigidbodyShape::getLocalPosition() const
+	{
+		return m_localPosition;
+	}
+
+	sf::Vector2f RigidbodyShape::getWorldPosition() const
 	{
 		return utils::boxToSfVec(m_body->GetPosition());
 	}

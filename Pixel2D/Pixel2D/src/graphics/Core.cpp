@@ -517,12 +517,8 @@ namespace px
 					ImGui::SetNextTreeNodeOpen(true, 2);
 					if (ImGui::CollapsingHeader("Circle Collider"))
 					{
-						/*ImGui::Spacing();
-						ImGui::InputFloat2("Position", &m_objectInfo.position.x, floatPrecision);*/
-						/*ImGui::Spacing();
-						ImGui::InputFloat2("Scale", &m_objectInfo.scale.x, floatPrecision);
 						ImGui::Spacing();
-						ImGui::InputFloat("Rotation", &m_objectInfo.rotation, 1.f, 0.f, floatPrecision);*/
+						ImGui::InputFloat2("Center", &m_objectInfo.entity.component<Rigidbody>()->body->getLocalPositionRef().x, floatPrecision);
 					}
 					ImGui::Spacing();
 				}
