@@ -512,8 +512,9 @@ namespace px
 			//Rigidbody
 			if (m_objectInfo.entity.has_component<Rigidbody>())
 			{
+				static bool open = true;
 				ImGui::SetNextTreeNodeOpen(true, 2);
-				if (ImGui::CollapsingHeader("Rigidbody"))
+				if (ImGui::CollapsingHeader("Rigidbody", &open))
 				{
 					ImGui::Text("Content goes here...");
 					ImGui::Spacing();
@@ -528,13 +529,13 @@ namespace px
 							ImGui::InputFloat2("Center", &m_objectInfo.entity.component<Rigidbody>()->body->getLocalPositionRef().x, floatPrecision);
 							ImGui::Spacing();
 							ImGui::InputFloat("Radius", &m_objectInfo.entity.component<Rigidbody>()->body->getRadiusRef(), 0.1f, 0.f, floatPrecision);
-						}
+						}					
 						ImGui::Spacing();
 					}
 					else if (m_objectInfo.entity.component<Rigidbody>()->body->getColliderType() == RigidbodyShape::Collider::Box)
 					{
 						ImGui::SetNextTreeNodeOpen(true, 2);
-						if (ImGui::CollapsingHeader("Box Collider"))
+						if (ImGui::CollapsingHeader("Box Collider")) //This is not perfectly centered, origin?
 						{
 							ImGui::Spacing();
 							ImGui::InputFloat2("Center##1", &m_objectInfo.entity.component<Rigidbody>()->body->getLocalPositionRef().x, floatPrecision);
@@ -543,6 +544,13 @@ namespace px
 						}
 						ImGui::Spacing();
 					}
+				}
+				else
+				{
+					//Remove rigidbody from the entity
+					m_objectInfo.entity.component<Rigidbody>()->body->destroyBody();
+					m_objectInfo.entity.remove<Rigidbody>();
+					open = true;
 				}
 			}
 		}
