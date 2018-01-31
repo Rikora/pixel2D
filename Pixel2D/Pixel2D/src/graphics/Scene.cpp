@@ -48,6 +48,7 @@ namespace px
 			auto entity = m_entities.create();
 			auto shape = std::make_unique<sf::CircleShape>(5.f);
 
+			//Transform
 			Transform transform(position, sf::Vector2f(1.f, 1.f), 0.f);
 			shape->setFillColor(sf::Color::Red);
 			utils::centerOrigin(*shape);
@@ -68,12 +69,17 @@ namespace px
 			auto entity = m_entities.create();
 			auto shape = std::make_unique<sf::RectangleShape>(sf::Vector2f(16.f, 16.f));
 
+			//Transform
 			Transform transform(position, sf::Vector2f(1.f, 1.f), 0.f);
 			shape->setFillColor(sf::Color::Red);
 			utils::centerOrigin(*shape);
 			shape->setPosition(transform.position);
 			shape->setScale(transform.scale);
 			shape->setRotation(transform.rotation);
+
+			//Box collider
+			auto rigidbody = std::make_unique<RigidbodyShape>(RigidbodyShape::Collider::Box, m_world);
+			rigidbody->setTransform(sf::Vector2f(0.f, 0.f), 0.f, sf::Vector2f(8.f, 8.f));
 
 			//Update the GUI display
 			info = { name, transform.position, transform.scale, transform.rotation, utils::rectangleCounter, true, "Default", entity };
@@ -82,6 +88,7 @@ namespace px
 			//Apply components
 			entity.assign<Render>(std::move(shape), name, "Default");
 			entity.assign<Transform>(transform);
+			entity.assign<Rigidbody>(std::move(rigidbody));
 		}
 	}
 

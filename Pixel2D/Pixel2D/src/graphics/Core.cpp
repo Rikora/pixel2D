@@ -509,18 +509,40 @@ namespace px
 			ImGui::Spacing();
 			m_scene->updateTransform(m_objectInfo);
 
+			//Rigidbody
 			if (m_objectInfo.entity.has_component<Rigidbody>())
 			{
-				//Show circle collider
-				if (m_objectInfo.entity.component<Rigidbody>()->body->getColliderType() == RigidbodyShape::Collider::Circle)
+				ImGui::SetNextTreeNodeOpen(true, 2);
+				if (ImGui::CollapsingHeader("Rigidbody"))
 				{
-					ImGui::SetNextTreeNodeOpen(true, 2);
-					if (ImGui::CollapsingHeader("Circle Collider"))
-					{
-						ImGui::Spacing();
-						ImGui::InputFloat2("Center", &m_objectInfo.entity.component<Rigidbody>()->body->getLocalPositionRef().x, floatPrecision);
-					}
+					ImGui::Text("Content goes here...");
 					ImGui::Spacing();
+
+					//Display info about collider type
+					if (m_objectInfo.entity.component<Rigidbody>()->body->getColliderType() == RigidbodyShape::Collider::Circle)
+					{
+						ImGui::SetNextTreeNodeOpen(true, 2);
+						if (ImGui::CollapsingHeader("Circle Collider"))
+						{
+							ImGui::Spacing();
+							ImGui::InputFloat2("Center", &m_objectInfo.entity.component<Rigidbody>()->body->getLocalPositionRef().x, floatPrecision);
+							ImGui::Spacing();
+							ImGui::InputFloat("Radius", &m_objectInfo.entity.component<Rigidbody>()->body->getRadiusRef(), 0.1f, 0.f, floatPrecision);
+						}
+						ImGui::Spacing();
+					}
+					else if (m_objectInfo.entity.component<Rigidbody>()->body->getColliderType() == RigidbodyShape::Collider::Box)
+					{
+						ImGui::SetNextTreeNodeOpen(true, 2);
+						if (ImGui::CollapsingHeader("Box Collider"))
+						{
+							ImGui::Spacing();
+							ImGui::InputFloat2("Center##1", &m_objectInfo.entity.component<Rigidbody>()->body->getLocalPositionRef().x, floatPrecision);
+							/*ImGui::Spacing();
+							ImGui::InputFloat2("Size", &m_objectInfo.entity.component<Rigidbody>()->body->getSizeRef().x, floatPrecision);*/
+						}
+						ImGui::Spacing();
+					}
 				}
 			}
 		}

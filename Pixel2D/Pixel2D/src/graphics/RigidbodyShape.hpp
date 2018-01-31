@@ -9,6 +9,8 @@ namespace sf
 class b2Body;
 class b2World;
 
+//Perhaps inheritance from this class could be a good idea in the future?
+//Depends how bloated this class will be...
 namespace px
 {
 	class RigidbodyShape
@@ -31,16 +33,21 @@ namespace px
 	public:
 		Collider getColliderType() const;
 		b2Body* getBody() const;
-		sf::Transform getTransform() const;
 		sf::Vector2f & getLocalPositionRef();
 		sf::Vector2f getLocalPosition() const;
 		sf::Vector2f getWorldPosition() const;
+		sf::Vector2f & getSizeRef();
+		sf::Vector2f getSize() const;
 		float getRotation() const;
+		float & getRadiusRef();
+		float getRadius() const;
 
 	private:
 		void createBody();
 
 	private:
+		float m_radius;
+		sf::Vector2f m_size;
 		sf::Vector2f m_localPosition;
 		b2Body* m_body;
 		b2World* m_world;

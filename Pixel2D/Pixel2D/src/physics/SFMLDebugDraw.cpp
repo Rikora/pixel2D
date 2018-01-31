@@ -66,7 +66,7 @@ namespace px
 		circle.setOrigin(utils::boxToSfFloat(radius), utils::boxToSfFloat(radius));
 		circle.setPosition(utils::boxToSfVec(center));
 		circle.setFillColor(sf::Color(sf::Color::Green.r, sf::Color::Green.g, sf::Color::Green.b, 60));
-		circle.setOutlineThickness(1.f);
+		circle.setOutlineThickness(-1.f);
 		circle.setOutlineColor(sf::Color::Green);
 
 		b2Vec2 endPoint = center + radius * axis;

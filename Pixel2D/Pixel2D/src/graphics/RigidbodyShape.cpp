@@ -12,8 +12,11 @@ namespace px
 
 	void RigidbodyShape::destroyBody()
 	{
-		if(m_body != nullptr)
+		if (m_body != nullptr)
+		{
 			m_world->DestroyBody(m_body);
+			m_body = nullptr;
+		}
 	}
 
 	void RigidbodyShape::createBody()
@@ -47,7 +50,9 @@ namespace px
 	//Polygon colliders
 	void RigidbodyShape::setTransform(const sf::Vector2f & position, const float & angle, const sf::Vector2f & scale)
 	{
-		//Only if we have to adjust the size
+		m_size = scale;
+
+		//Only adjust the size if we really have to?
 		if (m_colliderType == Collider::Box && scale != sf::Vector2f())
 		{
 			//Create new body from scratch
@@ -62,7 +67,7 @@ namespace px
 
 			//Set collider
 			b2PolygonShape shape;
-			shape.SetAsBox(utils::sfToBoxFloat(scale.x), utils::sfToBoxFloat(scale.y), utils::sfToBoxVec(sf::Vector2f(0.f, 0.f)), utils::sfToBoxAngle(angle));
+			shape.SetAsBox(utils::sfToBoxFloat(m_size.x), utils::sfToBoxFloat(m_size.y), utils::sfToBoxVec(sf::Vector2f(0.f, 0.f)), utils::sfToBoxAngle(angle));
 			fixtureDef.density = 1.f;
 			fixtureDef.shape = &shape;
 			m_body->CreateFixture(&fixtureDef);
@@ -74,7 +79,8 @@ namespace px
 	//Only used for circle colliders
 	void RigidbodyShape::setTransform(const sf::Vector2f & position, const float & radius, const float & angle)
 	{
-		m_body->GetFixtureList()->GetShape()->m_radius = utils::sfToBoxFloat(radius);
+		m_radius = radius;
+		m_body->GetFixtureList()->GetShape()->m_radius = utils::sfToBoxFloat(m_radius);
 		m_body->SetTransform(utils::sfToBoxVec(position), utils::sfToBoxAngle(angle));
 	}
 
@@ -86,15 +92,6 @@ namespace px
 	b2Body* RigidbodyShape::getBody() const
 	{
 		return m_body;
-	}
-
-	sf::Transform RigidbodyShape::getTransform() const
-	{
-		sf::Transform trans = sf::Transform::Identity;
-		trans.translate(getWorldPosition());
-		trans.rotate(getRotation());
-		trans.scale(sf::Vector2f(1.f, 1.f));
-		return trans;
 	}
 
 	sf::Vector2f & RigidbodyShape::getLocalPositionRef()
@@ -112,8 +109,28 @@ namespace px
 		return utils::boxToSfVec(m_body->GetPosition());
 	}
 
+	sf::Vector2f & RigidbodyShape::getSizeRef()
+	{
+		return m_size;
+	}
+
+	sf::Vector2f RigidbodyShape::getSize() const
+	{
+		return m_size;
+	}
+
 	float RigidbodyShape::getRotation() const
 	{
 		return utils::boxToSfAngle(m_body->GetAngle());
+	}
+
+	float & RigidbodyShape::getRadiusRef()
+	{
+		return m_radius;
+	}
+
+	float RigidbodyShape::getRadius() const
+	{
+		return m_radius;
 	}
 }

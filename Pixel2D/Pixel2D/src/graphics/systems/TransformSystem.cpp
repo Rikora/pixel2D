@@ -23,11 +23,20 @@ namespace px
 			render->shape->setScale(transform->scale);
 			render->shape->setRotation(transform->rotation);
 
-			//After or before?
 			if (entity.has_component<Rigidbody>())
 			{
-				const sf::Vector2f pos = transform->position + (entity.component<Rigidbody>()->body->getLocalPosition());
-				entity.component<Rigidbody>()->body->setTransform(pos, transform->rotation);
+				if (entity.component<Rigidbody>()->body->getColliderType() == RigidbodyShape::Collider::Circle)
+				{
+					const sf::Vector2f pos = transform->position + (entity.component<Rigidbody>()->body->getLocalPosition());
+					const float radius = entity.component<Rigidbody>()->body->getRadius();
+					entity.component<Rigidbody>()->body->setTransform(pos, radius, transform->rotation);
+				}
+				else if (entity.component<Rigidbody>()->body->getColliderType() == RigidbodyShape::Collider::Box)
+				{
+					const sf::Vector2f pos = transform->position + (entity.component<Rigidbody>()->body->getLocalPosition());
+					//const sf::Vector2f size = entity.component<Rigidbody>()->body->getSize();
+					entity.component<Rigidbody>()->body->setTransform(pos, transform->rotation); //Updating the size will be performance heavy?
+				}
 			}
 		}
 	}
