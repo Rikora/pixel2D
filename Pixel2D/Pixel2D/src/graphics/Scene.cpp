@@ -108,6 +108,7 @@ namespace px
 	{
 		ComponentHandle<Render> render;
 
+		//Remove entity which corresponds to the layer
 		for (Entity & entity : m_entities.entities_with_components(render))
 		{
 			if (render->layer == layer)
@@ -177,7 +178,7 @@ namespace px
 				info.changeName(render->name);
 				return true;
 			}
-			++i;
+			i++;
 		}
 		return false;
 	}

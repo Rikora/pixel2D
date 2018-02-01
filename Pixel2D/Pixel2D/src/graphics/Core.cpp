@@ -422,7 +422,7 @@ namespace px
 					m_scene->getLayers().pop_back();
 				}
 				ImGui::PopID();
-				++i;
+				i++;
 			}
 			ImGui::Separator();
 		}
@@ -554,65 +554,53 @@ namespace px
 			}
 
 			ImGui::Separator();
-			ImGui::Spacing();
-			ImGui::Spacing();
+			ImGui::Spacing(); ImGui::Spacing();
 			ImGui::InvisibleButton("Invis", ImVec2((ImGui::GetWindowContentRegionWidth() / 2.f) - 100.f, 0.f));
 			ImGui::SameLine();
 			if (ImGui::Button("Add Component", ImVec2(200.f, 0.f)))
 				ImGui::OpenPopup("ComponentPopup");
 
+			//Display the different components available
 			ImGui::SetNextWindowSize(ImVec2(200, 100));
 			if (ImGui::BeginPopup("ComponentPopup"))
 			{
-				ImGui::Text("Component");
-				ImGui::Separator();
-				//Note: This can probably be grouped into a function...
-				if(ImGui::BeginMenu("Physics"))
-				{
-					if (ImGui::MenuItem("Circle Collider##One"))
-					{
-						if (!m_objectInfo.entity.has_component<Rigidbody>())
-						{
-							//Create circle collider
-							auto rigidbody = std::make_unique<RigidbodyShape>(RigidbodyShape::Collider::Circle, m_physicsWorld->GetWorld());
-							if (dynamic_cast<sf::CircleShape*>(m_objectInfo.entity.component<Render>()->shape.get()))
-							{
-								sf::CircleShape* s = dynamic_cast<sf::CircleShape*>(m_objectInfo.entity.component<Render>()->shape.get());
-								rigidbody->setTransform(sf::Vector2f(0.f, 0.f), s->getRadius(), 0.f);
-								s = nullptr;
-							}
-							else
-								rigidbody->setTransform(sf::Vector2f(0.f, 0.f), 5.f, 0.f);
-
-							//Apply component
-							m_objectInfo.entity.assign<Rigidbody>(std::move(rigidbody));
-						}
-					}
-					//We will be dealing with sprites later
-					if (ImGui::MenuItem("Box Collider##One"))
-					{
-						if (!m_objectInfo.entity.has_component<Rigidbody>())
-						{
-							//Create box collider
-							auto rigidbody = std::make_unique<RigidbodyShape>(RigidbodyShape::Collider::Box, m_physicsWorld->GetWorld());
-							if (dynamic_cast<sf::RectangleShape*>(m_objectInfo.entity.component<Render>()->shape.get()))
-							{
-								sf::RectangleShape* r = dynamic_cast<sf::RectangleShape*>(m_objectInfo.entity.component<Render>()->shape.get());
-								rigidbody->setTransform(sf::Vector2f(0.f, 0.f), 0.f, sf::Vector2f(r->getSize().x / 2.f, r->getSize().y / 2.f));
-								r = nullptr;
-							}
-							else
-								rigidbody->setTransform(sf::Vector2f(0.f, 0.f), 0.f, sf::Vector2f(8.f, 8.f));
-
-							//Apply component
-							m_objectInfo.entity.assign<Rigidbody>(std::move(rigidbody));
-						}
-					}
-
-					ImGui::EndMenu();
-				}
+				displayComponents();
 				ImGui::EndPopup();
+			}	
+		}
+	}
+
+	void Core::displayComponents()
+	{
+		ImGui::Text("Component");
+		ImGui::Separator();
+
+		if (ImGui::BeginMenu("Physics"))
+		{
+			if (ImGui::MenuItem("Circle Collider##One"))
+			{
+				if (!m_objectInfo.entity.has_component<Rigidbody>())
+				{
+					//Create circle collider
+					auto rigidbody = std::make_unique<RigidbodyShape>(RigidbodyShape::Collider::Circle, m_physicsWorld->GetWorld());
+					const float radius = m_objectInfo.entity.component<Render>()->shape->getGlobalBounds().width;
+					rigidbody->setTransform(sf::Vector2f(0.f, 0.f), radius, 0.f);
+					m_objectInfo.entity.assign<Rigidbody>(std::move(rigidbody));
+				}
 			}
+			if (ImGui::MenuItem("Box Collider##One"))
+			{
+				if (!m_objectInfo.entity.has_component<Rigidbody>())
+				{
+					//Create box collider
+					auto rigidbody = std::make_unique<RigidbodyShape>(RigidbodyShape::Collider::Box, m_physicsWorld->GetWorld());
+					const float width = m_objectInfo.entity.component<Render>()->shape->getGlobalBounds().width;
+					const float height = m_objectInfo.entity.component<Render>()->shape->getGlobalBounds().height;
+					rigidbody->setTransform(sf::Vector2f(0.f, 0.f), 0.f, sf::Vector2f(width / 2.f, height / 2.f));
+					m_objectInfo.entity.assign<Rigidbody>(std::move(rigidbody));
+				}
+			}
+			ImGui::EndMenu();
 		}
 	}
 }

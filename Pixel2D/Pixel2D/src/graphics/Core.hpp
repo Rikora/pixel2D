@@ -49,6 +49,7 @@ namespace px
 		void sceneDock();
 		void hierarchyDock();
 		void inspectorDock();
+		void displayComponents();
 
 	private:
 		std::unique_ptr<utils::TileMap> m_tileMap;
