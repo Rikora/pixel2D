@@ -278,17 +278,17 @@ namespace px
 		ImGui::SetNextWindowSize(ImVec2(100, 100));
 		if (ImGui::BeginPopup("Add_Objects"))
 		{
-			ImGui::MenuItem("Add");
+			ImGui::Text("Add");
 			ImGui::Separator();
 			if (ImGui::BeginMenu("Mesh"))
 			{
-				if (ImGui::MenuItem("Circle##1"))
+				if (ImGui::MenuItem("Circle##One"))
 				{
 					m_scene->createEntity(Scene::Shapes::Circle, utils::getMouseWorldPos(m_sceneTexture, m_window),
 										  utils::generateName("Circle", utils::circleCounter), m_objectInfo);
 					updateLayerItem(m_layerItem);
 				}
-				if (ImGui::MenuItem("Rectangle##1"))
+				if (ImGui::MenuItem("Rectangle##One"))
 				{
 					m_scene->createEntity(Scene::Shapes::Rectangle, utils::getMouseWorldPos(m_sceneTexture, m_window),
 						utils::generateName("Rect", utils::rectangleCounter), m_objectInfo);
@@ -513,7 +513,7 @@ namespace px
 			{
 				static bool open = true;
 				ImGui::SetNextTreeNodeOpen(true, 2);
-				if (ImGui::CollapsingHeader("Rigidbody", &open))
+				if (ImGui::CollapsingHeader("Rigidbody", &open, ImGuiTreeNodeFlags_Leaf)) //Leaf node prevents closing bug
 				{
 					ImGui::Text("Content goes here...");
 					ImGui::Spacing();
@@ -534,10 +534,10 @@ namespace px
 					else if (m_objectInfo.entity.component<Rigidbody>()->body->getColliderType() == RigidbodyShape::Collider::Box)
 					{
 						ImGui::SetNextTreeNodeOpen(true, 2);
-						if (ImGui::CollapsingHeader("Box Collider")) //This is not perfectly centered, origin?
+						if (ImGui::CollapsingHeader("Box Collider"))
 						{
 							ImGui::Spacing();
-							ImGui::InputFloat2("Center##1", &m_objectInfo.entity.component<Rigidbody>()->body->getLocalPositionRef().x, floatPrecision);
+							ImGui::InputFloat2("Center##One", &m_objectInfo.entity.component<Rigidbody>()->body->getLocalPositionRef().x, floatPrecision);
 							/*ImGui::Spacing();
 							ImGui::InputFloat2("Size", &m_objectInfo.entity.component<Rigidbody>()->body->getSizeRef().x, floatPrecision);*/
 						}
@@ -551,6 +551,67 @@ namespace px
 					m_objectInfo.entity.remove<Rigidbody>();
 					open = true;
 				}
+			}
+
+			ImGui::Separator();
+			ImGui::Spacing();
+			ImGui::Spacing();
+			ImGui::InvisibleButton("Invis", ImVec2((ImGui::GetWindowContentRegionWidth() / 2.f) - 100.f, 0.f));
+			ImGui::SameLine();
+			if (ImGui::Button("Add Component", ImVec2(200.f, 0.f)))
+				ImGui::OpenPopup("ComponentPopup");
+
+			ImGui::SetNextWindowSize(ImVec2(200, 100));
+			if (ImGui::BeginPopup("ComponentPopup"))
+			{
+				ImGui::Text("Component");
+				ImGui::Separator();
+				//Note: This can probably be grouped into a function...
+				if(ImGui::BeginMenu("Physics"))
+				{
+					if (ImGui::MenuItem("Circle Collider##One"))
+					{
+						if (!m_objectInfo.entity.has_component<Rigidbody>())
+						{
+							//Create circle collider
+							auto rigidbody = std::make_unique<RigidbodyShape>(RigidbodyShape::Collider::Circle, m_physicsWorld->GetWorld());
+							if (dynamic_cast<sf::CircleShape*>(m_objectInfo.entity.component<Render>()->shape.get()))
+							{
+								sf::CircleShape* s = dynamic_cast<sf::CircleShape*>(m_objectInfo.entity.component<Render>()->shape.get());
+								rigidbody->setTransform(sf::Vector2f(0.f, 0.f), s->getRadius(), 0.f);
+								s = nullptr;
+							}
+							else
+								rigidbody->setTransform(sf::Vector2f(0.f, 0.f), 5.f, 0.f);
+
+							//Apply component
+							m_objectInfo.entity.assign<Rigidbody>(std::move(rigidbody));
+						}
+					}
+					//We will be dealing with sprites later
+					if (ImGui::MenuItem("Box Collider##One"))
+					{
+						if (!m_objectInfo.entity.has_component<Rigidbody>())
+						{
+							//Create box collider
+							auto rigidbody = std::make_unique<RigidbodyShape>(RigidbodyShape::Collider::Box, m_physicsWorld->GetWorld());
+							if (dynamic_cast<sf::RectangleShape*>(m_objectInfo.entity.component<Render>()->shape.get()))
+							{
+								sf::RectangleShape* r = dynamic_cast<sf::RectangleShape*>(m_objectInfo.entity.component<Render>()->shape.get());
+								rigidbody->setTransform(sf::Vector2f(0.f, 0.f), 0.f, sf::Vector2f(r->getSize().x / 2.f, r->getSize().y / 2.f));
+								r = nullptr;
+							}
+							else
+								rigidbody->setTransform(sf::Vector2f(0.f, 0.f), 0.f, sf::Vector2f(8.f, 8.f));
+
+							//Apply component
+							m_objectInfo.entity.assign<Rigidbody>(std::move(rigidbody));
+						}
+					}
+
+					ImGui::EndMenu();
+				}
+				ImGui::EndPopup();
 			}
 		}
 	}

@@ -77,14 +77,9 @@ namespace px
 			shape->setScale(transform.scale);
 			shape->setRotation(transform.rotation);
 
-			//Box collider
-			auto rigidbody = std::make_unique<RigidbodyShape>(RigidbodyShape::Collider::Box, m_world);
-			rigidbody->setTransform(sf::Vector2f(0.f, 0.f), 0.f, sf::Vector2f(8.f, 8.f));
-
 			//Apply components
 			entity.assign<Render>(std::move(shape), name, "Default");
 			entity.assign<Transform>(transform);
-			entity.assign<Rigidbody>(std::move(rigidbody));
 
 			//Update the GUI display
 			info = { name, utils::rectangleCounter, true, entity };
