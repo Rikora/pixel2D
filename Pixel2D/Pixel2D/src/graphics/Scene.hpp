@@ -33,9 +33,7 @@ namespace px
 		void destroyEntity(const std::string & name);
 		void destroyEntities(const std::string & layer);
 		void destroyEntities();
-		void updateLayer(std::string & cName, const std::string & layer);
 		void updateName(std::string & cName, const std::string & nName);
-		void updateTransform(const ObjectInfo & info);
 		void updateTransformSystem(const double & dt);
 		void updateRenderSystem(const double & dt);
 		bool checkIntersection(const sf::Vector2f & point, ObjectInfo & info);

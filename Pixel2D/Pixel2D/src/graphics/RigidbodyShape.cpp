@@ -67,7 +67,7 @@ namespace px
 
 			//Set collider
 			b2PolygonShape shape;
-			shape.SetAsBox(utils::sfToBoxFloat(m_size.x), utils::sfToBoxFloat(m_size.y), utils::sfToBoxVec(sf::Vector2f(0.f, 0.f)), utils::sfToBoxAngle(angle));
+			shape.SetAsBox(utils::sfToBoxFloat(m_size.x), utils::sfToBoxFloat(m_size.y), utils::sfToBoxVec(sf::Vector2f(0.0f, 0.f)), utils::sfToBoxAngle(angle));
 			fixtureDef.density = 1.f;
 			fixtureDef.shape = &shape;
 			m_body->CreateFixture(&fixtureDef);

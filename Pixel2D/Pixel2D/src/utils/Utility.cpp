@@ -1,7 +1,8 @@
 #include "Utility.hpp"
-#include <SFML\Window\Mouse.hpp>
-#include <SFML\Graphics\RenderWindow.hpp>
-#include <SFML\Graphics\RenderTexture.hpp>
+#include <SFML/Window/Mouse.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
+#include "../physics/Box2DConverters.hpp"
 
 namespace px
 {

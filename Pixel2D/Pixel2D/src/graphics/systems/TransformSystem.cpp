@@ -35,7 +35,7 @@ namespace px
 				{
 					const sf::Vector2f pos = transform->position + (entity.component<Rigidbody>()->body->getLocalPosition());
 					//const sf::Vector2f size = entity.component<Rigidbody>()->body->getSize();
-					entity.component<Rigidbody>()->body->setTransform(pos, transform->rotation); //Updating the size will be performance heavy?
+					entity.component<Rigidbody>()->body->setTransform(pos, transform->rotation); //Updating the size needs a workaround
 				}
 			}
 		}

@@ -56,13 +56,13 @@ namespace px
 			shape->setScale(transform.scale);
 			shape->setRotation(transform.rotation);
 
-			//Update the GUI display
-			info = { name, transform.position, transform.scale, transform.rotation, utils::circleCounter, true, "Default", entity };
-			info.changeName(name);
-
 			//Apply components
 			entity.assign<Render>(std::move(shape), name, "Default");
 			entity.assign<Transform>(transform);
+
+			//Update the GUI display
+			info = { name, utils::circleCounter, true, entity };
+			info.changeName(name);
 		}
 		else if (shape == Shapes::Rectangle)
 		{
@@ -81,14 +81,14 @@ namespace px
 			auto rigidbody = std::make_unique<RigidbodyShape>(RigidbodyShape::Collider::Box, m_world);
 			rigidbody->setTransform(sf::Vector2f(0.f, 0.f), 0.f, sf::Vector2f(8.f, 8.f));
 
-			//Update the GUI display
-			info = { name, transform.position, transform.scale, transform.rotation, utils::rectangleCounter, true, "Default", entity };
-			info.changeName(name);
-
 			//Apply components
 			entity.assign<Render>(std::move(shape), name, "Default");
 			entity.assign<Transform>(transform);
 			entity.assign<Rigidbody>(std::move(rigidbody));
+
+			//Update the GUI display
+			info = { name, utils::rectangleCounter, true, entity };
+			info.changeName(name);
 		}
 	}
 
@@ -136,20 +136,6 @@ namespace px
 		}
 	}
 
-	void Scene::updateLayer(std::string & cName, const std::string & layer)
-	{
-		ComponentHandle<Render> render;
-
-		for (Entity & entity : m_entities.entities_with_components(render))
-		{
-			if (render->name == cName)
-			{
-				render->layer = layer;
-				return;
-			}
-		}
-	}
-
 	void Scene::updateName(std::string & cName, const std::string & nName)
 	{
 		ComponentHandle<Render> render;
@@ -167,22 +153,6 @@ namespace px
 				render->name = nName;
 				cName = nName;
 				return;
-			}
-		}
-	}
-
-	void Scene::updateTransform(const ObjectInfo & info)
-	{
-		ComponentHandle<Render> render;
-		ComponentHandle<Transform> transform;
-
-		for (Entity & entity : m_entities.entities_with_components(render, transform))
-		{
-			if (render->name == info.pickedName && info.picked)
-			{
-				transform->position = info.position;
-				transform->scale = info.scale;
-				transform->rotation = info.rotation;
 			}
 		}
 	}
@@ -208,7 +178,7 @@ namespace px
 			if (render->shape->getGlobalBounds().contains(point))
 			{
 				//Update the GUI display
-				info = { render->name, transform->position, transform->scale, transform->rotation, i, true, render->layer, entity };
+				info = { render->name, i, true, entity };
 				info.changeName(render->name);
 				return true;
 			}

@@ -1,6 +1,7 @@
 #include "SFMLDebugDraw.hpp"
 #include <SFML/Graphics.hpp>
 #include "Box2DConverters.hpp"
+#include "../utils/Utility.hpp"
 
 namespace px
 {

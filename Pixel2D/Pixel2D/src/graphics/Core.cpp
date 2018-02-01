@@ -390,9 +390,10 @@ namespace px
 
 	void Core::updateLayerItem(int & item)
 	{
+		//Pick the correct layer for the object and display in GUI
 		for (unsigned i = 0; i < m_scene->getLayers().size(); ++i)
 		{
-			if (m_scene->getLayers()[i] == m_objectInfo.layer)
+			if (m_scene->getLayers()[i] == m_objectInfo.entity.component<Render>()->layer)
 			{
 				item = i;
 				return;
@@ -471,24 +472,23 @@ namespace px
 			if (ImGui::Selectable(label, m_objectInfo.selected == utils::selected))
 			{
 				//Update entity information for GUI
-				m_objectInfo = { render->name, render->shape->getPosition(), render->shape->getScale(),
-					render->shape->getRotation(), utils::selected, true, render->layer, entity };
+				m_objectInfo = { render->name, utils::selected, true, entity };
 				m_objectInfo.changeName(render->name);
 				updateLayerItem(m_layerItem);				
 			}
-			++utils::selected;
+			utils::selected++;
 		}
 	}
 
 	void Core::inspectorDock()
 	{
-		int floatPrecision = 3;
+		static int floatPrecision = 3;
 
 		if (m_objectInfo.picked)
 		{
 			//Change layer
 			if (ImGui::Combo("Layer", &m_layerItem, m_scene->getLayers()))
-				m_scene->updateLayer(m_objectInfo.pickedName, m_scene->getLayers()[m_layerItem]);
+				m_objectInfo.entity.component<Render>()->layer = m_scene->getLayers()[m_layerItem];
 
 			//Change name of entity upon completion
 			if (ImGui::InputText("Name", m_objectInfo.nameChanger.data(), m_objectInfo.nameChanger.size(), ImGuiInputTextFlags_EnterReturnsTrue))
@@ -500,14 +500,13 @@ namespace px
 			if (ImGui::CollapsingHeader("Transform"))
 			{
 				ImGui::Spacing();
-				ImGui::InputFloat2("Position", &m_objectInfo.position.x, floatPrecision);
+				ImGui::InputFloat2("Position", &m_objectInfo.entity.component<Transform>()->position.x, floatPrecision);
 				ImGui::Spacing();
-				ImGui::InputFloat2("Scale", &m_objectInfo.scale.x, floatPrecision);
+				ImGui::InputFloat2("Scale", &m_objectInfo.entity.component<Transform>()->scale.x, floatPrecision);
 				ImGui::Spacing();
-				ImGui::InputFloat("Rotation", &m_objectInfo.rotation, 1.f, 0.f, floatPrecision);
+				ImGui::InputFloat("Rotation", &m_objectInfo.entity.component<Transform>()->rotation, 1.f, 0.f, floatPrecision);
 			}
 			ImGui::Spacing();
-			m_scene->updateTransform(m_objectInfo);
 
 			//Rigidbody
 			if (m_objectInfo.entity.has_component<Rigidbody>())
@@ -556,3 +555,4 @@ namespace px
 		}
 	}
 }
+
