@@ -5,7 +5,7 @@
 
 namespace px
 {
-	RigidbodyShape::RigidbodyShape(Collider colliderType, b2World* world) : m_world(world), m_colliderType(colliderType), m_localPosition()
+	RigidbodyShape::RigidbodyShape(Collider colliderType, b2World* world) : m_world(world), m_colliderType(colliderType), m_localPosition(), m_isStatic(true)
 	{
 		createBody();
 	}
@@ -25,7 +25,7 @@ namespace px
 		b2BodyDef bodyDef;
 		b2FixtureDef fixtureDef;
 		bodyDef.position = utils::sfToBoxVec(sf::Vector2f(0.f, 0.f)); //Default at origin
-		bodyDef.type = b2_dynamicBody;
+		bodyDef.type = b2_staticBody;
 		m_body = m_world->CreateBody(&bodyDef);
 
 		//Apply collider depending on the type
@@ -62,7 +62,7 @@ namespace px
 
 			//Create empty body
 			bodyDef.position = utils::sfToBoxVec(position);
-			bodyDef.type = b2_dynamicBody;
+			bodyDef.type = b2_staticBody;
 			m_body = m_world->CreateBody(&bodyDef);
 
 			//Set collider
@@ -91,7 +91,7 @@ namespace px
 
 	b2Body* RigidbodyShape::getBody() const
 	{
-		return m_body;
+		return m_body;		
 	}
 
 	sf::Vector2f & RigidbodyShape::getLocalPositionRef()
@@ -132,5 +132,10 @@ namespace px
 	float RigidbodyShape::getRadius() const
 	{
 		return m_radius;
+	}
+
+	bool & RigidbodyShape::getStaticStatusRef()
+	{
+		return m_isStatic;
 	}
 }

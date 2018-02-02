@@ -288,6 +288,7 @@ namespace px
 										  utils::generateName("Circle", utils::circleCounter), m_objectInfo);
 					updateLayerItem(m_layerItem);
 				}
+
 				if (ImGui::MenuItem("Rectangle##One"))
 				{
 					m_scene->createEntity(Scene::Shapes::Rectangle, utils::getMouseWorldPos(m_sceneTexture, m_window),
@@ -511,11 +512,17 @@ namespace px
 			//Rigidbody
 			if (m_objectInfo.entity.has_component<Rigidbody>())
 			{
+				//Rigidbody info
 				static bool open = true;
 				ImGui::SetNextTreeNodeOpen(true, 2);
 				if (ImGui::CollapsingHeader("Rigidbody", &open, ImGuiTreeNodeFlags_Leaf)) //Leaf node prevents closing bug
 				{
 					ImGui::Text("Content goes here...");
+					ImGui::Spacing();
+					if (ImGui::Checkbox("isStatic", &m_objectInfo.entity.component<Rigidbody>()->body->getStaticStatusRef()))
+						m_objectInfo.entity.component<Rigidbody>()->body->getBody()->SetType(b2BodyType::b2_staticBody);
+					else
+						m_objectInfo.entity.component<Rigidbody>()->body->getBody()->SetType(b2BodyType::b2_dynamicBody);
 					ImGui::Spacing();
 
 					//Display info about collider type
