@@ -1,5 +1,5 @@
-#include "Physics.hpp"
-#include "Box2DConverters.hpp"
+#include <physics/Physics.hpp>
+#include <physics/Box2DConverters.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
 namespace px

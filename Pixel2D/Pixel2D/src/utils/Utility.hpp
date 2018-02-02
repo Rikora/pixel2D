@@ -3,7 +3,6 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics/Shape.hpp>
 #include <string>
-#include <vector>
 
 namespace sf
 {

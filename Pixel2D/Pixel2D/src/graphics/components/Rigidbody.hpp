@@ -1,5 +1,5 @@
 #pragma once
-#include "../../graphics/RigidbodyShape.hpp"
+#include <graphics/RigidbodyShape.hpp>
 #include <memory>
 
 namespace px

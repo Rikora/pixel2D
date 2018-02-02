@@ -1,9 +1,10 @@
-#include "TransformSystem.hpp"
+#include <graphics/systems/TransformSystem.hpp>
 #include <Box2D/Dynamics/b2Body.h>
-#include "../components/Render.hpp"
-#include "../components/Transform.hpp"
-#include "../components/Rigidbody.hpp"
 #include <SFML/Graphics/Transform.hpp>
+
+#include <graphics/components/Render.hpp>
+#include <graphics/components/Transform.hpp>
+#include <graphics/components/Rigidbody.hpp>
 
 namespace px
 {

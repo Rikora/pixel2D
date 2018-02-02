@@ -1,5 +1,5 @@
-#include "RenderSystem.hpp"
-#include "..\components\Render.hpp"
+#include <graphics\systems\RenderSystem.hpp>
+#include <graphics\components\Render.hpp>
 #include <SFML\Graphics\RenderTarget.hpp>
 #include <SFML\Graphics\RectangleShape.hpp>
 

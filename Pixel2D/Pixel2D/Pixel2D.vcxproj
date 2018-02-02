@@ -122,11 +122,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\third-party\sfml\include;$(SolutionDir)\third-party\thor\include;$(SolutionDir)\third-party\kairos;$(SolutionDir)\third-party\imgui\include;$(SolutionDir)\third-party\entityx\include;$(SolutionDir)\third-party\sol;$(SolutionDir)\third-party\lua\include;$(SolutionDir)\third-party\box2D\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\third-party\sfml\include;$(SolutionDir)\third-party\thor\include;$(SolutionDir)\third-party\kairos;$(SolutionDir)\third-party\imgui\include;$(SolutionDir)\third-party\entityx\include;$(SolutionDir)\third-party\sol;$(SolutionDir)\third-party\lua\include;$(SolutionDir)\third-party\box2D\include;$(ProjectDir)\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\third-party\sfml\lib;$(SolutionDir)\third-party\thor\lib;$(SolutionDir)\third-party\entityx\lib;$(SolutionDir)\third-party\lua\lib;$(SolutionDir)\third-party\box2D\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\third-party\sfml\include;$(SolutionDir)\third-party\thor\include;$(SolutionDir)\third-party\kairos;$(SolutionDir)\third-party\imgui\include;$(SolutionDir)\third-party\entityx\include;$(SolutionDir)\third-party\sol;$(SolutionDir)\third-party\lua\include;$(SolutionDir)\third-party\box2D\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\third-party\sfml\include;$(SolutionDir)\third-party\thor\include;$(SolutionDir)\third-party\kairos;$(SolutionDir)\third-party\imgui\include;$(SolutionDir)\third-party\entityx\include;$(SolutionDir)\third-party\sol;$(SolutionDir)\third-party\lua\include;$(SolutionDir)\third-party\box2D\include;$(ProjectDir)\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\third-party\sfml\lib;$(SolutionDir)\third-party\thor\lib;$(SolutionDir)\third-party\entityx\lib;$(SolutionDir)\third-party\lua\lib;$(SolutionDir)\third-party\box2D\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

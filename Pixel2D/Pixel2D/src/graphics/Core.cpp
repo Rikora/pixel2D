@@ -1,15 +1,15 @@
-#include "Core.hpp"
-#include "../utils/Themes.hpp"
-#include "../utils/Utility.hpp"
-#include "../utils/Macros.hpp"
-#include "../utils/Log.hpp"
-#include "../utils/Console.hpp"
-#include "../utils/imguiSTL.hpp"
+#include <graphics/Core.hpp>
+#include <utils/Themes.hpp>
+#include <utils/Utility.hpp>
+#include <utils/Macros.hpp>
+#include <utils/Log.hpp>
+#include <utils/Console.hpp>
+#include <utils/imguiSTL.hpp>
 #include <imgui-SFML.h>
 #include <imguidock.h>
 #include <SFML/Window/Event.hpp> 
 #include <Windows.h>
-#include "../physics/Box2DConverters.hpp"
+#include <physics/Box2DConverters.hpp>
 
 namespace px
 {
@@ -35,7 +35,7 @@ namespace px
 		m_window.setVerticalSyncEnabled(true);
 
 		//Load resources
-		loadTextures();
+		//loadTextures();
 
 		//Render texture
 		m_sceneTexture.create(m_window.getSize().x, m_window.getSize().y);
@@ -76,7 +76,7 @@ namespace px
 		//Doesn't work for multiple scripts if same name,
 		//so need to have a table for each script?
 		//Start for scripts
-		//lua["onStart"]();
+		lua["onStart"]();
 	}
 
 	void Core::loadTextures()
@@ -91,7 +91,7 @@ namespace px
 
 		//Keyboard table
 		sol::table kb = lua.create_named_table("keyboard");
-		kb.set_function("isKeyPressed", [](const std::string key)->bool { return sf::Keyboard::isKeyPressed(utils::toKey(key)); });
+		kb.set_function("isKeyPressed", [](const std::string & key)->bool { return sf::Keyboard::isKeyPressed(utils::toKey(key)); });
 	}
 
 	void Core::loadLuaScripts()
@@ -178,17 +178,17 @@ namespace px
 			}
 
 			//Input for scripts
-			//lua["onInput"](dt);
+			lua["onInput"](dt);
 		}
 
 		float alpha = m_timestep.getInterpolationAlphaAsFloat();
 
+		//Update for scripts
+		lua["onUpdate"](alpha);
+
 		//Update engine systems
 		//m_physicsWorld->Update(1 / 60.f);
 		m_scene->updateTransformSystem(m_timestep.getStep());
-
-		//Update for scripts
-		//lua["onUpdate"](alpha);
 	}
 
 	void Core::updateGUI()

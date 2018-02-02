@@ -1,6 +1,6 @@
 #pragma once
-#include "ResourceHolder.hpp"
-#include "ResourceIdentifiers.hpp"
+#include <utils/ResourceHolder.hpp>
+#include <utils/ResourceIdentifiers.hpp>
 
 namespace px
 {

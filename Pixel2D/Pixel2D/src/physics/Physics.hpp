@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include "SFMLDebugDraw.hpp"
+#include <physics/SFMLDebugDraw.hpp>
 #include <SFML/System/Vector2.hpp>
 
 namespace px

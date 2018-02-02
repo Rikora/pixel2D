@@ -1,6 +1,6 @@
-#include "RigidbodyShape.hpp"
+#include <graphics/RigidbodyShape.hpp>
 #include <Box2D/Box2D.h>
-#include "../physics/Box2DConverters.hpp"
+#include <physics/Box2DConverters.hpp>
 #include <SFML/Graphics/Transform.hpp>
 
 namespace px

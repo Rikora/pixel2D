@@ -1,11 +1,11 @@
 #pragma once
 #include <entityx/entityx.h>
-#include "../utils/ObjectInfo.hpp"
+#include <utils/ObjectInfo.hpp>
 
 //Components
-#include "components/Render.hpp"
-#include "components/Transform.hpp"
-#include "components/Rigidbody.hpp"
+#include <graphics/components/Render.hpp>
+#include <graphics/components/Transform.hpp>
+#include <graphics/components/Rigidbody.hpp>
 
 using namespace entityx;
 

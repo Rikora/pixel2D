@@ -4,11 +4,11 @@
 #include <Kairos/Timestep.hpp>
 #include <Kairos/FpsLite.hpp>
 
-#include "Scene.hpp"
-#include "../physics/Physics.hpp"
-#include "../utils/ResourceHolder.hpp"
-#include "../utils/ResourceIdentifiers.hpp"
-#include "../utils/TileMap.hpp"
+#include <graphics/Scene.hpp>
+#include <physics/Physics.hpp>
+#include <utils/ResourceHolder.hpp>
+#include <utils/ResourceIdentifiers.hpp>
+#include <utils/TileMap.hpp>
 
 namespace px
 {
@@ -17,10 +17,10 @@ namespace px
 	private:
 		struct Object
 		{
-			void setPosition(float x, float y) { entity.component<Render>()->shape->setPosition(x, y); }
+			void setPosition(const float & x, const float & y) { entity.component<Transform>()->position = sf::Vector2f(x, y); }
 			void getEntity(const std::string & name){ entity = m_scene->getEntity(name); }
-			const float getX() { return entity.component<Render>()->shape->getPosition().x; }
-			const float getY() { return entity.component<Render>()->shape->getPosition().y; }
+			float getX() { return entity.component<Render>()->shape->getPosition().x; }
+			float getY() { return entity.component<Render>()->shape->getPosition().y; }
 
 			Entity entity;
 		};

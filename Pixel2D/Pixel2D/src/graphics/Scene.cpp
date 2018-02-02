@@ -1,12 +1,11 @@
-#include "Scene.hpp"
+#include <graphics/Scene.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
-#include "../utils/Utility.hpp"
+#include <utils/Utility.hpp>
 
 //Systems
-#include "systems/RenderSystem.hpp"
-#include "systems/TransformSystem.hpp"
-
+#include <graphics/systems/RenderSystem.hpp>
+#include <graphics/systems/TransformSystem.hpp>
 
 namespace px
 {
@@ -23,13 +22,13 @@ namespace px
 		shape->setPosition(transform.position);
 
 		//Circle collider
-		auto rigidbody = std::make_unique<RigidbodyShape>(RigidbodyShape::Collider::Circle, m_world);
+		/*auto rigidbody = std::make_unique<RigidbodyShape>(RigidbodyShape::Collider::Circle, m_world);
 		rigidbody->setTransform(sf::Vector2f(0.f, 0.f), 10.f, 0.f);
-
+*/
 		//Apply components
 		entity.assign<Render>(std::move(shape), "Circle", "Default");
 		entity.assign<Transform>(transform);
-		entity.assign<Rigidbody>(std::move(rigidbody));
+		//entity.assign<Rigidbody>(std::move(rigidbody));
 
 		//Layers
 		m_layers = { "Default", "Grass" };
