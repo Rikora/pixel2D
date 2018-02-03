@@ -31,19 +31,19 @@ namespace px
 		void destroyBody();
 
 	public:
-		//Is there a better way than having a reference when we want to modify
-		//the value directly? Perhaps setters is the only shortcut...
+		void setLocalPosition(const sf::Vector2f & position);
+		void setRadius(const float & radius);
+		void setStaticStatus(const bool & status);
+
+	public:
 		Collider getColliderType() const;
 		b2Body* getBody() const;
-		sf::Vector2f & getLocalPositionRef();
 		sf::Vector2f getLocalPosition() const;
 		sf::Vector2f getWorldPosition() const;
-		sf::Vector2f & getSizeRef();
 		sf::Vector2f getSize() const;
 		float getRotation() const;
-		float & getRadiusRef();
 		float getRadius() const;
-		bool & getStaticStatusRef();
+		bool getStaticStatus();
 
 	private:
 		void createBody();

@@ -519,10 +519,12 @@ namespace px
 				{
 					ImGui::Text("Content goes here...");
 					ImGui::Spacing();
-					if (ImGui::Checkbox("isStatic", &m_objectInfo.entity.component<Rigidbody>()->body->getStaticStatusRef()))
-						m_objectInfo.entity.component<Rigidbody>()->body->getBody()->SetType(b2BodyType::b2_staticBody);
-					else
-						m_objectInfo.entity.component<Rigidbody>()->body->getBody()->SetType(b2BodyType::b2_dynamicBody);
+
+					static bool staticStatus = false;
+					staticStatus = m_objectInfo.entity.component<Rigidbody>()->body->getStaticStatus();
+
+					ImGui::Checkbox("isStatic", &staticStatus);
+					m_objectInfo.entity.component<Rigidbody>()->body->setStaticStatus(staticStatus);
 					ImGui::Spacing();
 
 					//Display info about collider type
@@ -531,10 +533,17 @@ namespace px
 						ImGui::SetNextTreeNodeOpen(true, 2);
 						if (ImGui::CollapsingHeader("Circle Collider"))
 						{
+							static sf::Vector2f localPos = sf::Vector2f();
+							static float radius = 0.f;
+							localPos = m_objectInfo.entity.component<Rigidbody>()->body->getLocalPosition();
+							radius = m_objectInfo.entity.component<Rigidbody>()->body->getRadius();
+
 							ImGui::Spacing();
-							ImGui::InputFloat2("Center", &m_objectInfo.entity.component<Rigidbody>()->body->getLocalPositionRef().x, floatPrecision);
+							ImGui::InputFloat2("Center", &localPos.x, floatPrecision);
+							m_objectInfo.entity.component<Rigidbody>()->body->setLocalPosition(localPos);
 							ImGui::Spacing();
-							ImGui::InputFloat("Radius", &m_objectInfo.entity.component<Rigidbody>()->body->getRadiusRef(), 0.1f, 0.f, floatPrecision);
+							ImGui::InputFloat("Radius", &radius, 0.1f, 0.f, floatPrecision);
+							m_objectInfo.entity.component<Rigidbody>()->body->setRadius(radius);
 						}					
 						ImGui::Spacing();
 					}
@@ -543,8 +552,12 @@ namespace px
 						ImGui::SetNextTreeNodeOpen(true, 2);
 						if (ImGui::CollapsingHeader("Box Collider"))
 						{
+							static sf::Vector2f localPos = sf::Vector2f();
+							localPos = m_objectInfo.entity.component<Rigidbody>()->body->getLocalPosition();
+
 							ImGui::Spacing();
-							ImGui::InputFloat2("Center##One", &m_objectInfo.entity.component<Rigidbody>()->body->getLocalPositionRef().x, floatPrecision);
+							ImGui::InputFloat2("Center##One", &localPos.x, floatPrecision);
+							m_objectInfo.entity.component<Rigidbody>()->body->setLocalPosition(localPos);
 							/*ImGui::Spacing();
 							ImGui::InputFloat2("Size", &m_objectInfo.entity.component<Rigidbody>()->body->getSizeRef().x, floatPrecision);*/
 						}

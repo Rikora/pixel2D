@@ -84,6 +84,26 @@ namespace px
 		m_body->SetTransform(utils::sfToBoxVec(position), utils::sfToBoxAngle(angle));
 	}
 
+	void RigidbodyShape::setLocalPosition(const sf::Vector2f & position)
+	{
+		m_localPosition = position;
+	}
+
+	void RigidbodyShape::setRadius(const float & radius)
+	{
+		m_radius = radius;
+	}
+
+	void RigidbodyShape::setStaticStatus(const bool & status)
+	{
+		m_isStatic = status;
+
+		if (m_isStatic)
+			m_body->SetType(b2BodyType::b2_staticBody);
+		else
+			m_body->SetType(b2BodyType::b2_dynamicBody);
+	}
+
 	RigidbodyShape::Collider RigidbodyShape::getColliderType() const
 	{
 		return m_colliderType;
@@ -92,11 +112,6 @@ namespace px
 	b2Body* RigidbodyShape::getBody() const
 	{
 		return m_body;		
-	}
-
-	sf::Vector2f & RigidbodyShape::getLocalPositionRef()
-	{
-		return m_localPosition;
 	}
 
 	sf::Vector2f RigidbodyShape::getLocalPosition() const
@@ -109,11 +124,6 @@ namespace px
 		return utils::boxToSfVec(m_body->GetPosition());
 	}
 
-	sf::Vector2f & RigidbodyShape::getSizeRef()
-	{
-		return m_size;
-	}
-
 	sf::Vector2f RigidbodyShape::getSize() const
 	{
 		return m_size;
@@ -124,17 +134,12 @@ namespace px
 		return utils::boxToSfAngle(m_body->GetAngle());
 	}
 
-	float & RigidbodyShape::getRadiusRef()
-	{
-		return m_radius;
-	}
-
 	float RigidbodyShape::getRadius() const
 	{
 		return m_radius;
 	}
 
-	bool & RigidbodyShape::getStaticStatusRef()
+	bool RigidbodyShape::getStaticStatus()
 	{
 		return m_isStatic;
 	}
