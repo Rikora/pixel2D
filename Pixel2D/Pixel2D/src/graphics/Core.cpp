@@ -520,6 +520,7 @@ namespace px
 					ImGui::Text("Content goes here...");
 					ImGui::Spacing();
 
+					//Seems like we have to remove the body first and add it again to be able to change the status...
 					static bool staticStatus = false;
 					staticStatus = m_objectInfo.entity.component<Rigidbody>()->body->getStaticStatus();
 

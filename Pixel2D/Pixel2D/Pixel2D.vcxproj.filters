@@ -11,9 +11,6 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{e7b9b9c8-1ecc-492e-96bf-c7031200fbe4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Kairos">
-      <UniqueIdentifier>{9cad34ef-c1be-4ddd-ad47-c71d0831e1ad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Graphics\Components">
       <UniqueIdentifier>{57743f9f-614b-4f74-ad25-e0fb4ec0df8e}</UniqueIdentifier>
     </Filter>
@@ -55,33 +52,6 @@
     </ClCompile>
     <ClCompile Include="..\third-party\imgui\include\imgui-SFML.cpp">
       <Filter>Graphics\GUI\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\third-party\kairos\Kairos\Absorel.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\third-party\kairos\Kairos\BasicClock.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\third-party\kairos\Kairos\Continuum.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\third-party\kairos\Kairos\Duration.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\third-party\kairos\Kairos\FpsLite.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\third-party\kairos\Kairos\Stopwatch.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\third-party\kairos\Kairos\Timer.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\third-party\kairos\Kairos\Timestep.cpp">
-      <Filter>Kairos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\third-party\kairos\Kairos\TimestepLite.cpp">
-      <Filter>Kairos</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\systems\TransformSystem.cpp">
       <Filter>Graphics\Systems</Filter>
@@ -166,13 +136,5 @@
     <ClInclude Include="src\utils\ObjectInfo.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\third-party\kairos\Kairos\Absorel.inl">
-      <Filter>Kairos</Filter>
-    </None>
-    <None Include="..\third-party\kairos\Kairos\Yalpes.inl">
-      <Filter>Kairos</Filter>
-    </None>
   </ItemGroup>
 </Project>

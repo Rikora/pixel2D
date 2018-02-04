@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
-#include <Kairos/Timestep.hpp>
-#include <Kairos/FpsLite.hpp>
+#include <Timestep.hpp>
+#include <FpsLite.hpp>
 
 #include <graphics/Scene.hpp>
 #include <physics/Physics.hpp>
