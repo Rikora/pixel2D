@@ -73,9 +73,7 @@ namespace px
 		loadLua();
 		loadLuaScripts();
 
-		//Doesn't work for multiple scripts if same name,
-		//so need to have a table for each script?
-		//Start for scripts
+		//Init all scripts
 		lua["onStart"]();
 	}
 
@@ -96,7 +94,7 @@ namespace px
 
 	void Core::loadLuaScripts()
 	{
-		lua.script_file("src/res/scripts/circle.lua");
+		lua.script_file("../Debug/scripts/main.lua");
 	}
 
 	void Core::run()
