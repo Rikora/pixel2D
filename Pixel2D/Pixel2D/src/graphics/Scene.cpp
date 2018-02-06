@@ -30,6 +30,18 @@ namespace px
 		entity.assign<Transform>(transform);
 		//entity.assign<Rigidbody>(std::move(rigidbody));
 
+		//Create a second for test
+		auto e = m_entities.create();
+		Transform t(sf::Vector2f(300.f, 233.f), sf::Vector2f(1.f, 1.f), 0.f);
+
+		auto s = std::make_unique<sf::CircleShape>(10.f);
+		s->setFillColor(sf::Color::Red);
+		utils::centerOrigin(*s);
+		s->setPosition(t.position);
+
+		e.assign<Render>(std::move(s), "Another", "Default");
+		e.assign<Transform>(t);
+
 		//Layers
 		m_layers = { "Default", "Grass" };
 

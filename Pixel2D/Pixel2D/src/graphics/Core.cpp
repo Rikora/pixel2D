@@ -73,8 +73,9 @@ namespace px
 		loadLua();
 		loadLuaScripts();
 
+		lua.script("circle = Circle:new('Circle')");
+		//lua.script("c = Circle:new('Another')");
 		//Init all scripts
-		lua["onStart"]();
 	}
 
 	void Core::loadTextures()
@@ -85,7 +86,8 @@ namespace px
 	void Core::loadLua()
 	{
 		//Usertypes
-		lua.new_usertype<Object>("Object", "get", &Object::getEntity, "getPosX", &Object::getX, "getPosY", &Object::getY, "setPosition", &Object::setPosition);
+		lua.new_usertype<GameObject, std::string>("GameObject", "getPosX", &GameObject::getX, "getPosY", &GameObject::getY, 
+												  "setPosition", &GameObject::setPosition);
 
 		//Keyboard table
 		sol::table kb = lua.create_named_table("keyboard");
@@ -94,6 +96,7 @@ namespace px
 
 	void Core::loadLuaScripts()
 	{
+		//Can each entity load the script and use the result from it?
 		lua.script_file("../Debug/scripts/main.lua");
 	}
 
@@ -176,13 +179,15 @@ namespace px
 			}
 
 			//Input for scripts
-			lua["onInput"](dt);
+			lua["circle"]["onInput"](lua["circle"], dt);
+			//lua["c"]["onInput"](lua["c"], dt);
 		}
 
 		float alpha = m_timestep.getInterpolationAlphaAsFloat();
 
 		//Update for scripts
-		lua["onUpdate"](alpha);
+		lua["circle"]["onUpdate"](lua["circle"], alpha);
+		//lua["c"]["onUpdate"](lua["c"], alpha);
 
 		//Update engine systems
 		//m_physicsWorld->Update(1 / 60.f);

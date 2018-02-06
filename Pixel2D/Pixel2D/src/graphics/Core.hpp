@@ -15,10 +15,10 @@ namespace px
 	class Core
 	{
 	private:
-		struct Object
+		struct GameObject
 		{
-			void setPosition(const float & x, const float & y) { entity.component<Transform>()->position = sf::Vector2f(x, y); }
-			void getEntity(const std::string & name){ entity = m_scene->getEntity(name); }
+			GameObject(std::string name) { entity = m_scene->getEntity(name); };
+			void setPosition(float x, float y) { entity.component<Transform>()->position = sf::Vector2f(x, y); }
 			float getX() { return entity.component<Render>()->shape->getPosition().x; }
 			float getY() { return entity.component<Render>()->shape->getPosition().y; }
 
