@@ -10,6 +10,7 @@
 #include <SFML/Window/Event.hpp> 
 #include <Windows.h>
 #include <physics/Box2DConverters.hpp>
+#include <graphics/components/Script.hpp>
 
 namespace px
 {
@@ -69,13 +70,10 @@ namespace px
 		////Tilemaps
 		//m_tileMap = std::make_unique<utils::TileMap>(m_textures, Textures::ID::Sprite);
 		//m_tileMap->loadMap(sf::Vector2u(32, 32), level, 16, 8);
-
+		
+		//Init functionality and scripts
 		loadLua();
 		loadLuaScripts();
-
-		lua.script("circle = Circle:new('Circle')");
-		//lua.script("c = Circle:new('Another')");
-		//Init all scripts
 	}
 
 	void Core::loadTextures()
@@ -179,15 +177,37 @@ namespace px
 			}
 
 			//Input for scripts
-			lua["circle"]["onInput"](lua["circle"], dt);
-			//lua["c"]["onInput"](lua["c"], dt);
+			ComponentHandle<Script> script;
+			for (Entity & entity : m_scene->getEntities().entities_with_components(script))
+			{
+				for (auto & s : script->scripts)
+				{
+					//Check type of script
+					if (s == "PlayerController")
+					{
+						sol::function onInput = lua[entity.component<Render>()->name]["onInput"];
+						onInput(lua[entity.component<Render>()->name], dt);
+					}
+				}
+			}
 		}
 
 		float alpha = m_timestep.getInterpolationAlphaAsFloat();
 
 		//Update for scripts
-		lua["circle"]["onUpdate"](lua["circle"], alpha);
-		//lua["c"]["onUpdate"](lua["c"], alpha);
+		ComponentHandle<Script> script;
+		for (Entity & entity : m_scene->getEntities().entities_with_components(script))
+		{
+			for (auto & s : script->scripts)
+			{
+				//Check type of script
+				if (s == "PlayerController")
+				{
+					sol::function onUpdate = lua[entity.component<Render>()->name]["onUpdate"];
+					onUpdate(lua[entity.component<Render>()->name], alpha);
+				}
+			}
+		}
 
 		//Update engine systems
 		//m_physicsWorld->Update(1 / 60.f);
@@ -577,6 +597,54 @@ namespace px
 				}
 			}
 
+			//Scripts
+			if (m_objectInfo.entity.has_component<Script>())
+			{
+				ImGui::SetNextTreeNodeOpen(true, 2);
+				if (ImGui::CollapsingHeader("Script"))
+				{
+					ImGui::Spacing();
+					unsigned int i = 0;
+					for (const auto & script : m_objectInfo.entity.component<Script>()->scripts)
+					{
+						ImGui::Text("Script: %s", script.c_str());
+						ImGui::SameLine(560);
+						ImGui::PushID(i);
+						if (ImGui::SmallButton("Delete"))
+						{
+							//Remove all entities which corresponds to the layer
+							//m_scene->destroyEntities(layer);
+
+							//Remove the layer from the vector
+							if (i != m_objectInfo.entity.component<Script>()->scripts.size() - 1)
+								m_objectInfo.entity.component<Script>()->scripts[i] = std::move(m_objectInfo.entity.component<Script>()->scripts.back());
+							m_objectInfo.entity.component<Script>()->scripts.pop_back();
+						}
+						ImGui::PopID();
+						i++;
+						ImGui::Separator();
+					}
+
+					//Add new script
+					static std::vector<char> scriptName(50);
+					if (ImGui::InputText("", scriptName.data(), scriptName.size(), ImGuiInputTextFlags_EnterReturnsTrue))
+					{
+						//Check which kind of script was requested and give access to it
+						if (std::string(scriptName.data()) == "PlayerController")
+						{
+							//Check better naming later on as we can't have the same object name for multiple scripts...
+							std::string objName = m_objectInfo.entity.component<Render>()->name;
+							std::string result = objName + " = " + scriptName.data() + ":new" + "('" + objName + "')";
+							lua.script(result);
+						}
+
+						m_objectInfo.entity.component<Script>()->scripts.emplace_back(scriptName.data());
+						scriptName.clear(); scriptName.resize(50);
+					}
+				}		
+			}
+
+			//Add components
 			ImGui::Separator();
 			ImGui::Spacing(); ImGui::Spacing();
 			ImGui::InvisibleButton("Invis", ImVec2((ImGui::GetWindowContentRegionWidth() / 2.f) - 100.f, 0.f));
@@ -625,6 +693,11 @@ namespace px
 				}
 			}
 			ImGui::EndMenu();
+		}
+		if (ImGui::MenuItem("Lua Script"))
+		{
+			if (!m_objectInfo.entity.has_component<Script>())
+				m_objectInfo.entity.assign<Script>();
 		}
 	}
 }

@@ -136,5 +136,8 @@
     <ClInclude Include="src\utils\ObjectInfo.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\graphics\components\Script.hpp">
+      <Filter>Graphics\Components</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -37,6 +37,7 @@
   <ItemGroup>
     <ClInclude Include="src\graphics\components\Render.hpp" />
     <ClInclude Include="src\graphics\components\Rigidbody.hpp" />
+    <ClInclude Include="src\graphics\components\Script.hpp" />
     <ClInclude Include="src\graphics\components\Transform.hpp" />
     <ClInclude Include="src\graphics\Core.hpp" />
     <ClInclude Include="src\graphics\RigidbodyShape.hpp" />
