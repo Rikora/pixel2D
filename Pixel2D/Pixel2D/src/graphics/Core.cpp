@@ -185,8 +185,8 @@ namespace px
 					//Check type of script
 					if (s == "PlayerController")
 					{
-						sol::function onInput = lua[entity.component<Render>()->name]["onInput"];
-						onInput(lua[entity.component<Render>()->name], dt);
+						sol::function onInput = lua[entity.component<Render>()->name + s]["onInput"];
+						onInput(lua[entity.component<Render>()->name + s], dt);
 					}
 				}
 			}
@@ -203,8 +203,8 @@ namespace px
 				//Check type of script
 				if (s == "PlayerController")
 				{
-					sol::function onUpdate = lua[entity.component<Render>()->name]["onUpdate"];
-					onUpdate(lua[entity.component<Render>()->name], alpha);
+					sol::function onUpdate = lua[entity.component<Render>()->name + s]["onUpdate"];
+					onUpdate(lua[entity.component<Render>()->name + s], alpha);
 				}
 			}
 		}
@@ -612,16 +612,19 @@ namespace px
 						ImGui::PushID(i);
 						if (ImGui::SmallButton("Delete"))
 						{
-							//Remove all entities which corresponds to the layer
-							//m_scene->destroyEntities(layer);
+							//Release the global variable for the script
+							if (script == "PlayerController")
+							{
+								std::string result = m_objectInfo.entity.component<Render>()->name + script;
+								lua.script(result + " = nil");
+							}
 
-							//Remove the layer from the vector
+							//Remove the script from the vector
 							if (i != m_objectInfo.entity.component<Script>()->scripts.size() - 1)
 								m_objectInfo.entity.component<Script>()->scripts[i] = std::move(m_objectInfo.entity.component<Script>()->scripts.back());
 							m_objectInfo.entity.component<Script>()->scripts.pop_back();
 						}
-						ImGui::PopID();
-						i++;
+						ImGui::PopID(); i++;
 						ImGui::Separator();
 					}
 
@@ -632,14 +635,14 @@ namespace px
 						//Check which kind of script was requested and give access to it
 						if (std::string(scriptName.data()) == "PlayerController")
 						{
-							//Check better naming later on as we can't have the same object name for multiple scripts...
 							std::string objName = m_objectInfo.entity.component<Render>()->name;
-							std::string result = objName + " = " + scriptName.data() + ":new" + "('" + objName + "')";
+							std::string result = objName + scriptName.data() + " = " + scriptName.data() + ":new" + "('" + objName + "')";
 							lua.script(result);
-						}
 
-						m_objectInfo.entity.component<Script>()->scripts.emplace_back(scriptName.data());
-						scriptName.clear(); scriptName.resize(50);
+							//Add the script to the vector
+							m_objectInfo.entity.component<Script>()->scripts.emplace_back(scriptName.data());
+							scriptName.clear(); scriptName.resize(50);
+						}
 					}
 				}		
 			}
